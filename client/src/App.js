@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import TGPDetail from "./routes/TGPDetail";
 import TGPList from "./routes/TGPList";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
