@@ -5,7 +5,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import Button from 'react-bootstrap/Button';
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = theme => ({
@@ -18,31 +18,21 @@ class CustomerAdd extends React.Component {
     constructor(props) { // 생성자
         super(props);
         this.state = {  // 변수 초기화
-            file: null, // 바이트
-            userName: '',
-            birthday: '',
-            gender: '',
-            job: '',
-            fileName: '',
+            tgpName: '',
             open: false
         }
     }
 
     handleFormSubmit = (e) => {
         e.preventDefault()
-        console.log('핸들폼서밋: '+e);
+        //console.log('핸들폼서밋: ' + e);
         this.addCustomer()
             .then((response) => {
-                console.log('핸들폼서밋: '+response.data);
+                //console.log('핸들폼서밋: ' + response.data);
                 this.props.stateRefresh(); // 고객 목록만 새로고침
             })
         this.setState({  // 변수 초기화
-            file: null, // 바이트
-            userName: '',
-            birthday: '',
-            gender: '',
-            job: '',
-            fileName: '',
+            tgpName: '',
             open: false
         })
     }
@@ -63,16 +53,14 @@ class CustomerAdd extends React.Component {
     addCustomer = () => {
         const url = '/api/customers';
         const formData = new FormData();
-        formData.append('image', this.state.file);
-        formData.append('name', this.state.userName);
-        formData.append('birthday', this.state.birthday);
-        formData.append('gender', this.state.gender);
-        formData.append('job', this.state.job);
+        formData.append('name', this.state.tgpName);
+        
         const config = { // 파일 포함 시
             headers: {
                 'content-type': 'multipart/form-data'
             }
         }
+
         return post(url, formData, config);
     }
 
@@ -84,45 +72,25 @@ class CustomerAdd extends React.Component {
 
     handleClose = () => {
         this.setState({  // 변수 초기화
-            file: null, // 바이트
-            userName: '',
-            birthday: '',
-            gender: '',
-            job: '',
-            fileName: '',
+            tgpName: '',
             open: false
         })
     }
 
     render() {
-        const { classes } = this.props;
-
         return (
             <div>
-                <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
-                    고객 추가하기
+                <Button variant="primary" size="sm" onClick={this.handleClickOpen}>
+                    추가
                 </Button>
                 <Dialog open={this.state.open} onClose={this.handleClose}>
-                    <DialogTitle>고객 추가</DialogTitle>
+                    <DialogTitle>TGP 추가</DialogTitle>
                     <DialogContent>
-                        <input className={classes.hidden} accept="image/*" id="raised-button-file" type="file" file={this.state.file} value={this.state.fileName} onChange={this.handleFileChange} />
-                        <label htmlFor="raised-button-file">
-                            <Button variant="contained" color="primary" component="span" name="file">
-                                {this.state.fileName === "" ? "프로필 이미지 선택" : this.state.fileName}
-                            </Button>
-                        </label>
-                        <br/>
-                        <TextField label="이름" type="text" name="userName" value={this.state.userName} onChange={this.handleValueChange} />
-                        <br />
-                        <TextField label="생년월일" type="text" name="birthday" value={this.state.birthday} onChange={this.handleValueChange} />
-                        <br />
-                        <TextField label="성별" type="text" name="gender" value={this.state.gender} onChange={this.handleValueChange} />
-                        <br />
-                        <TextField label="직업" type="text" name="job" value={this.state.job} onChange={this.handleValueChange} />
+                        <TextField label="이름" type="text" name="tgpName" value={this.state.tgpName} onChange={this.handleValueChange} />
                     </DialogContent>
                     <DialogActions>
-                        <Button variant="contained" color="primary" onClick={this.handleFormSubmit}>추가</Button>
-                        <Button variant="outlined" color="primary" onClick={this.handleClose}>닫기</Button>
+                        <Button variant="primary" size="sm" onClick={this.handleFormSubmit}>추가</Button>
+                        <Button variant="secondary" size="sm" onClick={this.handleClose}>취소</Button>
                     </DialogActions>
                 </Dialog>
             </div>

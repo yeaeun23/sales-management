@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import Customer from '../components/Customer';
 import CustomerAdd from '../components/CustomerAdd';
 import '../App.css';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -18,21 +12,21 @@ import InputBase from '@material-ui/core/InputBase';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import Table from 'react-bootstrap/Table';
 
 const styles = theme => ({
   root: {
     width: '100%',
-    minWidth: 1080
+    minWidth: 800
   },
   menu: {
     marginTop: 15,
     marginBottom: 15,
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'left'
   },
   paper: {
-    marginLeft: 18,
-    marginRight: 18
+    margin: 20
   },
   progress: {
     margin: theme.spacing(2)
@@ -97,7 +91,6 @@ const styles = theme => ({
 });
 
 class App extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -148,11 +141,13 @@ class App extends Component {
         return c.name.indexOf(this.state.searchKeyword) > -1;
       });
       return data.map((c) => {
-        return <Customer stateRefresh={this.stateRefresh} key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />
+        //console.log(c.id);
+        return <Customer stateRefresh={this.stateRefresh} key={c.tgp_id} id={c.tgp_id} name={c.name} status={c.status} update_time={c.update_time} />
       });
     }
+
     const { classes } = this.props;
-    const cellList = ["NO", "프로필 이미지", "이름", "생년월일", "성별", "직업", "설정"];
+
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -181,30 +176,39 @@ class App extends Component {
             </div>
           </Toolbar>
         </AppBar>
-        <div className={classes.menu}>
-          <CustomerAdd stateRefresh={this.stateRefresh} />
-        </div>
-        <Paper className={classes.paper}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                {cellList.map(c => {
-                  return <TableCell className={classes.tableHead}>{c}</TableCell>
-                })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
+
+        <div className={classes.paper}>
+          <Table striped>
+            <colgroup>
+              <col width="10%" />
+              <col width="30%" />
+              <col width="20%" />
+              <col width="20%" />
+              <col width="10%" />
+              <col width="10%" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th style={{ textAlign: 'center' }} >No</th>
+                <th>TGP</th>
+                <th style={{ textAlign: 'center' }} >상태</th>
+                <th style={{ textAlign: 'center' }} >수정한 날짜</th>
+                <th style={{ textAlign: 'center' }} ></th>
+                <th style={{ textAlign: 'center' }} ><CustomerAdd stateRefresh={this.stateRefresh} /></th>
+              </tr>
+            </thead>
+            <tbody>
               {this.state.customers ?
                 filteredComponents(this.state.customers) :
-                <TableRow>
-                  <TableCell colSpan="6" align="center">
+                <tr>
+                  <td colSpan="6" align="center">
                     <CircularProgress className={classes.progress} variant="determinate" value={this.state.completed} />
-                  </TableCell>
-                </TableRow>
+                  </td>
+                </tr>
               }
-            </TableBody>
+            </tbody>
           </Table>
-        </Paper>
+        </div>
       </div>
     );
   }

@@ -1,23 +1,23 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
 import CustomerDelete from './CustomerDelete';
+import Button from 'react-bootstrap/Button';
 
 class Customer extends React.Component {
     render() {
         return (
-            <TableRow>
-                <TableCell>{this.props.id}</TableCell>
-                {/* <TableCell><img src={this.props.image} alt="profile"/></TableCell> */}
-                <TableCell><Link to={`/TGP/${this.props.id}`}>{this.props.name}</Link></TableCell>
-                <TableCell>{this.props.birthday}</TableCell>
-                <TableCell>{this.props.gender}</TableCell>
-                <TableCell>{this.props.job}</TableCell>
-                <TableCell>
+            <tr>
+                <td style={{textAlign: 'center'}} >{this.props.id}</td>
+                <td><Link to={`/TGP/${this.props.id}`} style={{display: 'block'}}>{this.props.name}</Link></td>
+                <td style={{textAlign: 'center'}} >{this.props.status}</td>
+                <td style={{textAlign: 'center'}} >{this.props.update_time}</td>
+                <td style={{textAlign: 'center'}} >
+                    <Button variant="secondary" size="sm">수정</Button>
+                </td>
+                <td style={{textAlign: 'center'}} >
                     <CustomerDelete stateRefresh={this.props.stateRefresh} id={this.props.id} />
-                </TableCell>
-            </TableRow>
+                </td>
+            </tr>
         );
     }
 }
