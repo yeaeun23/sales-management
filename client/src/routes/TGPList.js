@@ -3,94 +3,16 @@ import Customer from '../components/Customer';
 import CustomerAdd from '../components/CustomerAdd';
 import '../App.css';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
-import { alpha } from '@material-ui/core/styles/colorManipulator';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Table from 'react-bootstrap/Table';
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    minWidth: 800
-  },
-  menu: {
-    marginTop: 15,
-    marginBottom: 15,
-    display: 'flex',
-    justifyContent: 'left'
-  },
-  paper: {
-    margin: 20
-  },
-  progress: {
-    margin: theme.spacing(2)
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  tableHead: {
-    fontSize: '1.0rem'
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(0),
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    width: theme.spacing(9),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-    width: '100%',
-  },
-  inputInput: {
-    paddingTop: theme.spacing(0),
-    paddingRight: theme.spacing(0),
-    paddingBottom: theme.spacing(0),
-    paddingLeft: theme.spacing(10),
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: 120,
-      '&:focus': {
-        width: 200,
-      },
-    },
-  }
-});
-
-class App extends Component {
+class TGPList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -141,34 +63,28 @@ class App extends Component {
         return c.name.indexOf(this.state.searchKeyword) > -1;
       });
       return data.map((c) => {
-        //console.log(c.id);
         return <Customer stateRefresh={this.stateRefresh} key={c.tgp_id} id={c.tgp_id} name={c.name} status={c.status} update_time={c.update_time} />
       });
     }
 
-    const { classes } = this.props;
-
     return (
-      <div className={classes.root}>
+      <div className="root">
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+            <IconButton className="menuButton" color="inherit" aria-label="Open drawer">
               <MenuIcon />
             </IconButton>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+            <Typography className="title" variant="h6" color="inherit" noWrap>
               Sales Master
             </Typography>
-            <div className={classes.grow} />
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
+            <div className="grow" />
+            <div className="search">
+              <div className="searchIcon">
                 <SearchIcon />
               </div>
               <InputBase
                 placeholder="검색하기"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
+                className="inputRoot"
                 name="searchKeyword"
                 value={this.state.searchKeyword}
                 onChange={this.handleValueChange}
@@ -177,7 +93,7 @@ class App extends Component {
           </Toolbar>
         </AppBar>
 
-        <div className={classes.paper}>
+        <div className="paper">
           <Table striped>
             <colgroup>
               <col width="10%" />
@@ -202,7 +118,7 @@ class App extends Component {
                 filteredComponents(this.state.customers) :
                 <tr>
                   <td colSpan="6" align="center">
-                    <CircularProgress className={classes.progress} variant="determinate" value={this.state.completed} />
+                    <CircularProgress className="progress" variant="determinate" value={this.state.completed} />
                   </td>
                 </tr>
               }
@@ -214,4 +130,5 @@ class App extends Component {
   }
 }
 
-export default withStyles(styles)(App);
+export default TGPList;
+//export default withStyles(styles)(TGPList);

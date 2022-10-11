@@ -25,7 +25,7 @@ const upload = multer({dest: './upload'})
 
 app.get('/api/customers', (req, res) => {
     connection.query(
-      "SELECT tgp_id, name, (SELECT status FROM STATUS WHERE CODE = tgp.`status`) AS status, update_time FROM TGP tgp ORDER BY tgp_id DESC",
+      "SELECT tgp_id, name, (SELECT status FROM STATUS WHERE CODE = tgp.`status`) AS status, date_format(update_time, '%Y-%m-%d %H:%i') AS update_time FROM TGP tgp ORDER BY tgp_id DESC",
 
       (err, rows, fields) => {
         res.send(rows);
