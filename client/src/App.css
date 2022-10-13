@@ -1,11 +1,12 @@
 /* Common */
 .root {
   width: 100%;
-    min-width: 800px;
+  min-width: 600px;
 }
 
 .paper {
-  margin: 20px;
+  margin: 20px auto;
+  max-width: 1000px;
 }
 
 .progress {
@@ -28,10 +29,10 @@
 
 .search {
   width: 100%;
-    position: relative;
-    margin-left: 0;
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.15); 
+  position: relative;
+  margin-left: 0;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .search:hover {
@@ -40,17 +41,17 @@
 
 .searchIcon {
   width: 72px;
-    height: 100%;
-    display: flex;
-    position: absolute;
-    align-items: center;
-    pointer-events: none;
-    justify-content: center;
+  height: 100%;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  pointer-events: none;
+  justify-content: center;
 }
 
 .inputRoot {
   color: #fff !important;
-    width: 100%;
+  width: 100%;
 }
 
 input[name="searchKeyword"] {
@@ -62,7 +63,7 @@ input[name="searchKeyword"] {
   padding-bottom: 0;
 }
 
-@media (min-width: 600px){
+@media (min-width: 600px) {
   .title {
     display: block;
   }
@@ -79,4 +80,17 @@ input[name="searchKeyword"] {
   input[name="searchKeyword"]:focus {
     width: 200px;
   }
+}
+
+/* TGPDetail */
+form {
+  width: 100%;
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+.plusBtn {
+  font-weight: bold !important;
 }

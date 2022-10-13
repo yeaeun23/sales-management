@@ -94,12 +94,12 @@ class TGPList extends Component {
         </AppBar>
 
         <div className="paper">
-          <Table striped>
+          <Table striped hover>
             <colgroup>
               <col width="10%" />
               <col width="30%" />
-              <col width="20%" />
-              <col width="20%" />
+              <col width="15%" />
+              <col width="25%" />
               <col width="10%" />
               <col width="10%" />
             </colgroup>
