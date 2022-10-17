@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 
-function LineAdd() {
+function LineAdd(props) {
     const handleClick = event => {
         //console.log(event.target.value);
         //event.target.style.color = event.target.value;
@@ -12,7 +12,7 @@ function LineAdd() {
     return (
         <Button
             variant="secondary"
-            size="sm"
+            size={props.size}
             title="행 추가"
             className="plusBtn"
             style={{ float: 'right'}}

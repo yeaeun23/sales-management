@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  useParams
-} from "react-router-dom";
+import { BrowserRouter as Router, useParams } from "react-router-dom";
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -14,7 +11,9 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import '../App.css';
-import SignSelect from '../components/SignSelect';
+import SelectSign from '../components/SelectSign';
+import SelectScore from '../components/SelectScore';
+import SelectPower from "../components/SelectPower";
 import LineAdd from '../components/LineAdd';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -22,6 +21,14 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Drawer from '@mui/material/Drawer';
+
+const size = "sm";
 
 function TGPDetail() {
   let { id } = useParams();
@@ -74,12 +81,49 @@ function TGPDetail() {
     navigate(`/`);
   };
 
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
+  const list = (anchor) => (
+    <Box
+      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <List>
+        {['로그아웃', '설정'].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
   return (
     <div className="root">
       <AppBar position="static">
         <Toolbar>
           <IconButton className="menuButton" color="inherit" aria-label="Open drawer">
-            <MenuIcon />
+            <MenuIcon onClick={toggleDrawer('left', true)} />
           </IconButton>
           <Typography className="title" variant="h6" color="inherit" noWrap>
             Sales Master
@@ -87,8 +131,20 @@ function TGPDetail() {
         </Toolbar>
       </AppBar>
 
+      {['left'].map((anchor) => (
+        <React.Fragment key={anchor}>            
+          <Drawer
+            anchor={anchor}
+            open={state[anchor]}
+            onClose={toggleDrawer(anchor, false)}
+          >
+            {list(anchor)}
+          </Drawer>
+        </React.Fragment>
+      ))}
+
       <div className="paper">
-        <Stepper activeStep={activeStep} style={{margin: '50px'}}>
+        <Stepper activeStep={activeStep} style={{ margin: '50px' }}>
           {steps.map((label, index) => {
             const stepProps = {};
             const labelProps = {};
@@ -112,18 +168,20 @@ function TGPDetail() {
           {activeStep === steps.length ? (
             <React.Fragment>
               <Typography sx={{ mt: 2, mb: 1 }}>
-              <Card>
-                <Card.Header>
-                  TGP 저장
-                </Card.Header>
-        <Card.Body>
-          TGP 저장이 완료되었습니다.
-        </Card.Body>
-      </Card>
+                <Card>
+                  <Card.Header>
+                    TGP 저장
+                  </Card.Header>
+                  <Card.Body>
+                    TGP 저장이 완료되었습니다.
+                  </Card.Body>
+                </Card>
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                 <Box sx={{ flex: '1 1 auto' }} />
-                <Button onClick={handleReset}>TGP 목록</Button>
+                <Button onClick={handleReset}>미리보기</Button>
+                &nbsp;&nbsp;
+                <Button onClick={handleReset}>목록으로</Button>
               </Box>
             </React.Fragment>
           ) : (
@@ -149,17 +207,17 @@ function TGPDetail() {
                     Skip
                   </Button>
                 )}&nbsp;&nbsp; */}
-                
+
                 {
-                activeStep === steps.length - 1 
-                ? 
-                (function(){
-                  return (<Button variant="primary" onClick={handleNext}>TGP 저장</Button>);
-                })()                   
-                : (function(){
-                  return (<Button variant="secondary" onClick={handleNext}>다음 &gt;</Button>);
-                })()
-                }                
+                  activeStep === steps.length - 1
+                    ?
+                    (function () {
+                      return (<Button variant="primary" onClick={handleNext}>TGP 저장</Button>);
+                    })()
+                    : (function () {
+                      return (<Button variant="secondary" onClick={handleNext}>다음 &gt;</Button>);
+                    })()
+                }
               </Box>
             </React.Fragment>
           )}
@@ -177,24 +235,24 @@ function Step1() {
         <Card.Body>
           <Row>
             <Form.Group as={Col} controlId="customer">
-              <Form.Label column="sm">거래처</Form.Label>
-              <Form.Control size="sm" type="text" />
+              <Form.Label column={size}>거래처</Form.Label>
+              <Form.Control size={size} type="text" />
             </Form.Group>
             <Form.Group as={Col} controlId="department">
-              <Form.Label column="sm">부서</Form.Label>
-              <Form.Control size="sm" type="text" />
+              <Form.Label column={size}>부서</Form.Label>
+              <Form.Control size={size} type="text" />
             </Form.Group>
             <Form.Group as={Col} controlId="solution">
-              <Form.Label column="sm">솔루션</Form.Label>
-              <Form.Control size="sm" type="text" />
+              <Form.Label column={size}>솔루션</Form.Label>
+              <Form.Control size={size} type="text" />
             </Form.Group>
             <Form.Group as={Col} controlId="amount">
-              <Form.Label column="sm">금액</Form.Label>
-              <Form.Control size="sm" type="text" />
+              <Form.Label column={size}>금액</Form.Label>
+              <Form.Control size={size} type="text" />
             </Form.Group>
             <Form.Group as={Col} controlId="target_date">
-              <Form.Label column="sm">목표일</Form.Label>
-              <Form.Control size="sm" type="date" />
+              <Form.Label column={size}>목표일</Form.Label>
+              <Form.Control size={size} type="date" />
             </Form.Group>
           </Row>
         </Card.Body>
@@ -213,7 +271,7 @@ function Step2() {
             <tbody>
               <tr>
                 <th>
-                  <Form.Label column="sm">고객관점<br />세일즈 퍼널 위치</Form.Label>
+                  <Form.Label column={size}>고객관점<br />세일즈 퍼널 위치</Form.Label>
                 </th>
                 <td>
                   <Form.Check inline label="Lead" name="sales_funnel" type="radio" id="sales_funnel1" />
@@ -221,11 +279,11 @@ function Step2() {
                   <Form.Check inline label="Opportunity" name="sales_funnel" type="radio" id="sales_funnel3" />
                   <Form.Check inline label="Closing" name="sales_funnel" type="radio" id="sales_funnel4" />
                 </td>
-                <td><SignSelect /></td>
+                <td><SelectSign size={size} /></td>
               </tr>
               <tr>
                 <th>
-                  <Form.Label column="sm">고객관점<br />경쟁대비 위치</Form.Label>
+                  <Form.Label column={size}>고객관점<br />경쟁대비 위치</Form.Label>
                 </th>
                 <td>
                   <Form.Check inline label="희박함" name="competition" type="radio" id="competition1" />
@@ -233,11 +291,11 @@ function Step2() {
                   <Form.Check inline label="우선시됨" name="competition" type="radio" id="competition3" />
                   <Form.Check inline label="거의 독점" name="competition" type="radio" id="competition4" />
                 </td>
-                <td><SignSelect /></td>
+                <td><SelectSign size={size} /></td>
               </tr>
               <tr>
                 <th>
-                  <Form.Label column="sm">내가 생각하는<br />성공 가능성</Form.Label>
+                  <Form.Label column={size}>내가 생각하는<br />성공 가능성</Form.Label>
                 </th>
                 <td>
                   <Form.Check inline label="0%" name="success" type="radio" id="success1" />
@@ -248,7 +306,7 @@ function Step2() {
                   <Form.Check inline label="75%" name="success" type="radio" id="success6" />
                   <Form.Check inline label="90%" name="success" type="radio" id="success7" />
                 </td>
-                <td><SignSelect /></td>
+                <td><SelectSign size={size} /></td>
               </tr>
             </tbody>
           </Table>
@@ -256,33 +314,64 @@ function Step2() {
       </Card>
 
       <Card>
-        <Card.Header as="h6">구매 영향력의 역할</Card.Header>
+        <Card.Header as="h6">구매 영향력 (Personal과 Business를 모두 고려)</Card.Header>
         <Card.Body>
           <Table>
             <tbody>
               <tr>
-                <th><Form.Label column="sm">TDM</Form.Label></th>
-                <td><Form.Control size="sm" type="text" placeholder="이름/직함 또는 직급" /></td>
-                <td><SignSelect /></td>
-                <td><LineAdd /></td>
+                <th>역할</th>
+                <th colSpan={2} style={{textAlign: 'center'}}>이름/직함/직급</th>
+                <th colSpan={2} style={{textAlign: 'center'}}>파워</th>
+                <th colSpan={2} style={{textAlign: 'center'}}>장벽</th>
+                <th colSpan={2} style={{textAlign: 'center'}}>원동력</th>
               </tr>
               <tr>
-                <th><Form.Label column="sm">FDM</Form.Label></th>
-                <td><Form.Control size="sm" type="text" placeholder="이름/직함 또는 직급" /></td>
-                <td><SignSelect /></td>
-                <td><LineAdd /></td>
+                <th><Form.Label column={size}>TDM</Form.Label></th>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectPower size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><LineAdd size={size} /></td>
               </tr>
               <tr>
-                <th><Form.Label column="sm">UDM</Form.Label></th>
-                <td><Form.Control size="sm" type="text" placeholder="이름/직함 또는 직급" /></td>
-                <td><SignSelect /></td>
-                <td><LineAdd /></td>
+                <th><Form.Label column={size}>FDM</Form.Label></th>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectPower size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><LineAdd size={size} /></td>
               </tr>
               <tr>
-                <th><Form.Label column="sm">HELPER</Form.Label></th>
-                <td><Form.Control size="sm" type="text" placeholder="이름/직함 또는 직급" /></td>
-                <td><SignSelect /></td>
-                <td><LineAdd /></td>
+                <th><Form.Label column={size}>UDM</Form.Label></th>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectPower size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><LineAdd size={size} /></td>
+              </tr>
+              <tr>
+                <th><Form.Label column={size}>HELPER</Form.Label></th>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectPower size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><LineAdd size={size} /></td>
               </tr>
             </tbody>
           </Table>
@@ -290,24 +379,73 @@ function Step2() {
       </Card>
 
       <Card>
-        <Card.Header as="h6">장벽과 원동력 (Personal과 Business를 모두 고려)</Card.Header>
+        <Card.Header as="h6">구매 영향력 평가</Card.Header>
         <Card.Body>
           <Table>
             <tbody>
               <tr>
-                <td>
-                  <Form.Select size="sm">
-                    <option>파워 선택</option>
-                    <option>High</option>
-                    <option>Middle</option>
-                    <option>Low</option>
-                  </Form.Select>
-                </td>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><SignSelect /></td>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><SignSelect /></td>
-                <td><LineAdd /></td>
+                <th>역할</th>
+                <th colSpan={2} style={{textAlign: 'center'}}>영업사원</th>
+                <th colSpan={2} style={{textAlign: 'center'}}>제품</th>
+                <th colSpan={2} style={{textAlign: 'center'}}>서비스</th>
+                <th colSpan={2} style={{textAlign: 'center'}}>우리 회사</th>
+                <th colSpan={2} style={{textAlign: 'center'}}>평가에 대한 의견</th>
+              </tr>
+              <tr>
+                <th><Form.Label column={size}>TDM</Form.Label></th>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><LineAdd size={size} /></td>
+              </tr>
+              <tr>
+                <th><Form.Label column={size}>FDM</Form.Label></th>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><LineAdd size={size} /></td>
+              </tr>
+              <tr>
+                <th><Form.Label column={size}>UDM</Form.Label></th>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><LineAdd size={size} /></td>
+              </tr>
+              <tr>
+                <th><Form.Label column={size}>HELPER</Form.Label></th>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><SelectScore size={size} /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><LineAdd size={size} /></td>
               </tr>
             </tbody>
           </Table>
@@ -315,115 +453,39 @@ function Step2() {
       </Card>
 
       <Card>
-        <Card.Header as="h6">평가</Card.Header>
+        <Card.Header as="h6">경쟁</Card.Header>
         <Card.Body>
           <Table>
             <tbody>
               <tr>
-                <th><Form.Label column="sm">영업사원</Form.Label></th>
-                <th><Form.Label column="sm">제품</Form.Label></th>
-                <th><Form.Label column="sm">서비스</Form.Label></th>
-                <th><Form.Label column="sm">우리 회사</Form.Label></th>
-                <th><Form.Label column="sm">평가에 대한 의견</Form.Label></th>
+                <th><Form.Label column={size}>선정 고객명</Form.Label></th>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
               </tr>
               <tr>
-                <td>
-                  <Form.Select size="sm">
-                    <option>선택</option>
-                    <option>+4</option>
-                    <option>+3</option>
-                    <option>+2</option>
-                    <option>+1</option>
-                    <option>-1</option>
-                    <option>-2</option>
-                    <option>-3</option>
-                    <option>-4</option>
-                  </Form.Select>
-                </td>
-                <td>
-                  <Form.Select size="sm">
-                    <option>선택</option>
-                    <option>+4</option>
-                    <option>+3</option>
-                    <option>+2</option>
-                    <option>+1</option>
-                    <option>-1</option>
-                    <option>-2</option>
-                    <option>-3</option>
-                    <option>-4</option>
-                  </Form.Select>
-                </td>
-                <td>
-                  <Form.Select size="sm">
-                    <option>선택</option>
-                    <option>+4</option>
-                    <option>+3</option>
-                    <option>+2</option>
-                    <option>+1</option>
-                    <option>-1</option>
-                    <option>-2</option>
-                    <option>-3</option>
-                    <option>-4</option>
-                  </Form.Select>
-                </td>
-                <td>
-                  <Form.Select size="sm">
-                    <option>선택</option>
-                    <option>+4</option>
-                    <option>+3</option>
-                    <option>+2</option>
-                    <option>+1</option>
-                    <option>-1</option>
-                    <option>-2</option>
-                    <option>-3</option>
-                    <option>-4</option>
-                  </Form.Select>
-                </td>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><SignSelect /></td>
-                <td><LineAdd /></td>
-              </tr>
-            </tbody>
-          </Table>
-        </Card.Body>
-      </Card>
-
-      <Card>
-        <Card.Header as="h6">경쟁자</Card.Header>
-        <Card.Body>
-          <Table>
-            <tbody>
-              <tr>
-                <th><Form.Label column="sm">선정고객</Form.Label></th>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><SignSelect /></td>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><SignSelect /></td>
-                <td><LineAdd /></td>
+                <th><Form.Label column={size}>고객관점 대체안<br />(우리의 경쟁)</Form.Label></th>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
               </tr>
               <tr>
-                <th><Form.Label column="sm">고객관점 대체안<br />(우리의 경쟁)</Form.Label></th>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><SignSelect /></td>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><SignSelect /></td>
-                <td><LineAdd /></td>
+                <th><Form.Label column={size}>강점과 기회</Form.Label></th>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><LineAdd size={size} /></td>
               </tr>
               <tr>
-                <th><Form.Label column="sm">강점과 기회</Form.Label></th>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><SignSelect /></td>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><SignSelect /></td>
-                <td><LineAdd /></td>
-              </tr>
-              <tr>
-                <th><Form.Label column="sm">약점과 위협</Form.Label></th>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><SignSelect /></td>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><SignSelect /></td>
-                <td><LineAdd /></td>
+                <th><Form.Label column={size}>약점과 위협</Form.Label></th>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><SelectSign size={size} /></td>
+                <td><LineAdd size={size} /></td>
               </tr>
             </tbody>
           </Table>
@@ -442,20 +504,22 @@ function Step3() {
           <Table>
             <tbody>
               <tr>
-                <th><Form.Label column="sm">기회/강점 요인 (Blue Sign)</Form.Label></th>
-                <th><Form.Label column="sm">기회/강점을 강화하거나 활용할 수 있는 방안</Form.Label></th>
+                <th><Form.Label column={size}>기회/강점 요인 (Blue Sign)</Form.Label></th>
+                <th><Form.Label column={size}>기회/강점을 강화하거나 활용할 수 있는 방안</Form.Label></th>
               </tr>
               <tr>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><Form.Control size="sm" type="text" /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><LineAdd size={size} /></td>
               </tr>
               <tr>
-                <th><Form.Label column="sm">위협/약점 요인 (Red/Gray Sign)</Form.Label></th>
-                <th><Form.Label column="sm">위협/약점을 최소화하거나 제거할 수 있는 방안</Form.Label></th>
+                <th><Form.Label column={size}>위협/약점 요인 (Red/Gray Sign)</Form.Label></th>
+                <th><Form.Label column={size}>위협/약점을 최소화하거나 제거할 수 있는 방안</Form.Label></th>
               </tr>
               <tr>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><Form.Control size="sm" type="text" /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><LineAdd size={size} /></td>
               </tr>
             </tbody>
           </Table>
@@ -468,17 +532,17 @@ function Step3() {
           <Table>
             <tbody>
               <tr>
-                <th><Form.Label column="sm">실행액션</Form.Label></th>
-                <th><Form.Label column="sm">실행일시</Form.Label></th>
-                <th><Form.Label column="sm">실행자</Form.Label></th>
-                <th><Form.Label column="sm">협조자 (부서)</Form.Label></th>
+                <th><Form.Label column={size}>실행액션</Form.Label></th>
+                <th><Form.Label column={size}>실행일시</Form.Label></th>
+                <th><Form.Label column={size}>실행자</Form.Label></th>
+                <th><Form.Label column={size}>협조자 (부서)</Form.Label></th>
               </tr>
               <tr>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><Form.Control size="sm" type="date" /></td>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><Form.Control size="sm" type="text" /></td>
-                <td><LineAdd /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><Form.Control size={size} type="date" /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><Form.Control size={size} type="text" /></td>
+                <td><LineAdd size={size} /></td>
               </tr>
             </tbody>
           </Table>
