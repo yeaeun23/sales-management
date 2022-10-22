@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -6,54 +6,43 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Button from 'react-bootstrap/Button';
 import Typography from "@material-ui/core/Typography";
 
-class CustomerDelete extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            open: false
-        }
+function CustomerDelete(props) {
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
     }
 
-    handleClickOpen = () => {
-        this.setState({
-            open: true
-        });
+    const handleClose = () => {
+        setOpen(false);
     }
 
-    handleClose = () => {
-        this.setState({  // 변수 초기화          
-            open: false
-        })
-    }
-
-    deleteCustomer(id) {
+    const deleteCustomer = (id) => {
         const url = '/api/customers/' + id;
-        
+
         fetch(url, {
             method: 'DELETE'
         });
-        this.props.stateRefresh(); // 목록 새로고침
+        props.stateRefresh(); // 목록 새로고침
     }
-    
-    render() {
-        return (
-            <div>
-            <Button variant="danger" size="sm" onClick={this.handleClickOpen}>삭제</Button>
-            <Dialog open={this.state.open} onClose={this.handleClose}>
-                <DialogTitle onClose={this.handleClose}>삭제</DialogTitle>
+
+    return (
+        <div>
+            <Button variant="danger" size="sm" onClick={handleClickOpen}>삭제</Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle onClose={handleClose}>삭제</DialogTitle>
                 <DialogContent>
                     <Typography gutterBottom>
                         선택한 TGP를 삭제하시겠습니까?
                     </Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="danger" onClick={(e) => {this.deleteCustomer(this.props.id)}}>삭제</Button>
-                    <Button variant="secondary" onClick={this.handleClose}>취소</Button>
+                    <Button variant="danger" onClick={(e) => { deleteCustomer(props.id) }}>삭제</Button>
+                    <Button variant="secondary" onClick={handleClose}>취소</Button>
                 </DialogActions>
             </Dialog>
-            </div>
-        )
-    }
+        </div>
+    )
 }
 
 export default CustomerDelete;

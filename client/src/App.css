@@ -12,6 +12,7 @@
 
 .progress {
   margin: 16px;
+  background-color: transparent !important;
 }
 
 /* AppBar */

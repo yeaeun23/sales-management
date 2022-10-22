@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { post } from "axios";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -14,47 +14,31 @@ const styles = theme => ({
     }
 });
 
-class CustomerAdd extends React.Component {
-    constructor(props) { // 생성자
-        super(props);
-        this.state = {  // 변수 초기화
-            tgpName: '',
-            open: false
-        }
-    }
+function CustomerAdd(props) {
+    const [tgpName, setTgpName] = useState("");
+    const [open, setOpen] = useState(false);
 
-    handleFormSubmit = (e) => {
+    const handleFormSubmit = (e) => {
         e.preventDefault()
-        //console.log('핸들폼서밋: ' + e);
-        this.addCustomer()
+
+        addCustomer()
             .then((response) => {
-                //console.log('핸들폼서밋: ' + response.data);
-                this.props.stateRefresh(); // 고객 목록만 새로고침
+                props.stateRefresh(); // 고객 목록만 새로고침
             })
-        this.setState({  // 변수 초기화
-            tgpName: '',
-            open: false
-        })
+
+        setTgpName("");
+        setOpen(false);
     }
 
-    handleFileChange = (e) => {
-        this.setState({
-            file: e.target.files[0],
-            fileName: e.target.value
-        })
+    const handleValueChange = (e) => {
+        setTgpName(e.target.value);
     }
 
-    handleValueChange = (e) => {
-        let nextState = {};
-        nextState[e.target.name] = e.target.value;
-        this.setState(nextState);
-    }
-
-    addCustomer = () => {
+    const addCustomer = () => {
         const url = '/api/customers';
         const formData = new FormData();
-        formData.append('name', this.state.tgpName);
-        
+        formData.append('name', tgpName);
+
         const config = { // 파일 포함 시
             headers: {
                 'content-type': 'multipart/form-data'
@@ -64,38 +48,32 @@ class CustomerAdd extends React.Component {
         return post(url, formData, config);
     }
 
-    handleClickOpen = () => {
-        this.setState({
-            open: true
-        });
+    const handleClickOpen = () => {
+        setOpen(true);
     }
 
-    handleClose = () => {
-        this.setState({  // 변수 초기화
-            tgpName: '',
-            open: false
-        })
+    const handleClose = () => {
+        setTgpName("");
+        setOpen(false);
     }
 
-    render() {
-        return (
-            <div>
-                <Button variant="primary" size="sm" onClick={this.handleClickOpen}>
-                    추가
-                </Button>
-                <Dialog open={this.state.open} onClose={this.handleClose}>
-                    <DialogTitle>TGP 추가</DialogTitle>
-                    <DialogContent>
-                        <TextField label="이름" type="text" name="tgpName" value={this.state.tgpName} onChange={this.handleValueChange} />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button variant="primary" size="sm" onClick={this.handleFormSubmit}>추가</Button>
-                        <Button variant="secondary" size="sm" onClick={this.handleClose}>취소</Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        )
-    }
+    return (
+        <div>
+            <Button variant="primary" size="sm" onClick={handleClickOpen}>
+                추가
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>TGP 추가</DialogTitle>
+                <DialogContent>
+                    <TextField label="이름" type="text" name="tgpName" value={tgpName} onChange={handleValueChange} />
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="primary" size="sm" onClick={handleFormSubmit}>추가</Button>
+                    <Button variant="secondary" size="sm" onClick={handleClose}>취소</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    )
 }
 
 export default withStyles(styles)(CustomerAdd);
