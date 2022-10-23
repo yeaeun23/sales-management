@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Customer from '../components/Customer';
-import CustomerAdd from '../components/CustomerAdd';
+import TGP from '../components/TGP';
+import TGPAdd from '../components/TGPAdd';
 import '../App.css';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,42 +11,44 @@ import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Table from 'react-bootstrap/Table';
+import { useParams } from 'react-router-dom';
 
 function TGPList(props) {
-  const [customers, setCustomers] = useState("");
+  const { customer_id } = useParams();
+  const [tgp, setTGP] = useState("");
   const [loading, setLoading] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState("");
 
   const stateRefresh = () => {
-    setCustomers("");
+    setTGP("");
     setLoading(0);
     setSearchKeyword("");
 
     callApi()
-      .then(res => setCustomers(res))
+      .then(res => setTGP(res))
       .catch(err => console.log(err));
   }
 
   const progress = () => {
-    const completed  = loading;
-    setLoading((completed >= 100) ? 0 : completed + 1 );
+    const completed = loading;
+    setLoading((completed >= 100) ? 0 : completed + 1);
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     setInterval(progress, 20);
-  }); 
+  });
 
-  useEffect(()=>{    
+  useEffect(() => {
     callApi()
-      .then(res => setCustomers(res))
+      .then(res => setTGP(res))
       .catch(err => console.log(err));
   }, []);
-  
+
   const callApi = async () => {
-    const response = await fetch('/api/customers');
+    const response = await fetch('/api/customer/' + customer_id);
     const body = await response.json();
     return body;
-  }  
+  }
 
   const handleValueChange = (e) => {
     setSearchKeyword(e.target.value);
@@ -57,7 +59,7 @@ function TGPList(props) {
       return c.name.indexOf(searchKeyword) > -1;
     });
     return data.map((c) => {
-      return <Customer stateRefresh={stateRefresh} key={c.tgp_id} id={c.tgp_id} name={c.name} status={c.status} update_time={c.update_time} />
+      return <TGP stateRefresh={stateRefresh} key={c.tgp_id} customer_id={customer_id} tgp_id={c.tgp_id} name={c.name} status={c.status} update_time={c.update_time} />
     });
   }
 
@@ -69,7 +71,7 @@ function TGPList(props) {
             <MenuIcon />
           </IconButton>
           <Typography className="title" variant="h6" color="inherit" noWrap>
-            Sales Master
+            Sales Master - {customer_id}
           </Typography>
           <div className="grow" />
           <div className="search">
@@ -104,12 +106,12 @@ function TGPList(props) {
               <th style={{ textAlign: 'center' }} >상태</th>
               <th style={{ textAlign: 'center' }} >수정한 날짜</th>
               <th style={{ textAlign: 'center' }} ></th>
-              <th style={{ textAlign: 'center' }} ><CustomerAdd stateRefresh={stateRefresh} /></th>
+              <th style={{ textAlign: 'center' }} ><TGPAdd stateRefresh={stateRefresh} /></th>
             </tr>
           </thead>
           <tbody>
-            {customers ?
-              filteredComponents(customers) :
+            {tgp ?
+              filteredComponents(tgp) :
               <tr>
                 <td colSpan="6" align="center">
                   <CircularProgress className="progress" variant="indeterminate" value={loading} />

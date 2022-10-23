@@ -35,7 +35,7 @@ function CustomerAdd(props) {
     }
 
     const addCustomer = () => {
-        const url = '/api/customers';
+        const url = '/api/customer';
         const formData = new FormData();
         formData.append('name', tgpName);
 
@@ -63,7 +63,7 @@ function CustomerAdd(props) {
                 추가
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>TGP 추가</DialogTitle>
+                <DialogTitle>고객사 추가</DialogTitle>
                 <DialogContent>
                     <TextField label="이름" type="text" name="tgpName" value={tgpName} onChange={handleValueChange} />
                 </DialogContent>

@@ -18,7 +18,7 @@ function CustomerDelete(props) {
     }
 
     const deleteCustomer = (id) => {
-        const url = '/api/customers/' + id;
+        const url = '/api/customer/' + id;
 
         fetch(url, {
             method: 'DELETE'
@@ -33,11 +33,11 @@ function CustomerDelete(props) {
                 <DialogTitle onClose={handleClose}>삭제</DialogTitle>
                 <DialogContent>
                     <Typography gutterBottom>
-                        선택한 TGP를 삭제하시겠습니까?
+                        선택한 고객사({props.name})를 삭제하시겠습니까?
                     </Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="danger" onClick={(e) => { deleteCustomer(props.id) }}>삭제</Button>
+                    <Button variant="danger" onClick={(e) => { deleteCustomer(props.customer_id) }}>삭제</Button>
                     <Button variant="secondary" onClick={handleClose}>취소</Button>
                 </DialogActions>
             </Dialog>

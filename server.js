@@ -21,11 +21,12 @@ const connection = mysql.createConnection({
 connection.connect();
 
 const multer = require('multer');
-const upload = multer({dest: './upload'})
+const upload = multer({dest: './upload'});
 
-app.get('/api/customers', (req, res) => {
+// 고객사 조회
+app.get('/api/customer', (req, res) => {
     connection.query(
-      "SELECT tgp_id, name, (SELECT status FROM STATUS WHERE CODE = tgp.`status`) AS status, date_format(update_time, '%Y-%m-%d %H:%i') AS update_time FROM TGP tgp ORDER BY tgp_id DESC",
+      "SELECT customer_id, name, (SELECT status FROM STATUS WHERE CODE = customer.`status`) AS status, date_format(update_time, '%Y-%m-%d %H:%i') AS update_time FROM CUSTOMER customer WHERE delete_time IS NULL ORDER BY customer_id DESC",
 
       (err, rows, fields) => {
         res.send(rows);
@@ -33,12 +34,25 @@ app.get('/api/customers', (req, res) => {
     );
 });
 
+// TGP 조회
+app.get('/api/customer/:customer_id', (req, res) => {
+    let sql = "SELECT tgp_id, name, (SELECT status FROM STATUS WHERE CODE = tgp.`status`) AS status, date_format(update_time, '%Y-%m-%d %H:%i') AS update_time FROM TGP tgp WHERE customer_id = ? and delete_time IS NULL ORDER BY tgp_id DESC";
+    let params = [req.params.customer_id];
+
+    connection.query(sql, params,
+        (err, rows, fields) => {
+            res.send(rows);
+        }
+    );
+});
+
 app.use('/image', express.static('./upload'));
 
-app.post('/api/customers', upload.single('image'), (req, res) => {
-    let sql = 'INSERT INTO TGP VALUES (null, ?, ?, ?, now(), now(), null)';    
+// 고객사 추가
+app.post('/api/customer', upload.single('image'), (req, res) => {
+    let sql = 'INSERT INTO CUSTOMER VALUES (null, ?, ?, now(), now(), null)';    
     let name = req.body.name;    
-    let params = ['1', name, '0'];
+    let params = [name, '0'];
 
     connection.query(sql, params, 
         (err, rows, fields) => {
@@ -47,15 +61,41 @@ app.post('/api/customers', upload.single('image'), (req, res) => {
     );
 });
 
-app.delete('/api/customers/:id', (req, res) => {
-    let sql = 'DELETE FROM TGP WHERE tgp_id = ?';
-    let params = [req.params.id];
+// TGP 추가
+app.post('/api/customer/:customer_id', upload.single('image'), (req, res) => {
+    let sql = 'INSERT INTO TGP VALUES (null, ?, ?, ?, now(), now(), null)';    
+    let name = req.body.name;    
+    let params = [req.params.customer_id, name, '0'];
+
+    connection.query(sql, params, 
+        (err, rows, fields) => {
+            res.send(rows);
+        }
+    );
+});
+
+// 고객사 삭제
+app.delete('/api/customer/:customer_id', (req, res) => {
+    let sql = 'UPDATE CUSTOMER SET delete_time = now() WHERE customer_id = ?';
+    let params = [req.params.customer_id];
 
     connection.query(sql, params,
         (err, rows, fields) => {
             res.send(rows);
         }
-    )
+    );
+});
+
+// TGP 삭제
+app.delete('/api/customer/:customer_id/:tgp_id', (req, res) => {
+    let sql = 'UPDATE TGP SET delete_time = now() WHERE customer_id = ? and tgp_id = ?';
+    let params = [req.params.customer_id, req.params.tgp_id];
+
+    connection.query(sql, params,
+        (err, rows, fields) => {
+            res.send(rows);
+        }
+    );
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
