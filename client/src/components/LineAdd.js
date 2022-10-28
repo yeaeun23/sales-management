@@ -1,22 +1,42 @@
 import React from 'react';
-import Form from 'react-bootstrap/Form';
-import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 
 function LineAdd(props) {
-    const handleClick = event => {
-        //console.log(event.target.value);
-        //event.target.style.color = event.target.value;
+    const handleAddClick = (e) => {
+        let T = e.currentTarget.closest('table tbody');
+        let R = e.currentTarget.closest('tr');
+        let C = R.cloneNode(true);
+
+        // 추가->삭제 버튼
+        C.querySelector('.addRowBtn').style.display = 'none';
+        C.querySelector('.deleteRowBtn').style.display = 'block';
+        C.querySelector('.deleteRowBtn').addEventListener('click', handleDeleteClick);
+
+        // input 초기화
+        [...C.getElementsByTagName('input')].forEach(element => {
+            element.value = null;
+        });
+
+        // th 초기화
+        if (C.getElementsByTagName('th')[0] != null) {
+            C.getElementsByTagName('th')[0].textContent = "";
+        }
+
+        T.appendChild(C);
+    };
+
+    const handleDeleteClick = (e) => {
+        e.currentTarget.closest("tr").remove();
     };
 
     return (
         <Button
+            className="addRowBtn"
             variant="secondary"
             size={props.size}
             title="행 추가"
-            className="plusBtn"
-            style={{ float: 'right'}}
-            onChange={handleClick}>
+            onClick={handleAddClick}
+            style={{ display: 'block' }}>
             +
         </Button>
     );
