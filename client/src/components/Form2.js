@@ -180,12 +180,15 @@ function Form2(props) {
         <Card.Body>
           <Table style={{ marginBottom: 0 }}>
             <colgroup className="col_form2_3">
-              <col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col />
+              <col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col />
             </colgroup>
             <tbody>
               <tr>
                 <th>
                   <Form.Label column={props.inputSize}>역할</Form.Label>
+                </th>
+                <th style={{ textAlign: 'center' }}>
+                  <Form.Label column={props.inputSize}>이름/직함/직급</Form.Label>
                 </th>
                 <th colSpan={2} style={{ textAlign: 'center' }}>
                   <Form.Label column={props.inputSize}>영업사원</Form.Label>
@@ -199,13 +202,13 @@ function Form2(props) {
                 <th colSpan={2} style={{ textAlign: 'center' }}>
                   <Form.Label column={props.inputSize}>우리 회사</Form.Label>
                 </th>
-                <th colSpan={2} style={{ textAlign: 'center' }}>
+                <th style={{ textAlign: 'center' }}>
                   <Form.Label column={props.inputSize}>평가 의견</Form.Label>
                 </th>
-                <th></th>
               </tr>
               <tr>
                 <th><Form.Label column={props.inputSize}>TDM</Form.Label></th>
+                <td><Form.Control size={props.inputSize} type="text" disabled /></td>
                 <td><SelectScore size={props.inputSize} /></td>
                 <td><SelectSign size={props.inputSize} /></td>
                 <td><SelectScore size={props.inputSize} /></td>
@@ -215,21 +218,17 @@ function Form2(props) {
                 <td><SelectScore size={props.inputSize} /></td>
                 <td><SelectSign size={props.inputSize} /></td>
                 <td><Form.Control size={props.inputSize} type="text" /></td>
-                <td><SelectSign size={props.inputSize} /></td>
-                <td>
-                  <LineAdd size={props.inputSize} />
-                  <LineDelete size={props.inputSize} />
-                </td>
               </tr>
             </tbody>
           </Table>
           <Table style={{ marginBottom: 0 }}>
             <colgroup className="col_form2_3">
-              <col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col />
+              <col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col />
             </colgroup>
             <tbody>
               <tr>
                 <th><Form.Label column={props.inputSize}>FDM</Form.Label></th>
+                <td><Form.Control size={props.inputSize} type="text" disabled /></td>
                 <td><SelectScore size={props.inputSize} /></td>
                 <td><SelectSign size={props.inputSize} /></td>
                 <td><SelectScore size={props.inputSize} /></td>
@@ -239,21 +238,17 @@ function Form2(props) {
                 <td><SelectScore size={props.inputSize} /></td>
                 <td><SelectSign size={props.inputSize} /></td>
                 <td><Form.Control size={props.inputSize} type="text" /></td>
-                <td><SelectSign size={props.inputSize} /></td>
-                <td>
-                  <LineAdd size={props.inputSize} />
-                  <LineDelete size={props.inputSize} />
-                </td>
               </tr>
             </tbody>
           </Table>
           <Table style={{ marginBottom: 0 }}>
             <colgroup className="col_form2_3">
-              <col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col />
+              <col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col />
             </colgroup>
             <tbody>
               <tr>
                 <th><Form.Label column={props.inputSize}>UDM</Form.Label></th>
+                <td><Form.Control size={props.inputSize} type="text" disabled /></td>
                 <td><SelectScore size={props.inputSize} /></td>
                 <td><SelectSign size={props.inputSize} /></td>
                 <td><SelectScore size={props.inputSize} /></td>
@@ -263,21 +258,17 @@ function Form2(props) {
                 <td><SelectScore size={props.inputSize} /></td>
                 <td><SelectSign size={props.inputSize} /></td>
                 <td><Form.Control size={props.inputSize} type="text" /></td>
-                <td><SelectSign size={props.inputSize} /></td>
-                <td>
-                  <LineAdd size={props.inputSize} />
-                  <LineDelete size={props.inputSize} />
-                </td>
               </tr>
             </tbody>
           </Table>
           <Table>
             <colgroup className="col_form2_3">
-              <col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col />
+              <col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col />
             </colgroup>
             <tbody>
               <tr>
                 <th><Form.Label column={props.inputSize}>HELPER</Form.Label></th>
+                <td><Form.Control size={props.inputSize} type="text" disabled /></td>
                 <td><SelectScore size={props.inputSize} /></td>
                 <td><SelectSign size={props.inputSize} /></td>
                 <td><SelectScore size={props.inputSize} /></td>
@@ -287,11 +278,6 @@ function Form2(props) {
                 <td><SelectScore size={props.inputSize} /></td>
                 <td><SelectSign size={props.inputSize} /></td>
                 <td><Form.Control size={props.inputSize} type="text" /></td>
-                <td><SelectSign size={props.inputSize} /></td>
-                <td>
-                  <LineAdd size={props.inputSize} />
-                  <LineDelete size={props.inputSize} />
-                </td>
               </tr>
             </tbody>
           </Table>

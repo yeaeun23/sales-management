@@ -14,7 +14,11 @@ function LineAdd(props) {
 
         // input 초기화
         [...C.getElementsByTagName('input')].forEach(element => {
-            element.value = null;
+            element.value = '';
+        });
+        [...C.getElementsByTagName('select')].forEach(element => {            
+            element.selectedIndex = 0;
+            element.style.color = element.value;
         });
 
         // th 초기화

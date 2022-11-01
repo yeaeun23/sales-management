@@ -23,6 +23,8 @@ connection.connect();
 const multer = require('multer');
 const upload = multer({dest: './upload'});
 
+app.use('/image', express.static('./upload'));
+
 // 고객사 조회
 app.get('/api/customer', (req, res) => {
     connection.query(
@@ -46,8 +48,6 @@ app.get('/api/customer/:customer_id', (req, res) => {
     );
 });
 
-app.use('/image', express.static('./upload'));
-
 // 고객사 추가
 app.post('/api/customer', upload.single('image'), (req, res) => {
     let sql = 'INSERT INTO CUSTOMER VALUES (null, ?, ?, now(), now(), null)';    
@@ -68,6 +68,36 @@ app.post('/api/customer/:customer_id', upload.single('image'), (req, res) => {
     let params = [req.params.customer_id, name, '0'];
 
     connection.query(sql, params, 
+        (err, rows, fields) => {
+            res.send(rows);
+        }
+    );
+});
+
+// TGP Step 1 저장
+app.post('/api/tgp/:tgp_id/1', upload.single('image'), (req, res) => {
+    let sql = 'INSERT INTO FORM1 VALUES (null, ?, ?, ?, ?, ?, ?)';    
+    let customer = req.body.customer;   
+    console.log(customer); 
+    let department = req.body.department;    
+    let solution = req.body.solution;    
+    let amount = req.body.amount;    
+    let targetdate = req.body.targetdate;    
+    let params = [req.params.tgp_id, customer, department, solution, amount, targetdate];
+
+    connection.query(sql, params, 
+        (err, rows, fields) => {
+            res.send(rows);
+        }
+    );
+});
+
+// TGP Step 1 조회
+app.get('/api/tgp/:tgp_id/1', (req, res) => {
+    let sql = "SELECT customer from FORM1 WHERE tgp_id = ? and form_id = 3";
+    let params = [req.params.tgp_id];
+
+    connection.query(sql, params,
         (err, rows, fields) => {
             res.send(rows);
         }

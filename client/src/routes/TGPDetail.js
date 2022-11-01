@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Card from 'react-bootstrap/Card';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -6,6 +6,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import '../App.css';
+import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
 import Form1 from '../components/Form1';
 import Form2 from '../components/Form2';
 import Form3 from '../components/Form3';
@@ -21,33 +23,91 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Drawer from '@mui/material/Drawer';
+import { useParams } from 'react-router-dom';
+import { post } from "axios";
 
 function TGPDetail() {
-  //let { id } = useParams();
+  const { tgp_id } = useParams();
   const inputSize = "sm";
   const navigate = useNavigate();
+  const [customer, setCustomer] = useState("");
+  const [department, setDepartment] = useState("");
+  const [solution, setSolution] = useState("");
+  const [amount, setAmount] = useState("");
+  const [targetdate, setTargetdate] = useState("");
   const steps = ['Target Goal Plan', 'In The Funnel', 'Getting Action'];
   const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set());
+  //const [skipped, setSkipped] = React.useState(new Set());
+
+  useEffect(() => {
+    callApi()
+      .then(res => setCustomer(res.map((c) => {
+        return c.customer
+      })))
+      .catch(err => console.log(err));
+  }, []);
+
+  const callApi = async () => {
+    const response = await fetch('/api/tgp/' + tgp_id + '/1');
+    const body = await response.json();
+    console.log(body);
+    return body;
+  }
 
   const isStepOptional = (step) => {
     return step === 1;
   };
 
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
-  };
+  // const isStepSkipped = (step) => {
+  //   return skipped.has(step);
+  // };
 
   const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
+    // let newSkipped = skipped;
+
+    // if (isStepSkipped(activeStep)) {
+    //   newSkipped = new Set(newSkipped.values());
+    //   newSkipped.delete(activeStep);
+    // }
+
+    if (activeStep == 0) {
+      saveForm1()
+        .then((response) => {
+          setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        })
+    }
+    else {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
+    // setSkipped(newSkipped);
   };
+
+  const saveForm1 = () => {
+    const url = '/api/tgp/' + tgp_id + '/1';
+    const formData = new FormData();
+    formData.append('customer', customer);
+    formData.append('department', department);
+    formData.append('solution', solution);
+    formData.append('amount', amount);
+    formData.append('targetdate', targetdate);
+
+    const config = { // 파일 포함 시
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    }
+
+    return post(url, formData, config);
+  }
+
+  const handleValueChange = (e) => {
+    setCustomer(e.target.value);
+    // setDepartment(e.target.value);
+    // setSolution(e.target.value);
+    // setAmount(e.target.value);
+    // setTargetdate(e.target.value);
+  }
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -97,7 +157,7 @@ function TGPDetail() {
 
   return (
     <div className="root">
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton className="menuButton" color="inherit" aria-label="Open drawer">
             {/*<MenuIcon onClick={toggleDrawer('left', true)} />*/}
@@ -130,9 +190,9 @@ function TGPDetail() {
                 <Typography variant="caption"></Typography>
               );
             }
-            if (isStepSkipped(index)) {
-              stepProps.completed = false;
-            }
+            // if (isStepSkipped(index)) {
+            //   stepProps.completed = false;
+            // }
             return (
               <Step key={label} {...stepProps}>
                 <StepLabel {...labelProps}>{label}</StepLabel>
@@ -167,7 +227,41 @@ function TGPDetail() {
                 {/* Step {activeStep + 1} */}
                 {
                   activeStep === 0
-                    ? <Form1 inputSize={inputSize} />
+                    ? <Card>
+                    <Card.Header>Target Goal Plan</Card.Header>
+                    <Card.Body>
+                      <Table>
+                        <colgroup className="col_form1_1">
+                          <col /><col /><col /><col />
+                        </colgroup>
+                        <tbody>
+                          <tr>
+                            <th><Form.Label column={inputSize}>거래처</Form.Label></th>
+                            <td><Form.Control size={inputSize} type="text" name="customer" value={customer} onChange={handleValueChange} /></td>
+                            <th><Form.Label column={inputSize}>부서</Form.Label></th>
+                            <td><Form.Control size={inputSize} type="text" name="department" onChange={handleValueChange} /></td>
+                          </tr>
+                          <tr>
+                            <th><Form.Label column={inputSize}>솔루션</Form.Label></th>
+                            <td><Form.Control size={inputSize} type="text" name="solution" onChange={handleValueChange} /></td>
+                            <th><Form.Label column={inputSize}>금액 (원)</Form.Label></th>
+                            <td><Form.Control size={inputSize} type="text" name="amount" onChange={handleValueChange} />
+                            </td>
+                          </tr>
+                          <tr>
+                            <th>
+                              <Form.Label column={inputSize}>목표일</Form.Label>
+                            </th>
+                            <td>
+                              <Form.Control size={inputSize} type="date" name="targetdate" />
+                            </td>
+                            <th></th>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </Card.Body>
+                  </Card>
                     : (activeStep === 1
                       ? <Form2 inputSize={inputSize} />
                       : <Form3 inputSize={inputSize} />

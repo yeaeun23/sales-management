@@ -16,15 +16,15 @@ function Form1(props) {
             <tbody>
               <tr>
                 <th><Form.Label column={props.inputSize}>거래처</Form.Label></th>
-                <td><Form.Control size={props.inputSize} type="text" /></td>
+                <td><Form.Control size={props.inputSize} type="text" name="customer" /></td>
                 <th><Form.Label column={props.inputSize}>부서</Form.Label></th>
-                <td><Form.Control size={props.inputSize} type="text" /></td>
+                <td><Form.Control size={props.inputSize} type="text" name="department" /></td>
               </tr>
               <tr>
                 <th><Form.Label column={props.inputSize}>솔루션</Form.Label></th>
-                <td><Form.Control size={props.inputSize} type="text" /></td>
+                <td><Form.Control size={props.inputSize} type="text" name="solution" /></td>
                 <th><Form.Label column={props.inputSize}>금액 (원)</Form.Label></th>
-                <td><Form.Control size={props.inputSize} type="text" />
+                <td><Form.Control size={props.inputSize} type="text" name="amount" />
                 </td>
               </tr>
               <tr>
@@ -32,14 +32,10 @@ function Form1(props) {
                   <Form.Label column={props.inputSize}>목표일</Form.Label>
                 </th>
                 <td>
-                  <Form.Control size={props.inputSize} type="date" />
+                  <Form.Control size={props.inputSize} type="date" name="targetdate" />
                 </td>
-                <th>
-                  <Form.Label column={props.inputSize}>상태</Form.Label>
-                </th>
-                <td>
-                  <Form.Control size={props.inputSize} type="text" />
-                </td>
+                <th></th>
+                <td></td>
               </tr>
             </tbody>
           </Table>

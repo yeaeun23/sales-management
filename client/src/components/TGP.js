@@ -13,7 +13,7 @@ function TGP(props) {
             <td style={{ textAlign: 'center' }} >{props.status}</td>
             <td style={{ textAlign: 'center' }} >{props.update_time}</td>
             <td style={{ textAlign: 'center' }} >
-                <Button variant="secondary" size="sm">수정</Button>
+                <Button variant="secondary" size="sm">전체 보기</Button>
             </td>
             <td style={{ textAlign: 'center' }} >
                 <TGPDelete stateRefresh={props.stateRefresh} customer_id={props.customer_id} tgp_id={props.tgp_id} name={props.name} />

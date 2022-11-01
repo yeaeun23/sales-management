@@ -17,14 +17,13 @@ function SelectSign(props) {
 
   const [selected, setSelected] = useState(options[0].value);
 
-  const handleChange = event => {
-    //console.log(event.target.value);
-    event.target.style.color = event.target.value;
-    setSelected(event.target.value);
+  const handleValueChange = (e) => {
+    setSelected(e.target.value);
+    e.target.style.color = e.target.value;
   };
 
   return (
-    <Form.Select size={props.size} title="사인 선택" style={styles} value={selected} onChange={handleChange}>
+    <Form.Select size={props.size} title="사인 선택" style={styles} value={selected} onChange={handleValueChange}>
       {options.map(option => (
         <option key={option.value} value={option.value} style={{ color: option.value }} title={option.title}>
           {option.text}

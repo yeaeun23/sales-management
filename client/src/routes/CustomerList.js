@@ -63,7 +63,7 @@ function CustomerList(props) {
 
   return (
     <div className="root">
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton className="menuButton" color="inherit" aria-label="Open drawer">
             <MenuIcon />

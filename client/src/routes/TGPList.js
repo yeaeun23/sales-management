@@ -47,6 +47,7 @@ function TGPList(props) {
   const callApi = async () => {
     const response = await fetch('/api/customer/' + customer_id);
     const body = await response.json();
+    console.log(body);
     return body;
   }
 
@@ -65,7 +66,7 @@ function TGPList(props) {
 
   return (
     <div className="root">
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton className="menuButton" color="inherit" aria-label="Open drawer">
             <MenuIcon />
