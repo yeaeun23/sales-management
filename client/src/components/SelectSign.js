@@ -11,8 +11,8 @@ function SelectSign(props) {
   const options = [
     { value: "black", text: "● Default", title: "" },
     { value: "darkgray", text: "● Gray Sign", title: "불확실" },
-    { value: "red", text: "● Red Sign", title: "위협/약점 요인" },
-    { value: "blue", text: "● Blue Sign", title: "기회/강점 요인" },
+    { value: "red", text: "● Red Sign", title: "약점/위협 요인" },
+    { value: "blue", text: "● Blue Sign", title: "강점/기회 요인" },
   ];
 
   const [selected, setSelected] = useState(options[0].value);

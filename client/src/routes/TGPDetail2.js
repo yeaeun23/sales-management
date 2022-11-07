@@ -23,8 +23,9 @@ import Drawer from '@mui/material/Drawer';
 import { useParams } from 'react-router-dom';
 import { post } from "axios";
 import { Link } from "react-router-dom";
+import SelectSign from '../components/SelectSign';
 
-function TGPDetail(props) {
+function TGPDetail2(props) {
   const params = useParams();
   const steps = ['Target Goal Plan', 'In The Funnel', 'Getting Action'];
   const [loading, setLoading] = useState(0);
@@ -39,11 +40,12 @@ function TGPDetail(props) {
   });
 
   const [inputs, setInputs] = useState({
-    account: "",
-    department: "",
-    solution: "",
-    amount: "",
-    closingdate: ""
+    position1: "",
+    position1_sign: "",
+    position2: "",
+    position2_sign: "",
+    position3: "",
+    position3_sign: ""
   });
 
   const handleValueChange = (e) => {
@@ -55,34 +57,40 @@ function TGPDetail(props) {
     setInputData()
       .then(res => setInputs({
         ...inputs,
-        account: res[0].account,
-        department: res[0].department,
-        solution: res[0].solution,
-        amount: res[0].amount,
-        closingdate: res[0].closingdate
+        position1: res[0].position1,
+        position1_sign: res[0].position1_sign,
+        position2: res[0].position2,
+        position2_sign: res[0].position2_sign,
+        position3: res[0].position3,
+        position3_sign: res[0].position3_sign
       }))
       .catch(err => console.log(err));
   }, []);
 
   const setInputData = async () => {
-    const response = await fetch('/api/tgp/' + params.tgp_id);
+    const response = await fetch('/api/tgp/' + params.tgp_id + '/' + params.form_id);
     const body = await response.json();
     return body;
   }
+
+  const handleBack = () => {
+    saveInputData();
+  };
 
   const handleNext = () => {
     saveInputData();
   };
 
   const saveInputData = () => {
-    const url = '/api/tgp/' + params.tgp_id;
+    const url = '/api/tgp/' + params.tgp_id + '/' + params.form_id;
     const formData = new FormData();
-    formData.append('account', inputs.account);
-    formData.append('department', inputs.department);
-    formData.append('solution', inputs.solution);
-    formData.append('amount', inputs.amount);
-    formData.append('closingdate', inputs.closingdate);
-    
+    formData.append('position1', inputs.position1);
+    formData.append('position1_sign', inputs.position1_sign);
+    formData.append('position2', inputs.position2);
+    formData.append('position2_sign', inputs.position2_sign);
+    formData.append('position3', inputs.position3);
+    formData.append('position3_sign', inputs.position3_sign);
+
     return post(url, formData);
   }
 
@@ -123,6 +131,8 @@ function TGPDetail(props) {
     </Box>
   );
 
+  const position1_label = ["Lead", "Filtering","Opportunity","Closing"];
+
   return (
     <div className="root">
       <AppBar position="fixed">
@@ -149,7 +159,7 @@ function TGPDetail(props) {
       ))}
 
       <div className="paper">
-        <Stepper activeStep={0} style={{ margin: '50px' }}>
+        <Stepper activeStep={1} style={{ margin: '50px' }}>
           {steps.map((label, index) => {
             const stepProps = {};
             const labelProps = {};
@@ -169,39 +179,55 @@ function TGPDetail(props) {
                 <Card.Header>Target Goal Plan</Card.Header>
                 <Card.Body>
                   <Table>
-                    <colgroup className="col_form1_1">
-                      <col /><col /><col /><col />
+                    <colgroup className="col_form2_1">
+                      <col /><col /><col />
                     </colgroup>
                     {inputs.account != "" ?
                       <tbody>
                         <tr>
-                          <th><Form.Label column={props.inputSize}>거래처</Form.Label></th>
-                          <td><Form.Control size={props.inputSize} type="text" name="account" value={inputs.account} onChange={handleValueChange} /></td>
-                          <th><Form.Label column={props.inputSize}>부서</Form.Label></th>
-                          <td><Form.Control size={props.inputSize} type="text" name="department" value={inputs.department} onChange={handleValueChange} /></td>
-                        </tr>
-                        <tr>
-                          <th><Form.Label column={props.inputSize}>솔루션</Form.Label></th>
-                          <td><Form.Control size={props.inputSize} type="text" name="solution" value={inputs.solution} onChange={handleValueChange} /></td>
-                          <th><Form.Label column={props.inputSize}>금액 (원)</Form.Label></th>
-                          <td><Form.Control size={props.inputSize} type="text" name="amount" value={inputs.amount} onChange={handleValueChange} />
+                          <th>
+                            <Form.Label column={props.inputSize}>고객관점<br />세일즈 퍼널 위치</Form.Label>
+                          </th>
+                          <td>
+                          {                            
+                            position1_label.map((label, i) => (
+                              <Form.Check inline label={label} name="position1" type="radio" key={i} value={i} checked={inputs.position1 === i } onChange={handleValueChange} />
+                          ))}
                           </td>
+                          <td><SelectSign size={props.inputSize} value={inputs.position1_sign} /></td>
                         </tr>
                         <tr>
                           <th>
-                            <Form.Label column={props.inputSize}>목표일</Form.Label>
+                            <Form.Label column={props.inputSize}>고객관점<br />경쟁대비 위치</Form.Label>
                           </th>
                           <td>
-                            <Form.Control size={props.inputSize} type="date" name="closingdate" value={inputs.closingdate} onChange={handleValueChange} />
+                            {/* <Form.Check inline label="희박함" name="position2" type="radio" value="0" checked={inputs.position2 === 0 } />
+                            <Form.Check inline label="동일선상" name="position2" type="radio" value="1" checked={inputs.position2 === 1 } />
+                            <Form.Check inline label="우선시됨" name="position2" type="radio" value="2" checked={inputs.position2 === 2 } />
+                            <Form.Check inline label="거의 독점" name="position2" type="radio" value="3" checked={inputs.position2 === 3 } /> */}
                           </td>
-                          <th></th>
-                          <td></td>
+                          <td><SelectSign size={props.inputSize} /></td>
+                        </tr>
+                        <tr>
+                          <th>
+                            <Form.Label column={props.inputSize}>내가 생각하는<br />성공 가능성</Form.Label>
+                          </th>
+                          <td>
+                            {/* <Form.Check inline label="0%" name="position3" type="radio" value="0" checked={inputs.position3 === 0 } />
+                            <Form.Check inline label="15%" name="position3" type="radio" value="1" checked={inputs.position3 === 1 } />
+                            <Form.Check inline label="30%" name="position3" type="radio" value="2" checked={inputs.position3 === 2 } />
+                            <Form.Check inline label="45%" name="position3" type="radio" value="3" checked={inputs.position3 === 3 } />
+                            <Form.Check inline label="60%" name="position3" type="radio" value="4" checked={inputs.position3 === 4 } />
+                            <Form.Check inline label="75%" name="position3" type="radio" value="5" checked={inputs.position3 === 5 } />
+                            <Form.Check inline label="90%" name="position3" type="radio" value="6" checked={inputs.position3 === 6 } /> */}
+                          </td>
+                          <td><SelectSign size={props.inputSize} /></td>
                         </tr>
                       </tbody>
                       :
                       <tbody>
                         <tr>
-                          <td colSpan="4" align="center">
+                          <td colSpan="3" align="center">
                             <CircularProgress className="progress" variant="indeterminate" value={loading} />
                           </td>
                         </tr>
@@ -212,8 +238,13 @@ function TGPDetail(props) {
               </Card>
             </div>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+              <Link to={`/customer/${params.customer_id}/${params.tgp_id}/1`} style={{ display: 'block' }}>
+                <Button variant="secondary" onClick={handleBack} sx={{ mr: 1 }}>
+                  &lt; 이전
+                </Button>
+              </Link>
               <Box sx={{ flex: '1 1 auto' }} />
-              <Link to={`/customer/${params.customer_id}/${params.tgp_id}/2`} style={{ display: 'block' }}>
+              <Link to={`/customer/${params.customer_id}/${params.tgp_id}/3`} style={{ display: 'block' }}>
                 <Button variant="secondary" onClick={handleNext}>다음 &gt;</Button>
               </Link>
             </Box>
@@ -224,4 +255,4 @@ function TGPDetail(props) {
   );
 }
 
-export default TGPDetail;
+export default TGPDetail2;
