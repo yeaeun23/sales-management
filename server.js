@@ -128,8 +128,41 @@ app.post('/api/tgp/:tgp_id', upload.single('image'), (req, res) => {
 });
 
 // TGP Step 2 조회
-app.get('/api/tgp/:tgp_id/:form_id', (req, res) => {
-  let sql = "SELECT position1, position1_sign, position2, position2_sign, position3, position3_sign FROM FORM WHERE tgp_id = ? AND form_id = 31";
+app.get('/api/tgp/:tgp_id/:form_id/FORM', (req, res) => {
+  let sql = "SELECT * FROM FORM WHERE tgp_id = ? AND form_id = 31";
+  let params = [req.params.tgp_id, req.params.form_id];
+
+  connection.query(sql, params,
+    (err, rows, fields) => {
+      res.send(rows);
+    }
+  );
+});
+
+app.get('/api/tgp/:tgp_id/:form_id/FORM_TDM', (req, res) => {
+  let sql = "SELECT * FROM FORM_TDM WHERE tdm_id = 1 AND form_id = 31";
+  let params = [req.params.tgp_id, req.params.form_id];
+
+  connection.query(sql, params,
+    (err, rows, fields) => {
+      res.send(rows);
+    }
+  );
+});
+
+app.get('/api/tgp/:tgp_id/:form_id/FORM_STRENGTH', (req, res) => {
+  let sql = "SELECT * FROM FORM_STRENGTH WHERE strength_id = 1 AND form_id = 31";
+  let params = [req.params.tgp_id, req.params.form_id];
+
+  connection.query(sql, params,
+    (err, rows, fields) => {
+      res.send(rows);
+    }
+  );
+});
+
+app.get('/api/tgp/:tgp_id/:form_id/FORM_WEAKNESS', (req, res) => {
+  let sql = "SELECT * FROM FORM_WEAKNESS WHERE weakness_id = 1 AND form_id = 31";
   let params = [req.params.tgp_id, req.params.form_id];
 
   connection.query(sql, params,

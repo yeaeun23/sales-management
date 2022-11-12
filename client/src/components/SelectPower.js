@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from "react";
 import Form from 'react-bootstrap/Form';
-import { useState } from 'react';
 
 function SelectPower(props) {
   const styles = {
-    width: props.size == "sm" ? "57px" : "62px",
+    width: props.size === "sm" ? "57px" : "62px",
     float: "right"
   };
   
@@ -15,17 +14,24 @@ function SelectPower(props) {
     { value: "L", text: "L", title: "Low" },
   ];
 
-  const [selected, setSelected] = useState(options[0].value);
+  const [selected, setSelected] = useState(props.selected);
 
   const handleValueChange = (e) => {
-    e.target.style.color = e.target.value;
     setSelected(e.target.value);
   };
 
   return (
-    <Form.Select size={props.size} title="파워 선택" style={styles} value={selected} onChange={handleValueChange}>
+    <Form.Select 
+    size={props.size} 
+    title="파워 선택" 
+    style={styles} 
+    value={selected} 
+    onChange={handleValueChange}>
       {options.map(option => (
-        <option key={option.value} value={option.value} style={{ color: option.value }} title={option.title}>
+        <option 
+        key={option.value} 
+        value={option.value} 
+        title={option.title}>
           {option.text}
         </option>
       ))}

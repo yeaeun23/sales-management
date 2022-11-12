@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from "react";
 import Form from 'react-bootstrap/Form';
-import { useState } from 'react';
 
 function SelectSign(props) {
   const styles = {
-    width: props.size == "sm" ? "60px" : "66px",
-    float: "right"
+    width: props.size === "sm" ? "60px" : "66px",
+    float: "right",
+    color: props.selected
   };
 
   const options = [
@@ -15,7 +15,7 @@ function SelectSign(props) {
     { value: "blue", text: "● Blue Sign", title: "강점/기회 요인" },
   ];
 
-  const [selected, setSelected] = useState(options[0].value);
+  const [selected, setSelected] = useState(props.selected);
 
   const handleValueChange = (e) => {
     setSelected(e.target.value);
@@ -23,9 +23,18 @@ function SelectSign(props) {
   };
 
   return (
-    <Form.Select size={props.size} title="사인 선택" style={styles} value={selected} onChange={handleValueChange}>
-      {options.map(option => (
-        <option key={option.value} value={option.value} style={{ color: option.value }} title={option.title}>
+    <Form.Select
+      size={props.size}
+      title="사인 선택"
+      style={styles}
+      value={selected}
+      onChange={handleValueChange}>
+      {options.map((option) => (
+        <option
+          key={option.value}
+          value={option.value}
+          style={{ color: option.value }}
+          title={option.title}>
           {option.text}
         </option>
       ))}
