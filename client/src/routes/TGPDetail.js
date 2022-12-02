@@ -52,6 +52,12 @@ function TGPDetail(props) {
   };
 
   useEffect(() => {
+    const setInputData = async () => {
+      const response = await fetch('/api/tgp/' + params.tgp_id);
+      const body = await response.json();
+      return body;
+    }
+
     setInputData()
       .then(res => setInputs({
         ...inputs,
@@ -62,21 +68,16 @@ function TGPDetail(props) {
         closingdate: res[0].closingdate
       }))
       .catch(err => console.log(err));
-  }, []);
-
-  const setInputData = async () => {
-    const response = await fetch('/api/tgp/' + params.tgp_id);
-    const body = await response.json();
-    return body;
-  }
+  }, [params.tgp_id]);
 
   const handleNext = () => {
     saveInputData();
   };
 
   const saveInputData = () => {
-    const url = '/api/tgp/' + params.tgp_id;
+    const url = '/api/tgp/' + params.tgp_id + '/STEP1';
     const formData = new FormData();
+
     formData.append('account', inputs.account);
     formData.append('department', inputs.department);
     formData.append('solution', inputs.solution);
@@ -172,7 +173,7 @@ function TGPDetail(props) {
                     <colgroup className="col_form1_1">
                       <col /><col /><col /><col />
                     </colgroup>
-                    {inputs.account != "" ?
+                    {inputs.account !== null ?
                       <tbody>
                         <tr>
                           <th><Form.Label column={props.inputSize}>거래처</Form.Label></th>

@@ -11,6 +11,7 @@ import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Table from 'react-bootstrap/Table';
+import { BsCaretRightFill } from "react-icons/bs";
 
 function CustomerList(props) {
   const [customer, setCustomer] = useState("");
@@ -42,8 +43,8 @@ function CustomerList(props) {
       .catch(err => console.log(err));
   }, []);
 
-  const callApi = async () => {
-    const response = await fetch('/api/customer');
+  const callApi = async() => {
+    const response = await fetch('/customer');
     const body = await response.json();
     return body;
   }
@@ -57,7 +58,7 @@ function CustomerList(props) {
       return c.name.indexOf(searchKeyword) > -1;
     });
     return data.map((c) => {
-      return <Customer stateRefresh={stateRefresh} key={c.customer_id} customer_id={c.customer_id} name={c.name} status={c.status} update_time={c.update_time} />
+      return <Customer stateRefresh={stateRefresh} key={c.customer_id} customer_id={c.customer_id} name={c.name} status={c.status} status_code={c.status_code} update_time={c.update_time} />
     });
   }
 
@@ -81,13 +82,15 @@ function CustomerList(props) {
               className="inputRoot"
               name="searchKeyword"
               value={searchKeyword}
-              onChange={handleValueChange}
-            />
+              onChange={handleValueChange} />
           </div>
         </Toolbar>
       </AppBar>
 
       <div className="paper">
+        <div className="paper_title">
+          거래처
+        </div>
         <Table striped hover>
           <colgroup>
             <col width="10%" />
@@ -100,16 +103,26 @@ function CustomerList(props) {
           <thead>
             <tr>
               <th style={{ textAlign: 'center' }} >No</th>
-              <th>고객사</th>
+              <th>거래처</th>
               <th style={{ textAlign: 'center' }} >상태</th>
-              <th style={{ textAlign: 'center' }} >수정한 날짜</th>
-              <th style={{ textAlign: 'center' }} ></th>
-              <th style={{ textAlign: 'center' }} ><CustomerAdd stateRefresh={stateRefresh} /></th>
+              <th style={{ textAlign: 'center' }} >수정한 시간</th>
+              <th style={{ textAlign: 'right' }} colSpan="2">
+                <CustomerAdd stateRefresh={stateRefresh} kind="add" />
+              </th>
             </tr>
           </thead>
           <tbody>
             {customer ?
-              filteredComponents(customer) :
+              (customer.length === 0 ?
+                <tr>
+                  <td colSpan="6" align="center" className="emptyRow">
+                    거래처가 없습니다.
+                  </td>
+                </tr>
+                :
+                filteredComponents(customer)
+              )
+              :
               <tr>
                 <td colSpan="6" align="center">
                   <CircularProgress className="progress" variant="indeterminate" value={loading} />

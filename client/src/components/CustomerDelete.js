@@ -7,42 +7,49 @@ import Button from 'react-bootstrap/Button';
 import Typography from "@material-ui/core/Typography";
 
 function CustomerDelete(props) {
-    const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    }
+	const handleClickOpen = () => {
+		setOpen(true);
+	}
 
-    const handleClose = () => {
-        setOpen(false);
-    }
+	const handleClose = () => {
+		setOpen(false);
+	}
 
-    const deleteCustomer = (id) => {
-        const url = '/api/customer/' + id;
+	const handleFormSubmit = () => {
+		deleteCustomer();
+		props.stateRefresh(); // 목록 새로고침
+	}
 
-        fetch(url, {
-            method: 'DELETE'
-        });
-        props.stateRefresh(); // 목록 새로고침
-    }
+	const deleteCustomer = () => {
+		const url = '/customer/' + props.customer_id;
+		fetch(url, { method: 'DELETE' });
+	}
 
-    return (
-        <div>
-            <Button variant="danger" size="sm" onClick={handleClickOpen}>삭제</Button>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle onClose={handleClose}>삭제</DialogTitle>
-                <DialogContent>
-                    <Typography gutterBottom>
-                        선택한 고객사({props.name})를 삭제하시겠습니까?
-                    </Typography>
-                </DialogContent>
-                <DialogActions>
-                    <Button variant="danger" onClick={(e) => { deleteCustomer(props.customer_id) }}>삭제</Button>
-                    <Button variant="secondary" onClick={handleClose}>취소</Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    )
+	return (
+		<div>
+			<Button variant="danger" size="sm" onClick={handleClickOpen}>
+				삭제
+			</Button>
+			<Dialog
+				open={open}
+				onClose={handleClose}
+				fullWidth={true}
+				maxWidth="xs">
+				<DialogTitle>거래처 삭제</DialogTitle>
+				<DialogContent>
+					<Typography gutterBottom>
+						'{props.name}'을(를) 삭제하시겠습니까?
+					</Typography>
+				</DialogContent>
+				<DialogActions>
+					<Button variant="danger" size="sm" onClick={handleFormSubmit}>삭제</Button>
+					<Button variant="secondary" size="sm" onClick={handleClose}>취소</Button>
+				</DialogActions>
+			</Dialog>
+		</div>
+	)
 }
 
 export default CustomerDelete;

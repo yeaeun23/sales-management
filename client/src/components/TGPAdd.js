@@ -1,81 +1,135 @@
-import React, { useState } from "react";
-import { post } from "axios";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
+import React, { useState, useEffect } from "react";
+import { post, put } from "axios";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import TextField from "@material-ui/core/TextField";
+import DialogContent from '@material-ui/core/DialogContent';
 import Button from 'react-bootstrap/Button';
-import { withStyles } from "@material-ui/core/styles";
-import { useParams } from 'react-router-dom';
-
-const styles = theme => ({
-  hidden: {
-    display: 'none'
-  }
-});
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 
 function TGPAdd(props) {
-  const { customer_id } = useParams();
-  const [tgpName, setTgpName] = useState("");
-  const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(false);
+	const [status, setStatus] = useState([]);
+	const [tgpName, setTgpName] = useState("");
+	const [tgpStatus, setTgpStatus] = useState(0);
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault()
+	useEffect(() => {
+		if (props.kind === "edit") {
+			setTgpName(props.name);
+			setTgpStatus(props.status_code);
+		}
 
-    addTGP()
-      .then((response) => {
-        props.stateRefresh(); // 고객 목록만 새로고침
-      })
+		callApi()
+			.then(res => setStatus(res))
+			.catch(err => console.log(err));
+	}, []);
 
-    setTgpName("");
-    setOpen(false);
-  }
+	const callApi = async () => {
+		const response = await fetch('/status');
+		const body = await response.json();
+		return body;
+	}
 
-  const handleValueChange = (e) => {
-    setTgpName(e.target.value);
-  }
+	const handleClickOpen = () => {
+		setOpen(true);
+	}
 
-  const addTGP = () => {
-    const url = '/api/customer/' + customer_id;
-    const formData = new FormData();
-    formData.append('name', tgpName);
+	const handleClose = (e) => {
+		setTgpName("");
+		setTgpStatus(0);
+		setOpen(false);
+	}
 
-    const config = { // 파일 포함 시
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
-    }
+	const handleValueChange = (e) => {
+		setTgpName(e.target.value);
+	}
 
-    return post(url, formData, config);
-  }
+	const handleSelectChange = (e) => {
+		setTgpStatus(e.target.value);
+	}
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  }
+	const handleFormSubmit = () => {
+		if (tgpName !== "") {
+			addTgp().then((res) => {
+				props.stateRefresh(); // 목록 새로고침
+			});
 
-  const handleClose = () => {
-    setTgpName("");
-    setOpen(false);
-  }
+			setTgpName("");
+			setTgpStatus(0);
+      setOpen(false);
+		}
+	}
 
-  return (
-    <div>
-      <Button variant="primary" size="sm" onClick={handleClickOpen}>
-        추가
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>TGP 추가</DialogTitle>
-        <DialogContent>
-          <TextField label="이름" type="text" name="tgpName" value={tgpName} onChange={handleValueChange} />
-        </DialogContent>
-        <DialogActions>
-          <Button variant="primary" size="sm" onClick={handleFormSubmit}>추가</Button>
-          <Button variant="secondary" size="sm" onClick={handleClose}>취소</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  )
+	const addTgp = () => {
+		let url = '/tgp/';
+		url += (props.kind === "add") ? props.customer_id : props.tgp_id;
+
+		const formData = new FormData();
+		formData.append('name', tgpName);
+		formData.append('status', tgpStatus);
+
+		const config = {
+			headers: { 'content-type': 'application/json' }
+		};
+
+		if (props.kind === "add") {
+			return post(url, formData, config);
+		}
+		else {
+			return put(url, formData, config);
+		}
+	}
+
+	return (
+		<div>
+			<Button variant={(props.kind === "add") ? "primary" : "secondary"} size="sm" onClick={handleClickOpen}>
+				{(props.kind === "add") ? "TGP 추가" : "수정"}
+			</Button>
+			<Dialog
+				open={open}
+				onClose={handleClose}
+				fullWidth={true}
+				maxWidth="xs">
+				<DialogTitle>
+					TGP {(props.kind === "add") ? "추가" : "수정"}
+				</DialogTitle>
+				<DialogContent>
+					<TextField
+						autoFocus
+						fullWidth
+						label="TGP 이름"
+						type="text"
+						name="tgpName"
+						value={tgpName}
+						onChange={handleValueChange}>
+					</TextField>
+					<br /><br />
+					<TextField
+						fullWidth
+						label="진행 상태"
+						select
+						name="tgpStatus"
+						value={tgpStatus}
+						onChange={handleSelectChange}>
+						{
+							status.map((c) => {
+								return <MenuItem key={c.code} value={c.code}>{c.status}</MenuItem>
+							})
+						}
+					</TextField>
+				</DialogContent>
+				<DialogActions>
+					<Button variant="primary" size="sm" onClick={handleFormSubmit}>
+						{(props.kind === "add") ? "추가" : "수정"}
+					</Button>
+					<Button variant="secondary" size="sm" onClick={handleClose}>
+						취소
+					</Button>
+				</DialogActions>
+			</Dialog>
+		</div>
+	)
 }
 
-export default withStyles(styles)(TGPAdd);
+export default TGPAdd;

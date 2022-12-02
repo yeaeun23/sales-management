@@ -1,79 +1,135 @@
-import React, { useState } from "react";
-import { post } from "axios";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
+import React, { useState, useEffect } from "react";
+import { post, put } from "axios";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import TextField from "@material-ui/core/TextField";
+import DialogContent from '@material-ui/core/DialogContent';
 import Button from 'react-bootstrap/Button';
-import { withStyles } from "@material-ui/core/styles";
-
-const styles = theme => ({
-    hidden: {
-        display: 'none'
-    }
-});
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 
 function CustomerAdd(props) {
-    const [tgpName, setTgpName] = useState("");
-    const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(false);
+	const [status, setStatus] = useState([]);
+	const [customerName, setCustomerName] = useState("");
+	const [customerStatus, setCustomerStatus] = useState(0);
 
-    const handleFormSubmit = (e) => {
-        e.preventDefault()
+	useEffect(() => {
+		if (props.kind === "edit") {
+			setCustomerName(props.name);
+			setCustomerStatus(props.status_code);
+		}
 
-        addCustomer()
-            .then((response) => {
-                props.stateRefresh(); // 고객 목록만 새로고침
-            })
+		callApi()
+			.then(res => setStatus(res))
+			.catch(err => console.log(err));
+	}, []);
 
-        setTgpName("");
-        setOpen(false);
-    }
+	const callApi = async () => {
+		const response = await fetch('/status');
+		const body = await response.json();
+		return body;
+	}
 
-    const handleValueChange = (e) => {
-        setTgpName(e.target.value);
-    }
+	const handleClickOpen = () => {
+		setOpen(true);
+	}
 
-    const addCustomer = () => {
-        const url = '/api/customer';
-        const formData = new FormData();
-        formData.append('name', tgpName);
+	const handleClose = () => {
+		setCustomerName("");
+		setCustomerStatus(0);
+		setOpen(false);
+	}
 
-        const config = { // 파일 포함 시
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        }
+	const handleValueChange = (e) => {
+		setCustomerName(e.target.value);
+	}
 
-        return post(url, formData, config);
-    }
+	const handleSelectChange = (e) => {
+		setCustomerStatus(e.target.value);
+	}
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    }
+	const handleFormSubmit = () => {
+		if (customerName !== "") {
+			addCustomer().then((res) => {
+				props.stateRefresh(); // 목록 새로고침
+			});
 
-    const handleClose = () => {
-        setTgpName("");
-        setOpen(false);
-    }
+			setCustomerName("");
+			setCustomerStatus(0);
+			setOpen(false);
+		}
+	}
 
-    return (
-        <div>
-            <Button variant="primary" size="sm" onClick={handleClickOpen}>
-                추가
-            </Button>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>고객사 추가</DialogTitle>
-                <DialogContent>
-                    <TextField label="이름" type="text" name="tgpName" value={tgpName} onChange={handleValueChange} />
-                </DialogContent>
-                <DialogActions>
-                    <Button variant="primary" size="sm" onClick={handleFormSubmit}>추가</Button>
-                    <Button variant="secondary" size="sm" onClick={handleClose}>취소</Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    )
+	const addCustomer = () => {
+		let url = '/customer';
+		url += (props.kind === "add") ? '' : '/' + props.customer_id;
+
+		const formData = new FormData();
+		formData.append('name', customerName);
+		formData.append('status', customerStatus);
+
+		const config = {
+			headers: { 'content-type': 'application/json' }
+		};
+
+		if (props.kind === "add") {
+			return post(url, formData, config);
+		}
+		else {
+			return put(url, formData, config);
+		}
+	}
+
+	return (
+		<div>
+			<Button variant={(props.kind === "add") ? "primary" : "secondary"} size="sm" onClick={handleClickOpen}>
+				{(props.kind === "add") ? "거래처 추가" : "수정"}
+			</Button>
+			<Dialog
+				open={open}
+				onClose={handleClose}
+				fullWidth={true}
+				maxWidth="xs">
+				<DialogTitle>
+					거래처 {(props.kind === "add") ? "추가" : "수정"}
+				</DialogTitle>
+				<DialogContent>
+					<TextField
+						autoFocus
+						fullWidth
+						label="거래처 이름"
+						type="text"
+						name="customerName"
+						value={customerName}
+						onChange={handleValueChange}>
+					</TextField>
+					<br /><br />
+					<TextField
+						fullWidth
+						label="진행 상태"
+						select
+						name="customerStatus"
+						value={customerStatus}
+						onChange={handleSelectChange}>
+						{
+							status.map((c) => {
+								return <MenuItem key={c.code} value={c.code}>{c.status}</MenuItem>
+							})
+						}
+					</TextField>
+				</DialogContent>
+				<DialogActions>
+					<Button variant="primary" size="sm" onClick={handleFormSubmit}>
+						{(props.kind === "add") ? "추가" : "수정"}
+					</Button>
+					<Button variant="secondary" size="sm" onClick={handleClose}>
+						취소
+					</Button>
+				</DialogActions>
+			</Dialog>
+		</div>
+	)
 }
 
-export default withStyles(styles)(CustomerAdd);
+export default CustomerAdd;

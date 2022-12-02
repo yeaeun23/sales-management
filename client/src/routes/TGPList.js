@@ -11,13 +11,15 @@ import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import Table from 'react-bootstrap/Table';
-import { useParams } from 'react-router-dom';
+import { BsCaretRightFill } from "react-icons/bs";
+import { useParams, useLocation } from 'react-router-dom';
 
 function TGPList(props) {
-  const { customer_id } = useParams();
   const [tgp, setTGP] = useState("");
   const [loading, setLoading] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const { customer_id } = useParams();
+  const customer_name = useLocation().state.customer_name;
 
   const stateRefresh = () => {
     setTGP("");
@@ -44,10 +46,9 @@ function TGPList(props) {
       .catch(err => console.log(err));
   }, []);
 
-  const callApi = async () => {
-    const response = await fetch('/api/customer/' + customer_id);
+  const callApi = async() => {
+    const response = await fetch('/tgp/' + customer_id);
     const body = await response.json();
-    console.log(body);
     return body;
   }
 
@@ -60,7 +61,7 @@ function TGPList(props) {
       return c.name.indexOf(searchKeyword) > -1;
     });
     return data.map((c) => {
-      return <TGP stateRefresh={stateRefresh} key={c.tgp_id} customer_id={customer_id} tgp_id={c.tgp_id} name={c.name} status={c.status} update_time={c.update_time} />
+      return <TGP stateRefresh={stateRefresh} key={c.tgp_id} customer_id={customer_id} tgp_id={c.tgp_id} name={c.name} status={c.status} status_code={c.status_code} update_time={c.update_time} />
     });
   }
 
@@ -72,7 +73,7 @@ function TGPList(props) {
             <MenuIcon />
           </IconButton>
           <Typography className="title" variant="h6" color="inherit" noWrap>
-            Sales Master - {customer_id}
+            Sales Master
           </Typography>
           <div className="grow" />
           <div className="search">
@@ -84,13 +85,15 @@ function TGPList(props) {
               className="inputRoot"
               name="searchKeyword"
               value={searchKeyword}
-              onChange={handleValueChange}
-            />
+              onChange={handleValueChange} />
           </div>
         </Toolbar>
       </AppBar>
 
       <div className="paper">
+        <div className="paper_title">
+          거래처 <BsCaretRightFill /> {customer_name}
+        </div>
         <Table striped hover>
           <colgroup>
             <col width="10%" />
@@ -105,14 +108,24 @@ function TGPList(props) {
               <th style={{ textAlign: 'center' }} >No</th>
               <th>TGP</th>
               <th style={{ textAlign: 'center' }} >상태</th>
-              <th style={{ textAlign: 'center' }} >수정한 날짜</th>
-              <th style={{ textAlign: 'center' }} ></th>
-              <th style={{ textAlign: 'center' }} ><TGPAdd stateRefresh={stateRefresh} /></th>
+              <th style={{ textAlign: 'center' }} >수정한 시간</th>
+              <th style={{ textAlign: 'right' }} colSpan="2">
+                <TGPAdd stateRefresh={stateRefresh} kind="add" customer_id={customer_id} />
+              </th>
             </tr>
           </thead>
           <tbody>
             {tgp ?
-              filteredComponents(tgp) :
+              (tgp.length === 0 ?
+                <tr>
+                  <td colSpan="6" align="center" className="emptyRow">
+                    TGP가 없습니다.
+                  </td>
+                </tr>
+                :
+                filteredComponents(tgp)
+              )
+              :
               <tr>
                 <td colSpan="6" align="center">
                   <CircularProgress className="progress" variant="indeterminate" value={loading} />
@@ -127,4 +140,3 @@ function TGPList(props) {
 }
 
 export default TGPList;
-//export default withStyles(styles)(TGPList);

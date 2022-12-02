@@ -10,9 +10,20 @@
   max-width: 1200px;
 }
 
+.paper_title {
+  padding: 20px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
 .progress {
   margin: 16px;
   background-color: transparent !important;
+}
+
+.emptyRow {
+  color: #aaa !important;
+  padding: 30px !important;
 }
 
 /* AppBar */
