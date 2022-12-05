@@ -1,29 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Card from 'react-bootstrap/Card';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import '../App.css';
+import Navi from "../components/Navi";
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import LineAdd from '../components/LineAdd';
 import LineDelete from '../components/LineDelete';
-import SelectSign from '../components/SelectSign';
-import SelectScore from '../components/SelectScore';
-import SelectPower from "../components/SelectPower";
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import Drawer from '@mui/material/Drawer';
 import { useParams } from 'react-router-dom';
 import { post } from "axios";
@@ -97,68 +86,10 @@ function TGPDetail3(props) {
     navigate(`/`);
   };
 
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
-
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
-
-    setState({ ...state, [anchor]: open });
-  };
-
-  const list = (anchor) => (
-    <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        {['로그아웃', '설정'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
-
   return (
     <div className="root">
-      <AppBar position="fixed">
-        <Toolbar>
-          <IconButton className="menuButton" color="inherit" aria-label="Open drawer">
-            {/*<MenuIcon onClick={toggleDrawer('left', true)} />*/}
-            <MenuIcon />
-          </IconButton>
-          <Typography className="title" variant="h6" color="inherit" noWrap>
-            Sales Master
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
-      {['left'].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Drawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}>
-            {list(anchor)}
-          </Drawer>
-        </React.Fragment>
-      ))}
-
+      <Navi />
+      
       <div className="paper">
         <Stepper activeStep={activeStep} style={{ margin: '50px' }}>
           {steps.map((label, index) => {

@@ -2,18 +2,12 @@ import React, { useState, useEffect } from "react";
 import Customer from '../components/Customer';
 import CustomerAdd from '../components/CustomerAdd';
 import '../App.css';
+import Navi from "../components/Navi";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 import Table from 'react-bootstrap/Table';
-import { BsCaretRightFill } from "react-icons/bs";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-function CustomerList(props) {
+function CustomerList() {
   const [customer, setCustomer] = useState("");
   const [loading, setLoading] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -64,33 +58,13 @@ function CustomerList(props) {
 
   return (
     <div className="root">
-      <AppBar position="fixed">
-        <Toolbar>
-          <IconButton className="menuButton" color="inherit" aria-label="Open drawer">
-            <MenuIcon />
-          </IconButton>
-          <Typography className="title" variant="h6" color="inherit" noWrap>
-            Sales Master
-          </Typography>
-          <div className="grow" />
-          <div className="search">
-            <div className="searchIcon">
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="검색하기"
-              className="inputRoot"
-              name="searchKeyword"
-              value={searchKeyword}
-              onChange={handleValueChange} />
-          </div>
-        </Toolbar>
-      </AppBar>
-
+      <Navi searchKeyword={searchKeyword} handleValueChange={handleValueChange} />
+      
       <div className="paper">
         <div className="paper_title">
-          거래처
+          <PlayArrowIcon />&nbsp;거래처
         </div>
+        
         <Table striped hover>
           <colgroup>
             <col width="10%" />
@@ -104,7 +78,7 @@ function CustomerList(props) {
             <tr>
               <th style={{ textAlign: 'center' }} >No</th>
               <th>거래처</th>
-              <th style={{ textAlign: 'center' }} >상태</th>
+              <th style={{ textAlign: 'center' }} >진행 상태</th>
               <th style={{ textAlign: 'center' }} >수정한 시간</th>
               <th style={{ textAlign: 'right' }} colSpan="2">
                 <CustomerAdd stateRefresh={stateRefresh} kind="add" />
@@ -112,7 +86,7 @@ function CustomerList(props) {
             </tr>
           </thead>
           <tbody>
-            {customer ?
+            { customer ?
               (customer.length === 0 ?
                 <tr>
                   <td colSpan="6" align="center" className="emptyRow">

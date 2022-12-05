@@ -11,9 +11,8 @@
 }
 
 .paper_title {
-  padding: 20px;
+  margin: 20px 10px;
   font-weight: bold;
-  font-size: 1.1rem;
 }
 
 .progress {
@@ -24,6 +23,14 @@
 .emptyRow {
   color: #aaa !important;
   padding: 30px !important;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+a.title_link:hover {
+  text-decoration: underline !important;
 }
 
 /* AppBar */

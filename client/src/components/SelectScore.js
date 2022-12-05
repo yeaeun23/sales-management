@@ -27,20 +27,22 @@ function SelectScore(props) {
   };
 
   return (
-    <Form.Select 
-    size={props.size} 
-    title="평가 선택" 
-    style={styles} 
-    value={selected} 
-    onChange={handleValueChange}>
-      {options.map(option => (
-        <option 
-        key={option.value} 
-        value={option.value} 
-        title={option.title}>
-          {option.text}
-        </option>
-      ))}
+    <Form.Select
+      size={props.size}
+      title="평가 선택"
+      style={styles}
+      value={selected}
+      onChange={handleValueChange}>
+      {
+        options.map(option => (
+          <option
+            key={option.value}
+            value={option.value}
+            title={option.title}>
+            {option.text}
+          </option>
+        ))
+      }
     </Form.Select>
   );
 }

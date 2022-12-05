@@ -29,15 +29,17 @@ function SelectSign(props) {
       style={styles}
       value={selected}
       onChange={handleValueChange}>
-      {options.map((option) => (
-        <option
-          key={option.value}
-          value={option.value}
-          style={{ color: option.value }}
-          title={option.title}>
-          {option.text}
-        </option>
-      ))}
+      {
+        options.map((option) => (
+          <option
+            key={option.value}
+            value={option.value}
+            style={{ color: option.value }}
+            title={option.title}>
+            {option.text}
+          </option>
+        ))
+      }
     </Form.Select>
   );
 }
