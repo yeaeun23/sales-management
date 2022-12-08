@@ -3,31 +3,28 @@ import Card from 'react-bootstrap/Card';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import '../App.css';
 import Navi from "../components/Navi";
+import TGPStep from "../components/TGPStep";
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
 import Button from 'react-bootstrap/Button';
+import { post } from "axios";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
+import { useParams, useLocation, Link } from 'react-router-dom';
 import LineAdd from '../components/LineAdd';
 import LineDelete from '../components/LineDelete';
 import SelectScore from '../components/SelectScore';
 import SelectPower from "../components/SelectPower";
-import { useParams } from 'react-router-dom';
-import { post } from "axios";
-import { Link } from "react-router-dom";
 import SelectSign from '../components/SelectSign';
 
 function TGPDetail2(props) {
-  const params = useParams();
-  const steps = ['Target Goal Plan', 'In The Funnel', 'Getting Action'];
-  const position1_label = ["Lead", "Filtering", "Opportunity", "Closing"];
-  const position2_label = ["Late Runner", "Same Line", "Consider First", "Exclusive"];
-  const position3_label = ["0%", "15%", "30%", "45%", "60%", "75%", "90%"];
   const [loading1, setLoading1] = useState(0);
   const [loading2, setLoading2] = useState(0);
   const [loading3, setLoading3] = useState(0);
+  const { customer_id, tgp_id } = useParams();
+  const customer_name = useLocation().state.customer_name;
+  const tgp_name = useLocation().state.tgp_name;
 
   const progress1 = () => {
     const completed = loading1;
@@ -123,7 +120,7 @@ function TGPDetail2(props) {
 
   useEffect(() => {
     const setInputData1 = async () => {
-      const response = await fetch('/api/tgp/' + params.tgp_id + '/FORM');
+      const response = await fetch('/tgp/' + tgp_id + '/step2');
       const body = await response.json();
       return body;
     }
@@ -147,11 +144,11 @@ function TGPDetail2(props) {
         competition2_type_sign: res[0].competition2_type_sign,
       }))
       .catch(err => console.log(err));
-  }, [params.tgp_id]);
+  }, [tgp_id]);
 
   useEffect(() => {
     const setInputData2 = async () => {
-      const response = await fetch('/api/tgp/' + params.tgp_id + '/FORM_TDM');
+      const response = await fetch('/tgp/' + tgp_id + '/tdm');
       const body = await response.json();
       return body;
     }
@@ -178,11 +175,11 @@ function TGPDetail2(props) {
         score_opinion: res[0].score_opinion
       }))
       .catch(err => console.log(err));
-  }, [params.tgp_id]);
+  }, [tgp_id]);
 
   useEffect(() => {
     const setInputData3 = async () => {
-      const response = await fetch('/api/tgp/' + params.tgp_id + '/FORM_STRENGTH');
+      const response = await fetch('/tgp/' + tgp_id + '/strength');
       const body = await response.json();
       return body;
     }
@@ -196,11 +193,11 @@ function TGPDetail2(props) {
         strength2_sign: res[0].strength2_sign
       }))
       .catch(err => console.log(err));
-  }, [params.tgp_id]);
+  }, [tgp_id]);
 
   useEffect(() => {
     const setInputData4 = async () => {
-      const response = await fetch('/api/tgp/' + params.tgp_id + '/FORM_WEAKNESS');
+      const response = await fetch('/tgp/' + tgp_id + '/weakness');
       const body = await response.json();
       return body;
     }
@@ -214,7 +211,7 @@ function TGPDetail2(props) {
         weakness2_sign: res[0].weakness2_sign
       }))
       .catch(err => console.log(err));
-  }, [params.tgp_id]);
+  }, [tgp_id]);
 
   const handleBack = () => {
     saveInputData();
@@ -225,7 +222,7 @@ function TGPDetail2(props) {
   };
 
   const saveInputData = () => {
-    const url = '/api/tgp/' + params.tgp_id + '/STEP2';
+    const url = '/tgp/' + tgp_id + '/step2';
     const formData = new FormData();
 
     // Target Goal Plan
@@ -284,18 +281,20 @@ function TGPDetail2(props) {
       <Navi />
 
       <div className="paper">
-        <Stepper activeStep={1} style={{ margin: '50px' }}>
-          {steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
+        <div className="paper_title">
+          <PlayArrowIcon />&nbsp;
+          <Link className="title_link" to={"/"}>거래처</Link>&nbsp;
+          <PlayArrowIcon />&nbsp;
+          <Link className="title_link"
+            to={"/customer/" + customer_id}
+            state={{ customer_name: customer_name }}>
+            {customer_name}
+          </Link>&nbsp;
+          <PlayArrowOutlinedIcon />&nbsp;
+          {tgp_name}
+        </div>
 
-            return (
-              <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
+        <TGPStep step={1} />
 
         <div className="form">
           <React.Fragment>
@@ -314,7 +313,7 @@ function TGPDetail2(props) {
                             <Form.Label column={props.inputSize}>고객관점<br />세일즈 퍼널 위치</Form.Label>
                           </th>
                           <td>
-                            {position1_label.map((label) => (
+                            {["Lead", "Filtering", "Opportunity", "Closing"].map((label) => (
                               <Form.Check
                                 inline
                                 type="radio"
@@ -334,7 +333,7 @@ function TGPDetail2(props) {
                             <Form.Label column={props.inputSize}>고객관점<br />경쟁대비 위치</Form.Label>
                           </th>
                           <td>
-                            {position2_label.map((label) => (
+                            {["Late Runner", "Same Line", "Consider First", "Exclusive"].map((label) => (
                               <Form.Check
                                 inline
                                 type="radio"
@@ -354,7 +353,7 @@ function TGPDetail2(props) {
                             <Form.Label column={props.inputSize}>내가 생각하는<br />성공 가능성</Form.Label>
                           </th>
                           <td>
-                            {position3_label.map((label) => (
+                            {["0%", "15%", "30%", "45%", "60%", "75%", "90%"].map((label) => (
                               <Form.Check
                                 inline
                                 type="radio"
@@ -569,13 +568,13 @@ function TGPDetail2(props) {
               </Card>
             </div>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Link to={`/customer/${params.customer_id}/${params.tgp_id}/1`} style={{ display: 'block' }}>
+              <Link to={`/customer/${customer_id}/${tgp_id}/1`} style={{ display: 'block' }}>
                 <Button variant="secondary" onClick={handleBack} sx={{ mr: 1 }}>
                   &lt; 이전
                 </Button>
               </Link>
               <Box sx={{ flex: '1 1 auto' }} />
-              <Link to={`/customer/${params.customer_id}/${params.tgp_id}/3`} style={{ display: 'block' }}>
+              <Link to={`/customer/${customer_id}/${tgp_id}/3`} style={{ display: 'block' }}>
                 <Button variant="secondary" onClick={handleNext}>다음 &gt;</Button>
               </Link>
             </Box>

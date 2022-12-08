@@ -45,14 +45,14 @@ function TGPDetail(props) {
     setInputData()
       .then(res => setInputs({
         ...inputs,
-        account: res[0].account,
-        department: res[0].department,
-        solution: res[0].solution,
-        amount: res[0].amount,
-        closingdate: res[0].closingdate
+        account: customer_name,
+        department: (res[0] === undefined) ? "" : res[0].department,
+        solution: (res[0] === undefined) ? "" : res[0].solution,
+        amount: (res[0] === undefined) ? "" : res[0].amount,
+        closingdate: (res[0] === undefined) ? "" : res[0].closingdate
       }))
       .catch(err => console.log(err));
-  }, [props.tgp_id]);
+  }, [tgp_id]);
 
   const handleValueChange = (e) => {
     const { name, value } = e.target;
@@ -64,7 +64,7 @@ function TGPDetail(props) {
   }
 
   const saveInputData = () => {
-    const url = '/tgp/' + props.tgp_id + '/step1';
+    let url = '/tgp/' + tgp_id + '/step1';
     const formData = new FormData();
 
     formData.append('account', inputs.account);
@@ -73,7 +73,11 @@ function TGPDetail(props) {
     formData.append('amount', inputs.amount);
     formData.append('closingdate', inputs.closingdate);
 
-    return post(url, formData);
+    const config = {
+      headers: { 'content-type': 'application/json' }
+    };
+
+    return post(url, formData, config);
   }
 
   return (
@@ -83,7 +87,7 @@ function TGPDetail(props) {
       <div className="paper">
         <div className="paper_title">
           <PlayArrowIcon />&nbsp;
-          <Link className="title_link" to={"/"}>거래처</Link>&nbsp;          
+          <Link className="title_link" to={"/"}>거래처</Link>&nbsp;
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
             to={"/customer/" + customer_id}
@@ -104,11 +108,11 @@ function TGPDetail(props) {
                 <colgroup className="col_form1_1">
                   <col /><col /><col /><col />
                 </colgroup>
-                {inputs.account !== null ?
+                {inputs.account !== "" && inputs.department !== null ?
                   <tbody>
                     <tr>
                       <th><Form.Label column={props.inputSize}>거래처</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="account" value={inputs.account} onChange={handleValueChange} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="account" value={inputs.account} readOnly /></td>
                       <th><Form.Label column={props.inputSize}>부서</Form.Label></th>
                       <td><Form.Control size={props.inputSize} type="text" name="department" value={inputs.department} onChange={handleValueChange} /></td>
                     </tr>
@@ -124,7 +128,7 @@ function TGPDetail(props) {
                         <Form.Label column={props.inputSize}>목표일</Form.Label>
                       </th>
                       <td>
-                        <Form.Control size={props.inputSize} type="date" name="closingdate" value={inputs.closingdate} onChange={handleValueChange} />
+                        <Form.Control size={props.inputSize} type="date" name="closingdate" value={inputs.closingdate} onChange={handleValueChange} max="2999-12-31" />
                       </td>
                       <th></th>
                       <td></td>
@@ -143,10 +147,12 @@ function TGPDetail(props) {
             </Card.Body>
           </Card>
         </div>
-        
+
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
           <Box sx={{ flex: '1 1 auto' }} />
-          <Link to={`/customer/${customer_id}/${tgp_id}/2`} style={{ display: 'block' }}>
+          <Link
+            to={`/customer/${customer_id}/${tgp_id}/2`}
+            state={{ tgp_name: tgp_name, customer_name: customer_name }}>
             <Button variant="secondary" onClick={handleNext}>다음 &gt;</Button>
           </Link>
         </Box>

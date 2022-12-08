@@ -3,20 +3,15 @@ import Card from 'react-bootstrap/Card';
 import Typography from '@material-ui/core/Typography';
 import '../App.css';
 import Navi from "../components/Navi";
+import TGPStep from "../components/TGPStep";
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import LineAdd from '../components/LineAdd';
 import LineDelete from '../components/LineDelete';
 import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
 import Button from 'react-bootstrap/Button';
-import { useNavigate } from 'react-router-dom';
-import Drawer from '@mui/material/Drawer';
-import { useParams } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { post } from "axios";
-import { Link } from "react-router-dom";
 
 function TGPDetail3(props) {
   const id = useParams();
@@ -91,18 +86,7 @@ function TGPDetail3(props) {
       <Navi />
       
       <div className="paper">
-        <Stepper activeStep={activeStep} style={{ margin: '50px' }}>
-          {steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
-            
-            return (
-              <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
+      <TGPStep step={2} />
 
         <div className="form">
           {activeStep === steps.length ? (
