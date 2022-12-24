@@ -49,7 +49,8 @@ function Navi(props) {
           </Typography>
           <div className="grow" />
           {(props.searchKeyword === undefined) ?
-            "" :
+            ""
+            :
             <div className="search">
               <div className="searchIcon">
                 <SearchIcon />

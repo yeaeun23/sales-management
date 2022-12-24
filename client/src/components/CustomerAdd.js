@@ -65,19 +65,20 @@ function CustomerAdd(props) {
 		let url = '/customer';
 		url += (props.kind === "add") ? '' : '/' + props.customer_id;
 
-		const formData = new FormData();
-		formData.append('name', customerName);
-		formData.append('status', customerStatus);
+		const data = {
+			name: customerName,
+			status: customerStatus
+		};
 
 		const config = {
 			headers: { 'content-type': 'application/json' }
 		};
 
 		if (props.kind === "add") {
-			return post(url, formData, config);
+			return post(url, data, config);
 		}
 		else {
-			return put(url, formData, config);
+			return put(url, data, config);
 		}
 	}
 

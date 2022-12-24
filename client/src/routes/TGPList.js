@@ -11,29 +11,18 @@ import { useParams, useLocation, Link } from 'react-router-dom';
 
 function TGPList() {
   const [tgp, setTGP] = useState("");
-  const [loading, setLoading] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState("");
   const { customer_id } = useParams();
   const customer_name = useLocation().state.customer_name;
 
   const stateRefresh = () => {
     setTGP("");
-    setLoading(0);
     setSearchKeyword("");
 
     callApi()
       .then(res => setTGP(res))
       .catch(err => console.log(err));
   }
-
-  const progress = () => {
-    const completed = loading;
-    setLoading((completed >= 100) ? 0 : completed + 1);
-  }
-
-  useEffect(() => {
-    setInterval(progress, 20);
-  });
 
   useEffect(() => {
     callApi()
@@ -106,7 +95,7 @@ function TGPList() {
               :
               <tr>
                 <td colSpan="6" align="center">
-                  <CircularProgress className="progress" variant="indeterminate" value={loading} />
+                  <CircularProgress className="progress" variant="indeterminate" />
                 </td>
               </tr>
             }

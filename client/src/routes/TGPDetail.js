@@ -14,25 +14,16 @@ import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useParams, useLocation, Link } from "react-router-dom";
 
 function TGPDetail(props) {
+  const { customer_id, tgp_id } = useParams();
+  const customer_name = useLocation().state.customer_name;
+  const tgp_name = useLocation().state.tgp_name;
+
   const [inputs, setInputs] = useState({
     account: "",
     department: "",
     solution: "",
     amount: "",
     closingdate: ""
-  });
-  const [loading, setLoading] = useState(0);
-  const { customer_id, tgp_id } = useParams();
-  const customer_name = useLocation().state.customer_name;
-  const tgp_name = useLocation().state.tgp_name;
-
-  const progress = () => {
-    const completed = loading;
-    setLoading((completed >= 100) ? 0 : completed + 1);
-  }
-
-  useEffect(() => {
-    setInterval(progress, 20);
   });
 
   useEffect(() => {
@@ -42,16 +33,14 @@ function TGPDetail(props) {
       return body;
     }
 
-    setInputData()
-      .then(res => setInputs({
-        ...inputs,
-        account: customer_name,
-        department: (res[0] === undefined) ? "" : res[0].department,
-        solution: (res[0] === undefined) ? "" : res[0].solution,
-        amount: (res[0] === undefined) ? "" : res[0].amount,
-        closingdate: (res[0] === undefined) ? "" : res[0].closingdate
-      }))
-      .catch(err => console.log(err));
+    setInputData().then(res => setInputs({
+      ...inputs,
+      account: customer_name,
+      department: (res[0] === undefined) ? "" : res[0].department,
+      solution: (res[0] === undefined) ? "" : res[0].solution,
+      amount: (res[0] === undefined) ? "" : res[0].amount,
+      closingdate: (res[0] === undefined) ? "" : res[0].closingdate
+    })).catch(err => console.log(err));
   }, [tgp_id]);
 
   const handleValueChange = (e) => {
@@ -64,20 +53,21 @@ function TGPDetail(props) {
   }
 
   const saveInputData = () => {
-    let url = '/tgp/' + tgp_id + '/step1';
-    const formData = new FormData();
+    const url = '/tgp/' + tgp_id + '/step1';
 
-    formData.append('account', inputs.account);
-    formData.append('department', inputs.department);
-    formData.append('solution', inputs.solution);
-    formData.append('amount', inputs.amount);
-    formData.append('closingdate', inputs.closingdate);
+    const data = {
+			account: inputs.account,
+			department: inputs.department,
+			solution: inputs.solution,
+			amount: inputs.amount,
+			closingdate: inputs.closingdate
+		};
 
     const config = {
       headers: { 'content-type': 'application/json' }
     };
 
-    return post(url, formData, config);
+    return post(url, data, config);
   }
 
   return (
@@ -108,7 +98,7 @@ function TGPDetail(props) {
                 <colgroup className="col_form1_1">
                   <col /><col /><col /><col />
                 </colgroup>
-                {inputs.account !== "" && inputs.department !== null ?
+                {inputs.account !== "" ?
                   <tbody>
                     <tr>
                       <th><Form.Label column={props.inputSize}>거래처</Form.Label></th>
@@ -138,7 +128,7 @@ function TGPDetail(props) {
                   <tbody>
                     <tr>
                       <td colSpan="4" align="center">
-                        <CircularProgress className="progress" variant="indeterminate" value={loading} />
+                        <CircularProgress className="progress" variant="indeterminate" />
                       </td>
                     </tr>
                   </tbody>
@@ -153,7 +143,7 @@ function TGPDetail(props) {
           <Link
             to={`/customer/${customer_id}/${tgp_id}/2`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
-            <Button variant="secondary" onClick={handleNext}>다음 &gt;</Button>
+            <Button variant="secondary" onClick={handleNext}>저장 후 다음 &gt;</Button>
           </Link>
         </Box>
       </div>

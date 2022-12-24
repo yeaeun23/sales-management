@@ -65,19 +65,20 @@ function TGPAdd(props) {
 		let url = '/tgp/';
 		url += (props.kind === "add") ? props.customer_id : props.tgp_id;
 
-		const formData = new FormData();
-		formData.append('name', tgpName);
-		formData.append('status', tgpStatus);
+		const data = {
+			name: tgpName,
+			status: tgpStatus
+		};
 
 		const config = {
 			headers: { 'content-type': 'application/json' }
 		};
 
 		if (props.kind === "add") {
-			return post(url, formData, config);
+			return post(url, data, config);
 		}
 		else {
-			return put(url, formData, config);
+			return put(url, data, config);
 		}
 	}
 

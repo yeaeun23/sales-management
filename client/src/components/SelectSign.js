@@ -1,25 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import Form from 'react-bootstrap/Form';
 
 function SelectSign(props) {
-  const styles = {
-    width: props.size === "sm" ? "60px" : "66px",
-    float: "right",
-    color: props.selected
-  };
-
   const options = [
-    { value: "black", text: "● Default", title: "" },
-    { value: "darkgray", text: "● Gray Sign", title: "불확실" },
-    { value: "red", text: "● Red Sign", title: "약점/위협 요인" },
-    { value: "blue", text: "● Blue Sign", title: "강점/기회 요인" },
+    { value: "", color: "black", text: "● Default", title: "" },
+    { value: "G", color: "darkgray", text: "● Gray Sign", title: "불확실" },
+    { value: "R", color: "red", text: "● Red Sign", title: "약점/위협 요인" },
+    { value: "B", color: "blue", text: "● Blue Sign", title: "강점/기회 요인" },
   ];
 
-  const [selected, setSelected] = useState(props.selected);
+  let selectedValue = 0;
+ 
+  options.map((option, i) => {
+    if (option.value === props.value) 
+      selectedValue = i;   
+  });
 
-  const handleValueChange = (e) => {
-    setSelected(e.target.value);
-    e.target.style.color = e.target.value;
+  const styles = {
+    width: props.size === "sm" ? "60px" : "66px",
+    color: options[selectedValue].color,
+    float: "right"
   };
 
   return (
@@ -27,14 +27,15 @@ function SelectSign(props) {
       size={props.size}
       title="사인 선택"
       style={styles}
-      value={selected}
-      onChange={handleValueChange}>
+      name={props.name}
+      value={props.value}
+      onChange={props.handleValueChange}>
       {
-        options.map((option) => (
+        options.map(option => (
           <option
             key={option.value}
             value={option.value}
-            style={{ color: option.value }}
+            style={{ color: option.color }}
             title={option.title}>
             {option.text}
           </option>

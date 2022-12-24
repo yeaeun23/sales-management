@@ -1,23 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import Form from 'react-bootstrap/Form';
 
 function SelectPower(props) {
+  const options = [
+    { value: "", title: "" },
+    { value: "H", title: "High" },
+    { value: "M", title: "Middle" },
+    { value: "L", title: "Low" },
+  ];
+
+  let selectedValue = 0;
+ 
+  options.map((option, i) => {
+    if (option.value === props.value) 
+      selectedValue = i;   
+  });
+  
   const styles = {
     width: props.size === "sm" ? "57px" : "62px",
     float: "right"
-  };
-
-  const options = [
-    { value: "", text: "", title: "" },
-    { value: "H", text: "H", title: "High" },
-    { value: "M", text: "M", title: "Middle" },
-    { value: "L", text: "L", title: "Low" },
-  ];
-
-  const [selected, setSelected] = useState(props.selected);
-
-  const handleValueChange = (e) => {
-    setSelected(e.target.value);
   };
 
   return (
@@ -25,15 +26,16 @@ function SelectPower(props) {
       size={props.size}
       title="파워 선택"
       style={styles}
-      value={selected}
-      onChange={handleValueChange}>
+      name={props.name}
+      value={props.value}
+      onChange={props.handleValueChange}>
       {
         options.map(option => (
           <option
             key={option.value}
             value={option.value}
             title={option.title}>
-            {option.text}
+            {option.value}
           </option>
         ))
       }
