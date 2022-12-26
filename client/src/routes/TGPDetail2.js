@@ -275,7 +275,7 @@ function TGPDetail2(props) {
           {tgp_name}
         </div>
 
-        <TGPStep step={1} />
+        <TGPStep step={2} />
 
         <div sx={{ mt: 2, mb: 1 }}>
           <Card>

@@ -8,7 +8,6 @@ import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Box from '@mui/material/Box';
 import Button from 'react-bootstrap/Button';
-import { post } from "axios";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useParams, useLocation, Link } from "react-router-dom";
@@ -18,57 +17,40 @@ function TGPDetail(props) {
   const customer_name = useLocation().state.customer_name;
   const tgp_name = useLocation().state.tgp_name;
 
-  const [inputs, setInputs] = useState({
-    account: "",
-    department: "",
-    solution: "",
-    amount: "",
-    closingdate: ""
-  });
+  const [mode, setMode] = useState(0);
+  const [formId, setFormId] = useState("");
+  const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    const setInputData = async () => {
-      const response = await fetch('/tgp/' + tgp_id + '/step1');
-      const body = await response.json();
-      return body;
-    }
+    callApi()
+      .then(res => setHistory(res))
+      .catch(err => console.log(err));
 
-    setInputData().then(res => setInputs({
-      ...inputs,
-      account: customer_name,
-      department: (res[0] === undefined) ? "" : res[0].department,
-      solution: (res[0] === undefined) ? "" : res[0].solution,
-      amount: (res[0] === undefined) ? "" : res[0].amount,
-      closingdate: (res[0] === undefined) ? "" : res[0].closingdate
-    })).catch(err => console.log(err));
-  }, [tgp_id]);
+    document.getElementsByName("mode")[mode].checked = true;
+  }, []);
 
-  const handleValueChange = (e) => {
-    const { name, value } = e.target;
-    setInputs({ ...inputs, [name]: value });
+  useEffect(() => {
+    const target = document.getElementsByName("history")[0];
+
+    if (mode.toString() === "0")
+      target.disabled = true;
+    else
+      target.disabled = false;
+  }, [mode]);
+
+  const callApi = async () => {
+    const response = await fetch('/tgp/' + tgp_id + '/history');
+    const body = await response.json();
+    return body;
   }
 
-  const handleNext = () => {
-    saveInputData();
-  }
+  const handleChangeMode = (e) => {
+    setMode(e.target.value);
+  };
 
-  const saveInputData = () => {
-    const url = '/tgp/' + tgp_id + '/step1';
-
-    const data = {
-			account: inputs.account,
-			department: inputs.department,
-			solution: inputs.solution,
-			amount: inputs.amount,
-			closingdate: inputs.closingdate
-		};
-
-    const config = {
-      headers: { 'content-type': 'application/json' }
-    };
-
-    return post(url, data, config);
-  }
+  const handleChangeHistory = (e) => {
+    setFormId(e.target.value);
+  };
 
   return (
     <div className="root">
@@ -92,47 +74,54 @@ function TGPDetail(props) {
 
         <div sx={{ mt: 2, mb: 1 }}>
           <Card>
-            <Card.Header>Target Goal Plan</Card.Header>
+            <Card.Header>Get Started</Card.Header>
             <Card.Body>
               <Table>
-                <colgroup className="col_form1_1">
-                  <col /><col /><col /><col />
-                </colgroup>
-                {inputs.account !== "" ?
-                  <tbody>
-                    <tr>
-                      <th><Form.Label column={props.inputSize}>거래처</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="account" value={inputs.account} readOnly /></td>
-                      <th><Form.Label column={props.inputSize}>부서</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="department" value={inputs.department} onChange={handleValueChange} /></td>
-                    </tr>
-                    <tr>
-                      <th><Form.Label column={props.inputSize}>솔루션</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="solution" value={inputs.solution} onChange={handleValueChange} /></td>
-                      <th><Form.Label column={props.inputSize}>금액 (원)</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="amount" value={inputs.amount} onChange={handleValueChange} />
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <Form.Label column={props.inputSize}>목표일</Form.Label>
-                      </th>
-                      <td>
-                        <Form.Control size={props.inputSize} type="date" name="closingdate" value={inputs.closingdate} onChange={handleValueChange} max="2999-12-31" />
-                      </td>
-                      <th></th>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                  :
-                  <tbody>
-                    <tr>
-                      <td colSpan="4" align="center">
-                        <CircularProgress className="progress" variant="indeterminate" />
-                      </td>
-                    </tr>
-                  </tbody>
-                }
+                <tbody>
+                  <tr>
+                    <th rowSpan={2}>
+                      <Form.Label column={props.inputSize}>작업 선택</Form.Label>
+                    </th>
+                    <td>
+                      <Form.Check
+                        type="radio"
+                        name="mode"
+                        id="mode1"
+                        value={0}
+                        label="이어서 작성하기"
+                        onChange={handleChangeMode}
+                      />
+                    </td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <Form.Check
+                        type="radio"
+                        name="mode"
+                        id="mode2"
+                        value={1}
+                        label="이전 내역 불러오기"
+                        onChange={handleChangeMode}
+                      />
+                    </td>
+                    <td>
+                      <Form.Select
+                        size={props.inputSize}
+                        name="history"
+                        onChange={handleChangeHistory}
+                      >
+                        <option>작업 시간 선택</option>
+                        {
+                          history.map((c, i) => {
+                            if (i !== 0)
+                              return <option key={c.form_id} value={c.form_id}>{c.update_time}</option>
+                          })
+                        }
+                      </Form.Select>
+                    </td>
+                  </tr>
+                </tbody>
               </Table>
             </Card.Body>
           </Card>
@@ -140,10 +129,12 @@ function TGPDetail(props) {
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
           <Box sx={{ flex: '1 1 auto' }} />
+          <Button variant="secondary">미리보기</Button>
+          &nbsp;&nbsp;
           <Link
-            to={`/customer/${customer_id}/${tgp_id}/2`}
-            state={{ tgp_name: tgp_name, customer_name: customer_name }}>
-            <Button variant="secondary" onClick={handleNext}>저장 후 다음 &gt;</Button>
+            to={`/customer/${customer_id}/${tgp_id}/1`}
+            state={{ tgp_name: tgp_name, customer_name: customer_name, form_id: mode.toString() === "0" ? "" : formId }}>
+            <Button variant="success">Start &gt;</Button>
           </Link>
         </Box>
       </div>
