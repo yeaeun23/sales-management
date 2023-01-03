@@ -14,10 +14,11 @@ import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useParams, useLocation, Link } from "react-router-dom";
 
 function TGPDetail1(props) {
-  const { customer_id, tgp_id } = useParams();
-  const customer_name = useLocation().state.customer_name;
-  const tgp_name = useLocation().state.tgp_name;
-  const form_id = useLocation().state.form_id;
+  const { customer_id, tgp_id, form_id } = useParams();
+  //const customer_name = useLocation().state.customer_name;
+  //const tgp_name = useLocation().state.tgp_name;
+  const customer_name = "임시";
+  const tgp_name = "";
 
   const [inputs, setInputs] = useState({
     account: "",
@@ -29,12 +30,7 @@ function TGPDetail1(props) {
 
   useEffect(() => {
     const setInputData = async () => {
-      let api = '/tgp/' + tgp_id + '/step1';
-
-      if (form_id !== "" && form_id !== undefined) 
-        api += '/' + form_id;
-      
-      const response = await fetch(api);
+      const response = await fetch('/tgp/' + tgp_id + '/' + form_id + '/step1');
       const body = await response.json();
       return body;
     }
@@ -42,10 +38,10 @@ function TGPDetail1(props) {
     setInputData().then(res => setInputs({
       ...inputs,
       account: customer_name,
-      department: (res[0] === undefined) ? "" : res[0].department,
-      solution: (res[0] === undefined) ? "" : res[0].solution,
-      amount: (res[0] === undefined) ? "" : res[0].amount,
-      closingdate: (res[0] === undefined) ? "" : res[0].closingdate
+      department: res[0].department,
+      solution: res[0].solution,
+      amount: res[0].amount,
+      closingdate: res[0].closingdate
     })).catch(err => console.log(err));
   }, [tgp_id]);
 
@@ -59,10 +55,7 @@ function TGPDetail1(props) {
   }
 
   const saveInputData = () => {
-    let api = '/tgp/' + tgp_id + '/step1';
-
-    if (form_id !== "" && form_id !== undefined) 
-      api += '/' + form_id;
+    const api = '/tgp/' + tgp_id + '/' + form_id + '/step1';
 
     const data = {
 			account: inputs.account,
@@ -89,7 +82,7 @@ function TGPDetail1(props) {
           <Link className="title_link" to={"/"}>거래처</Link>&nbsp;
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
-            to={"/customer/" + customer_id}
+            to={"/" + customer_id}
             state={{ customer_name: customer_name }}>
             {customer_name}
           </Link>&nbsp;
@@ -111,15 +104,15 @@ function TGPDetail1(props) {
                   <tbody>
                     <tr>
                       <th><Form.Label column={props.inputSize}>거래처</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="account" value={inputs.account} readOnly /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="account" value={inputs.account || ''} readOnly /></td>
                       <th><Form.Label column={props.inputSize}>부서</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="department" value={inputs.department} onChange={handleValueChange} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="department" value={inputs.department || ''} onChange={handleValueChange} /></td>
                     </tr>
                     <tr>
                       <th><Form.Label column={props.inputSize}>솔루션</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="solution" value={inputs.solution} onChange={handleValueChange} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="solution" value={inputs.solution || ''} onChange={handleValueChange} /></td>
                       <th><Form.Label column={props.inputSize}>금액 (원)</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="amount" value={inputs.amount} onChange={handleValueChange} />
+                      <td><Form.Control size={props.inputSize} type="text" name="amount" value={inputs.amount || ''} onChange={handleValueChange} />
                       </td>
                     </tr>
                     <tr>
@@ -127,7 +120,7 @@ function TGPDetail1(props) {
                         <Form.Label column={props.inputSize}>목표일</Form.Label>
                       </th>
                       <td>
-                        <Form.Control size={props.inputSize} type="date" name="closingdate" value={inputs.closingdate} onChange={handleValueChange} max="2999-12-31" />
+                        <Form.Control size={props.inputSize} type="date" name="closingdate" value={inputs.closingdate || ''} onChange={handleValueChange} max="2999-12-31" />
                       </td>
                       <th></th>
                       <td></td>
@@ -149,13 +142,13 @@ function TGPDetail1(props) {
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
           <Link
-            to={`/customer/${customer_id}/${tgp_id}`}
+            to={`/${customer_id}/${tgp_id}`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
             <Button variant="secondary">&lt; 이전</Button>
           </Link>
           <Box sx={{ flex: '1 1 auto' }} />
           <Link
-            to={`/customer/${customer_id}/${tgp_id}/2`}
+            to={`/${customer_id}/${tgp_id}/${form_id}/step2`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
             <Button variant="secondary" onClick={handleNext}>저장 후 다음 &gt;</Button>
           </Link>

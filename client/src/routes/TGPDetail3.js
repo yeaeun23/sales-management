@@ -16,9 +16,11 @@ import LineAdd from '../components/LineAdd';
 import LineDelete from '../components/LineDelete';
 
 function TGPDetail3(props) {
-  const { customer_id, tgp_id } = useParams();
-  const customer_name = useLocation().state.customer_name;
-  const tgp_name = useLocation().state.tgp_name;
+  const { customer_id, tgp_id, form_id } = useParams();
+  //const customer_name = useLocation().state.customer_name;
+  //const tgp_name = useLocation().state.tgp_name;
+  const customer_name = "";
+  const tgp_name = "";
 
   const [inputs1, setInputs1] = useState({
     flag: false,
@@ -42,7 +44,7 @@ function TGPDetail3(props) {
 
   useEffect(() => {
     const setInputData1 = async () => {
-      const response = await fetch('/tgp/' + tgp_id + '/strategy1');
+      const response = await fetch('/tgp/' + form_id + '/strategy1');
       const body = await response.json();
       return body;
     }
@@ -50,14 +52,14 @@ function TGPDetail3(props) {
     setInputData1().then(res => setInputs1({
       ...inputs1,
       flag: true,
-      strength: (res[0] === undefined) ? "" : res[0].strength,
-      behavior1: (res[0] === undefined) ? "" : res[0].behavior1
+      strength: res[0].strength,
+      behavior1: res[0].behavior1
     })).catch(err => console.log(err));
   }, [tgp_id]);
 
   useEffect(() => {
     const setInputData2 = async () => {
-      const response = await fetch('/tgp/' + tgp_id + '/strategy2');
+      const response = await fetch('/tgp/' + form_id + '/strategy2');
       const body = await response.json();
       return body;
     }
@@ -65,14 +67,14 @@ function TGPDetail3(props) {
     setInputData2().then(res => setInputs2({
       ...inputs2,
       flag: true,
-      weakness: (res[0] === undefined) ? "" : res[0].weakness,
-      behavior2: (res[0] === undefined) ? "" : res[0].behavior2
+      weakness: res[0].weakness,
+      behavior2: res[0].behavior2
     })).catch(err => console.log(err));
   }, [tgp_id]);
 
   useEffect(() => {
     const setInputData3 = async () => {
-      const response = await fetch('/tgp/' + tgp_id + '/action');
+      const response = await fetch('/tgp/' + form_id + '/action');
       const body = await response.json();
       return body;
     }
@@ -80,10 +82,10 @@ function TGPDetail3(props) {
     setInputData3().then(res => setInputs3({
       ...inputs3,
       flag: true,
-      action: (res[0] === undefined) ? "" : res[0].action,
-      date: (res[0] === undefined) ? "" : res[0].date,
-      owner: (res[0] === undefined) ? "" : res[0].owner,
-      collaborator: (res[0] === undefined) ? "" : res[0].collaborator
+      action: res[0].action,
+      date: res[0].date,
+      owner: res[0].owner,
+      collaborator: res[0].collaborator
     })).catch(err => console.log(err));
   }, [tgp_id]);
 
@@ -111,7 +113,7 @@ function TGPDetail3(props) {
   };
 
   const saveInputData = () => {
-    const url = '/tgp/' + tgp_id + '/step3';
+    const api = '/tgp/' + tgp_id + '/' + form_id + '/step3';
 
     const data = {
       strength: inputs1.strength,
@@ -130,7 +132,7 @@ function TGPDetail3(props) {
       headers: { 'content-type': 'application/json' }
     };
 
-    return post(url, data, config);
+    return post(api, data, config);
   }
 
   return (
@@ -143,7 +145,7 @@ function TGPDetail3(props) {
           <Link className="title_link" to={"/"}>거래처</Link>&nbsp;
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
-            to={"/customer/" + customer_id}
+            to={"/" + customer_id}
             state={{ customer_name: customer_name }}>
             {customer_name}
           </Link>&nbsp;
@@ -174,10 +176,10 @@ function TGPDetail3(props) {
                     </tr>
                     <tr>
                       <td>
-                        <Form.Control size={props.inputSize} type="text" name="strength" value={inputs1.strength} onChange={handleValueChange1} />
+                        <Form.Control size={props.inputSize} type="text" name="strength" value={inputs1.strength || ''} onChange={handleValueChange1} />
                       </td>
                       <td>
-                        <Form.Control size={props.inputSize} type="text" name="behavior1" value={inputs1.behavior1} onChange={handleValueChange1} />
+                        <Form.Control size={props.inputSize} type="text" name="behavior1" value={inputs1.behavior1 || ''} onChange={handleValueChange1} />
                       </td>
                       <td>
                         <LineAdd size={props.inputSize} />
@@ -202,10 +204,10 @@ function TGPDetail3(props) {
                     </tr>
                     <tr>
                       <td>
-                        <Form.Control size={props.inputSize} type="text" name="weakness" value={inputs2.weakness} onChange={handleValueChange2} />
+                        <Form.Control size={props.inputSize} type="text" name="weakness" value={inputs2.weakness || ''} onChange={handleValueChange2} />
                       </td>
                       <td>
-                        <Form.Control size={props.inputSize} type="text" name="behavior2" value={inputs2.behavior2} onChange={handleValueChange2} />
+                        <Form.Control size={props.inputSize} type="text" name="behavior2" value={inputs2.behavior2 || ''} onChange={handleValueChange2} />
                       </td>
                       <td>
                         <LineAdd size={props.inputSize} />
@@ -256,16 +258,16 @@ function TGPDetail3(props) {
                     </tr>
                     <tr>
                       <td>
-                        <Form.Control size={props.inputSize} type="text" name="action" value={inputs3.action} onChange={handleValueChange3} />
+                        <Form.Control size={props.inputSize} type="text" name="action" value={inputs3.action || ''} onChange={handleValueChange3} />
                       </td>
                       <td>
-                        <Form.Control size={props.inputSize} type="date" name="date" value={inputs3.date} onChange={handleValueChange3} max="2999-12-31" />
+                        <Form.Control size={props.inputSize} type="date" name="date" value={inputs3.date || ''} onChange={handleValueChange3} max="2999-12-31" />
                       </td>
                       <td>
-                        <Form.Control size={props.inputSize} type="text" name="owner" value={inputs3.owner} onChange={handleValueChange3} />
+                        <Form.Control size={props.inputSize} type="text" name="owner" value={inputs3.owner || ''} onChange={handleValueChange3} />
                       </td>
                       <td>
-                        <Form.Control size={props.inputSize} type="text" name="collaborator" value={inputs3.collaborator} onChange={handleValueChange3} />
+                        <Form.Control size={props.inputSize} type="text" name="collaborator" value={inputs3.collaborator || ''} onChange={handleValueChange3} />
                       </td>
                       <td>
                         <LineAdd size={props.inputSize} />
@@ -289,7 +291,7 @@ function TGPDetail3(props) {
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
           <Link
-            to={`/customer/${customer_id}/${tgp_id}/2`}
+            to={`/${customer_id}/${tgp_id}/${form_id}/step2`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
             <Button variant="secondary" onClick={handleBack}>&lt; 저장 후 이전</Button>
           </Link>
@@ -297,7 +299,7 @@ function TGPDetail3(props) {
           <Button variant="secondary">미리보기</Button>
           &nbsp;&nbsp;
           <Link
-            to={`/customer/${customer_id}`}
+            to={`/${customer_id}`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
             <Button variant="success" onClick={handleNext}>저장 완료</Button>
           </Link>

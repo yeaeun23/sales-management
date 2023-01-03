@@ -19,9 +19,11 @@ import SelectPower from "../components/SelectPower";
 import SelectSign from '../components/SelectSign';
 
 function TGPDetail2(props) {
-  const { customer_id, tgp_id } = useParams();
-  const customer_name = useLocation().state.customer_name;
-  const tgp_name = useLocation().state.tgp_name;
+  const { customer_id, tgp_id, form_id } = useParams();
+  //const customer_name = useLocation().state.customer_name;
+  //const tgp_name = useLocation().state.tgp_name;
+  const customer_name = "";
+  const tgp_name = "";
 
   const [inputs1, setInputs1] = useState({
     flag: false,
@@ -80,7 +82,7 @@ function TGPDetail2(props) {
 
   useEffect(() => {
     const setInputData1 = async () => {
-      const response = await fetch('/tgp/' + tgp_id + '/step2');
+      const response = await fetch('/tgp/' + tgp_id + '/' + form_id + '/step2');
       const body = await response.json();
       return body;
     }
@@ -88,26 +90,26 @@ function TGPDetail2(props) {
     setInputData1().then(res => setInputs1({
       ...inputs1,
       flag: true,
-      position1: (res[0] === undefined) ? "" : res[0].position1,
-      position1_sign: (res[0] === undefined) ? "" : res[0].position1_sign,
-      position2: (res[0] === undefined) ? "" : res[0].position2,
-      position2_sign: (res[0] === undefined) ? "" : res[0].position2_sign,
-      position3: (res[0] === undefined) ? "" : res[0].position3,
-      position3_sign: (res[0] === undefined) ? "" : res[0].position3_sign,
-      competition1_name: (res[0] === undefined) ? "" : res[0].competition1_name,
-      competition1_name_sign: (res[0] === undefined) ? "" : res[0].competition1_name_sign,
-      competition1_type: (res[0] === undefined) ? "" : res[0].competition1_type,
-      competition1_type_sign: (res[0] === undefined) ? "" : res[0].competition1_type_sign,
-      competition2_name: (res[0] === undefined) ? "" : res[0].competition2_name,
-      competition2_name_sign: (res[0] === undefined) ? "" : res[0].competition2_name_sign,
-      competition2_type: (res[0] === undefined) ? "" : res[0].competition2_type,
-      competition2_type_sign: (res[0] === undefined) ? "" : res[0].competition2_type_sign
+      position1: res[0].position1,
+      position1_sign: res[0].position1_sign,
+      position2: res[0].position2,
+      position2_sign: res[0].position2_sign,
+      position3: res[0].position3,
+      position3_sign: res[0].position3_sign,
+      competition1_name: res[0].competition1_name,
+      competition1_name_sign: res[0].competition1_name_sign,
+      competition1_type: res[0].competition1_type,
+      competition1_type_sign: res[0].competition1_type_sign,
+      competition2_name: res[0].competition2_name,
+      competition2_name_sign: res[0].competition2_name_sign,
+      competition2_type: res[0].competition2_type,
+      competition2_type_sign: res[0].competition2_type_sign
     })).catch(err => console.log(err));
   }, [tgp_id]);
 
   useEffect(() => {
     const setInputData2 = async () => {
-      const response = await fetch('/tgp/' + tgp_id + '/tdm');
+      const response = await fetch('/tgp/' + form_id + '/tdm');
       const body = await response.json();
       return body;
     }
@@ -115,29 +117,29 @@ function TGPDetail2(props) {
     setInputData2().then(res => setInputs2({
       ...inputs2,
       flag: true,
-      title: (res[0] === undefined) ? "" : res[0].title,
-      title_sign: (res[0] === undefined) ? "" : res[0].title_sign,
-      power: (res[0] === undefined) ? "" : res[0].power,
-      power_sign: (res[0] === undefined) ? "" : res[0].power_sign,
-      barrier: (res[0] === undefined) ? "" : res[0].barrier,
-      barrier_sign: (res[0] === undefined) ? "" : res[0].barrier_sign,
-      dynamic: (res[0] === undefined) ? "" : res[0].dynamic,
-      dynamic_sign: (res[0] === undefined) ? "" : res[0].dynamic_sign,
-      score_sales: (res[0] === undefined) ? "" : res[0].score_sales,
-      score_sales_sign: (res[0] === undefined) ? "" : res[0].score_sales_sign,
-      score_product: (res[0] === undefined) ? "" : res[0].score_product,
-      score_product_sign: (res[0] === undefined) ? "" : res[0].score_product_sign,
-      score_service: (res[0] === undefined) ? "" : res[0].score_service,
-      score_service_sign: (res[0] === undefined) ? "" : res[0].score_service_sign,
-      score_company: (res[0] === undefined) ? "" : res[0].score_company,
-      score_company_sign: (res[0] === undefined) ? "" : res[0].score_company_sign,
-      score_opinion: (res[0] === undefined) ? "" : res[0].score_opinion
+      title: res[0].title,
+      title_sign: res[0].title_sign,
+      power: res[0].power,
+      power_sign: res[0].power_sign,
+      barrier: res[0].barrier,
+      barrier_sign: res[0].barrier_sign,
+      dynamic: res[0].dynamic,
+      dynamic_sign: res[0].dynamic_sign,
+      score_sales: res[0].score_sales,
+      score_sales_sign: res[0].score_sales_sign,
+      score_product: res[0].score_product,
+      score_product_sign: res[0].score_product_sign,
+      score_service: res[0].score_service,
+      score_service_sign: res[0].score_service_sign,
+      score_company: res[0].score_company,
+      score_company_sign: res[0].score_company_sign,
+      score_opinion: res[0].score_opinion
     })).catch(err => console.log(err));
   }, [tgp_id]);
 
   useEffect(() => {
     const setInputData3 = async () => {
-      const response = await fetch('/tgp/' + tgp_id + '/strength');
+      const response = await fetch('/tgp/' + form_id + '/strength');
       const body = await response.json();
       return body;
     }
@@ -145,16 +147,16 @@ function TGPDetail2(props) {
     setInputData3().then(res => setInputs3({
       ...inputs3,
       flag: true,
-      strength1: (res[0] === undefined) ? "" : res[0].strength1,
-      strength1_sign: (res[0] === undefined) ? "" : res[0].strength1_sign,
-      strength2: (res[0] === undefined) ? "" : res[0].strength2,
-      strength2_sign: (res[0] === undefined) ? "" : res[0].strength2_sign
+      strength1: res[0].strength1,
+      strength1_sign: res[0].strength1_sign,
+      strength2: res[0].strength2,
+      strength2_sign: res[0].strength2_sign
     })).catch(err => console.log(err));
   }, [tgp_id]);
 
   useEffect(() => {
     const setInputData4 = async () => {
-      const response = await fetch('/tgp/' + tgp_id + '/weakness');
+      const response = await fetch('/tgp/' + form_id + '/weakness');
       const body = await response.json();
       return body;
     }
@@ -162,10 +164,10 @@ function TGPDetail2(props) {
     setInputData4().then(res => setInputs4({
       ...inputs4,
       flag: true,
-      weakness1: (res[0] === undefined) ? "" : res[0].weakness1,
-      weakness1_sign: (res[0] === undefined) ? "" : res[0].weakness1_sign,
-      weakness2: (res[0] === undefined) ? "" : res[0].weakness2,
-      weakness2_sign: (res[0] === undefined) ? "" : res[0].weakness2_sign
+      weakness1: res[0].weakness1,
+      weakness1_sign: res[0].weakness1_sign,
+      weakness2: res[0].weakness2,
+      weakness2_sign: res[0].weakness2_sign
     })).catch(err => console.log(err));
   }, [tgp_id]);
 
@@ -198,7 +200,7 @@ function TGPDetail2(props) {
   };
 
   const saveInputData = () => {
-    const url = '/tgp/' + tgp_id + '/step2';
+    const api = '/tgp/' + tgp_id + '/' + form_id + '/step2';
 
     const data = {
       // Target Goal Plan
@@ -254,7 +256,7 @@ function TGPDetail2(props) {
       headers: { 'content-type': 'application/json' }
     };
 
-    return post(url, data, config);
+    return post(api, data, config);
   }
 
   return (
@@ -267,7 +269,7 @@ function TGPDetail2(props) {
           <Link className="title_link" to={"/"}>거래처</Link>&nbsp;
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
-            to={"/customer/" + customer_id}
+            to={"/" + customer_id}
             state={{ customer_name: customer_name }}>
             {customer_name}
           </Link>&nbsp;
@@ -305,7 +307,7 @@ function TGPDetail2(props) {
                             checked={inputs1.position1 === label} />))
                         }
                       </td>
-                      <td><SelectSign size={props.inputSize} name="position1_sign" value={inputs1.position1_sign} handleValueChange={handleValueChange1} /></td>
+                      <td><SelectSign size={props.inputSize} name="position1_sign" value={inputs1.position1_sign || ''} handleValueChange={handleValueChange1} /></td>
                     </tr>
                     <tr>
                       <th>
@@ -325,7 +327,7 @@ function TGPDetail2(props) {
                             checked={inputs1.position2 === label} />))
                         }
                       </td>
-                      <td><SelectSign size={props.inputSize} name="position2_sign" value={inputs1.position2_sign} handleValueChange={handleValueChange1} /></td>
+                      <td><SelectSign size={props.inputSize} name="position2_sign" value={inputs1.position2_sign || ''} handleValueChange={handleValueChange1} /></td>
                     </tr>
                     <tr>
                       <th>
@@ -346,7 +348,7 @@ function TGPDetail2(props) {
                             checked={inputs1.position3 === label} />))
                         }
                       </td>
-                      <td><SelectSign size={props.inputSize} name="position3_sign" value={inputs1.position3_sign} handleValueChange={handleValueChange1} /></td>
+                      <td><SelectSign size={props.inputSize} name="position3_sign" value={inputs1.position3_sign || ''} handleValueChange={handleValueChange1} /></td>
                     </tr>
                   </tbody>
                   :
@@ -390,14 +392,14 @@ function TGPDetail2(props) {
                     </tr>
                     <tr>
                       <th><Form.Label column={props.inputSize}>TDM</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="title" value={inputs2.title} onChange={handleValueChange2} /></td>
-                      <td><SelectSign size={props.inputSize} name="title_sign" value={inputs2.title_sign} handleValueChange={handleValueChange2} /></td>
-                      <td><SelectPower size={props.inputSize} name="power" value={inputs2.power} handleValueChange={handleValueChange2} /></td>
-                      <td><SelectSign size={props.inputSize} name="power_sign" value={inputs2.power_sign} handleValueChange={handleValueChange2} /></td>
-                      <td><Form.Control size={props.inputSize} type="text" name="barrier" value={inputs2.barrier} onChange={handleValueChange2} /></td>
-                      <td><SelectSign size={props.inputSize} name="barrier_sign" value={inputs2.barrier_sign} handleValueChange={handleValueChange2} /></td>
-                      <td><Form.Control size={props.inputSize} type="text" name="dynamic" value={inputs2.dynamic} onChange={handleValueChange2} /></td>
-                      <td><SelectSign size={props.inputSize} name="dynamic_sign" value={inputs2.dynamic_sign} handleValueChange={handleValueChange2} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="title" value={inputs2.title || ''} onChange={handleValueChange2} /></td>
+                      <td><SelectSign size={props.inputSize} name="title_sign" value={inputs2.title_sign || ''} handleValueChange={handleValueChange2} /></td>
+                      <td><SelectPower size={props.inputSize} name="power" value={inputs2.power || ''} handleValueChange={handleValueChange2} /></td>
+                      <td><SelectSign size={props.inputSize} name="power_sign" value={inputs2.power_sign || ''} handleValueChange={handleValueChange2} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="barrier" value={inputs2.barrier || ''} onChange={handleValueChange2} /></td>
+                      <td><SelectSign size={props.inputSize} name="barrier_sign" value={inputs2.barrier_sign || ''} handleValueChange={handleValueChange2} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="dynamic" value={inputs2.dynamic || ''} onChange={handleValueChange2} /></td>
+                      <td><SelectSign size={props.inputSize} name="dynamic_sign" value={inputs2.dynamic_sign || ''} handleValueChange={handleValueChange2} /></td>
                       <td>
                         <LineAdd size={props.inputSize} />
                         <LineDelete size={props.inputSize} />
@@ -450,16 +452,16 @@ function TGPDetail2(props) {
                     </tr>
                     <tr>
                       <th><Form.Label column={props.inputSize}>TDM</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" value={inputs2.title} disabled /></td>
-                      <td><SelectScore size={props.inputSize} name="score_sales" value={inputs2.score_sales} handleValueChange={handleValueChange2} /></td>
-                      <td><SelectSign size={props.inputSize} name="score_sales_sign" value={inputs2.score_sales_sign} handleValueChange={handleValueChange2} /></td>
-                      <td><SelectScore size={props.inputSize} name="score_product" value={inputs2.score_product} handleValueChange={handleValueChange2} /></td>
-                      <td><SelectSign size={props.inputSize} name="score_product_sign" value={inputs2.score_product_sign} handleValueChange={handleValueChange2} /></td>
-                      <td><SelectScore size={props.inputSize} name="score_service" value={inputs2.score_service} handleValueChange={handleValueChange2} /></td>
-                      <td><SelectSign size={props.inputSize} name="score_service_sign" value={inputs2.score_service_sign} handleValueChange={handleValueChange2} /></td>
-                      <td><SelectScore size={props.inputSize} name="score_company" value={inputs2.score_company} handleValueChange={handleValueChange2} /></td>
-                      <td><SelectSign size={props.inputSize} name="score_company_sign" value={inputs2.score_company_sign} handleValueChange={handleValueChange2} /></td>
-                      <td><Form.Control size={props.inputSize} type="text" name="score_opinion" value={inputs2.score_opinion} onChange={handleValueChange2} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" value={inputs2.title || ''} disabled /></td>
+                      <td><SelectScore size={props.inputSize} name="score_sales" value={inputs2.score_sales || ''} handleValueChange={handleValueChange2} /></td>
+                      <td><SelectSign size={props.inputSize} name="score_sales_sign" value={inputs2.score_sales_sign || ''} handleValueChange={handleValueChange2} /></td>
+                      <td><SelectScore size={props.inputSize} name="score_product" value={inputs2.score_product || ''} handleValueChange={handleValueChange2} /></td>
+                      <td><SelectSign size={props.inputSize} name="score_product_sign" value={inputs2.score_product_sign || ''} handleValueChange={handleValueChange2} /></td>
+                      <td><SelectScore size={props.inputSize} name="score_service" value={inputs2.score_service || ''} handleValueChange={handleValueChange2} /></td>
+                      <td><SelectSign size={props.inputSize} name="score_service_sign" value={inputs2.score_service_sign || ''} handleValueChange={handleValueChange2} /></td>
+                      <td><SelectScore size={props.inputSize} name="score_company" value={inputs2.score_company || ''} handleValueChange={handleValueChange2} /></td>
+                      <td><SelectSign size={props.inputSize} name="score_company_sign" value={inputs2.score_company_sign || ''} handleValueChange={handleValueChange2} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="score_opinion" value={inputs2.score_opinion || ''} onChange={handleValueChange2} /></td>
                     </tr>
                   </tbody>
                   :
@@ -485,26 +487,26 @@ function TGPDetail2(props) {
                   <tbody>
                     <tr>
                       <th><Form.Label column={props.inputSize}>선정 고객명</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="competition1_name" value={inputs1.competition1_name} onChange={handleValueChange1} /></td>
-                      <td><SelectSign size={props.inputSize} name="competition1_name_sign" value={inputs1.competition1_name_sign} handleValueChange={handleValueChange1} /></td>
-                      <td><Form.Control size={props.inputSize} type="text" name="competition2_name" value={inputs1.competition2_name} onChange={handleValueChange1} /></td>
-                      <td><SelectSign size={props.inputSize} name="competition2_name_sign" value={inputs1.competition2_name_sign} handleValueChange={handleValueChange1} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="competition1_name" value={inputs1.competition1_name || ''} onChange={handleValueChange1} /></td>
+                      <td><SelectSign size={props.inputSize} name="competition1_name_sign" value={inputs1.competition1_name_sign || ''} handleValueChange={handleValueChange1} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="competition2_name" value={inputs1.competition2_name || ''} onChange={handleValueChange1} /></td>
+                      <td><SelectSign size={props.inputSize} name="competition2_name_sign" value={inputs1.competition2_name_sign || ''} handleValueChange={handleValueChange1} /></td>
                       <td></td>
                     </tr>
                     <tr>
                       <th><Form.Label column={props.inputSize}>고객관점 대체안<br />(우리의 경쟁)</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="competition1_type" value={inputs1.competition1_type} onChange={handleValueChange1} /></td>
-                      <td><SelectSign size={props.inputSize} name="competition1_type_sign" value={inputs1.competition1_type_sign} handleValueChange={handleValueChange1} /></td>
-                      <td><Form.Control size={props.inputSize} type="text" name="competition2_type" value={inputs1.competition2_type} onChange={handleValueChange1} /></td>
-                      <td><SelectSign size={props.inputSize} name="competition2_type_sign" value={inputs1.competition2_type_sign} handleValueChange={handleValueChange1} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="competition1_type" value={inputs1.competition1_type || ''} onChange={handleValueChange1} /></td>
+                      <td><SelectSign size={props.inputSize} name="competition1_type_sign" value={inputs1.competition1_type_sign || ''} handleValueChange={handleValueChange1} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="competition2_type" value={inputs1.competition2_type || ''} onChange={handleValueChange1} /></td>
+                      <td><SelectSign size={props.inputSize} name="competition2_type_sign" value={inputs1.competition2_type_sign || ''} handleValueChange={handleValueChange1} /></td>
                       <td></td>
                     </tr>
                     <tr>
                       <th><Form.Label column={props.inputSize}>강점과 기회</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="strength1" value={inputs3.strength1} onChange={handleValueChange3} /></td>
-                      <td><SelectSign size={props.inputSize} name="strength1_sign" value={inputs3.strength1_sign} handleValueChange={handleValueChange3} /></td>
-                      <td><Form.Control size={props.inputSize} type="text" name="strength2" value={inputs3.strength2} onChange={handleValueChange3} /></td>
-                      <td><SelectSign size={props.inputSize} name="strength2_sign" value={inputs3.strength2_sign} handleValueChange={handleValueChange3} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="strength1" value={inputs3.strength1 || ''} onChange={handleValueChange3} /></td>
+                      <td><SelectSign size={props.inputSize} name="strength1_sign" value={inputs3.strength1_sign || ''} handleValueChange={handleValueChange3} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="strength2" value={inputs3.strength2 || ''} onChange={handleValueChange3} /></td>
+                      <td><SelectSign size={props.inputSize} name="strength2_sign" value={inputs3.strength2_sign || ''} handleValueChange={handleValueChange3} /></td>
                       <td>
                         <LineAdd size={props.inputSize} />
                         <LineDelete size={props.inputSize} />
@@ -519,10 +521,10 @@ function TGPDetail2(props) {
                   <tbody>
                     <tr>
                       <th><Form.Label column={props.inputSize}>약점과 위협</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="weakness1" value={inputs4.weakness1} onChange={handleValueChange4} /></td>
-                      <td><SelectSign size={props.inputSize} name="weakness1_sign" value={inputs4.weakness1_sign} handleValueChange={handleValueChange4} /></td>
-                      <td><Form.Control size={props.inputSize} type="text" name="weakness2" value={inputs4.weakness2} onChange={handleValueChange4} /></td>
-                      <td><SelectSign size={props.inputSize} name="weakness2_sign" value={inputs4.weakness2_sign} handleValueChange={handleValueChange4} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="weakness1" value={inputs4.weakness1 || ''} onChange={handleValueChange4} /></td>
+                      <td><SelectSign size={props.inputSize} name="weakness1_sign" value={inputs4.weakness1_sign || ''} handleValueChange={handleValueChange4} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="weakness2" value={inputs4.weakness2 || ''} onChange={handleValueChange4} /></td>
+                      <td><SelectSign size={props.inputSize} name="weakness2_sign" value={inputs4.weakness2_sign || ''} handleValueChange={handleValueChange4} /></td>
                       <td>
                         <LineAdd size={props.inputSize} />
                         <LineDelete size={props.inputSize} />
@@ -549,13 +551,13 @@ function TGPDetail2(props) {
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
           <Link
-            to={`/customer/${customer_id}/${tgp_id}/1`}
+            to={`/${customer_id}/${tgp_id}/${form_id}/step1`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
             <Button variant="secondary" onClick={handleBack}>&lt; 저장 후 이전</Button>
           </Link>
           <Box sx={{ flex: '1 1 auto' }} />
           <Link
-            to={`/customer/${customer_id}/${tgp_id}/3`}
+            to={`/${customer_id}/${tgp_id}/${form_id}/step3`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
             <Button variant="secondary" onClick={handleNext}>저장 후 다음 &gt;</Button>
           </Link>

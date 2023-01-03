@@ -10,7 +10,7 @@ function TGP(props) {
 			<td>
 				<Link
 					style={{ display: 'block' }}
-					to={`/customer/${props.customer_id}/${props.tgp_id}`}
+					to={`/${props.customer_id}/${props.tgp_id}`}
 					state={{ tgp_name: props.name, customer_name: props.customer_name }}>
 					{props.name}
 				</Link>

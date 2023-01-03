@@ -10,7 +10,7 @@ function Customer(props) {
 			<td>
 				<Link
 					style={{ display: 'block' }}
-					to={`/customer/${props.customer_id}`}
+					to={`/${props.customer_id}`}
 					state={{ customer_name: props.name }}>
 					{props.name}
 				</Link>
