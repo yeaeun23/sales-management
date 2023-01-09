@@ -17,7 +17,7 @@ function SelectSign(props) {
   });
 
   const styles = {
-    width: props.size === "sm" ? "60px" : "66px",
+    width: props.size === "sm" ? "60px" : "65px",
     color: options[selectedValue].color,
     float: "right"
   };

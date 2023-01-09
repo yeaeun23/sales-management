@@ -126,15 +126,15 @@ app.get('/tgp/:tgp_id/continue', (req, res) => {
   let tgp_id = req.params.tgp_id;
 
   // 미완료된 form_id 조회
-  let sql = "SELECT form_id FROM FORM WHERE tgp_id = " + tgp_id + " AND complete = 0 AND delete_time IS NULL";
+  let sql = "SELECT form_id FROM FORM WHERE tgp_id = " + tgp_id + " AND complete = 0 AND delete_time IS NULL ORDER BY form_id DESC LIMIT 1";
 
-  console.log("" + sql);
+  console.log("TGP 미완료 조회: " + sql);
   connection.query(sql, (err, rows, fields) => {
     if (rows.length === 0) {
       // 없으면 insert
       let sql1 = "INSERT INTO FORM (`tgp_id`, `update_time`, `make_time`) VALUES(" + tgp_id + ", NOW(), NOW())";
 
-      console.log("" + sql1);
+      console.log("TGP 생성: " + sql1);
       connection.query(sql1);
 
       // 다시 조회

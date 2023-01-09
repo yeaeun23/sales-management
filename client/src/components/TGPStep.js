@@ -6,7 +6,7 @@ import StepLabel from '@mui/material/StepLabel';
 
 function TGPStep(props) {
   const steps = [
-    'Get Started',
+    'Getting Start',
     'Target Goal Plan',
     'In The Funnel',
     'Getting Action'

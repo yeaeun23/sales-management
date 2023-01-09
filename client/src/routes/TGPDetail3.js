@@ -11,16 +11,14 @@ import Button from 'react-bootstrap/Button';
 import { post } from "axios";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
-import { useParams, useLocation, Link } from 'react-router-dom';
+import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
 import LineAdd from '../components/LineAdd';
 import LineDelete from '../components/LineDelete';
 
 function TGPDetail3(props) {
   const { customer_id, tgp_id, form_id } = useParams();
-  //const customer_name = useLocation().state.customer_name;
-  //const tgp_name = useLocation().state.tgp_name;
-  const customer_name = "";
-  const tgp_name = "";
+  const { customer_name, tgp_name } = useLocation().state;
+  const navigate = useNavigate();
 
   const [inputs1, setInputs1] = useState({
     flag: false,
@@ -49,13 +47,18 @@ function TGPDetail3(props) {
       return body;
     }
 
-    setInputData1().then(res => setInputs1({
-      ...inputs1,
-      flag: true,
-      strength: res[0].strength,
-      behavior1: res[0].behavior1
-    })).catch(err => console.log(err));
-  }, [tgp_id]);
+    setInputData1().then(res => {
+      setInputs1({ flag: true });
+
+      if (res[0] !== undefined) {
+        setInputs1({
+          flag: true,
+          strength: res[0].strength,
+          behavior1: res[0].behavior1
+        })
+      }
+    }).catch(err => console.log(err));
+  }, [form_id]);
 
   useEffect(() => {
     const setInputData2 = async () => {
@@ -64,13 +67,18 @@ function TGPDetail3(props) {
       return body;
     }
 
-    setInputData2().then(res => setInputs2({
-      ...inputs2,
-      flag: true,
-      weakness: res[0].weakness,
-      behavior2: res[0].behavior2
-    })).catch(err => console.log(err));
-  }, [tgp_id]);
+    setInputData2().then(res => {
+      setInputs2({ flag: true });
+
+      if (res[0] !== undefined) {
+        setInputs2({
+          flag: true,
+          weakness: res[0].weakness,
+          behavior2: res[0].behavior2
+        })
+      }
+    }).catch(err => console.log(err));
+  }, [form_id]);
 
   useEffect(() => {
     const setInputData3 = async () => {
@@ -79,15 +87,20 @@ function TGPDetail3(props) {
       return body;
     }
 
-    setInputData3().then(res => setInputs3({
-      ...inputs3,
-      flag: true,
-      action: res[0].action,
-      date: res[0].date,
-      owner: res[0].owner,
-      collaborator: res[0].collaborator
-    })).catch(err => console.log(err));
-  }, [tgp_id]);
+    setInputData3().then(res => {
+      setInputs3({ flag: true });
+
+      if (res[0] !== undefined) {
+        setInputs3({
+          flag: true,
+          action: res[0].action,
+          date: res[0].date,
+          owner: res[0].owner,
+          collaborator: res[0].collaborator
+        })
+      }
+    }).catch(err => console.log(err));
+  }, [form_id]);
 
   const handleValueChange1 = (e) => {
     const { name, value } = e.target;
@@ -104,13 +117,35 @@ function TGPDetail3(props) {
     setInputs3({ ...inputs3, [name]: value });
   };
 
-  const handleBack = () => {
-    saveInputData();
-  };
+  const handleMove = (e) => {
+    if (e.target.innerHTML === "작성 완료") {
+      if (window.confirm("작성 완료하시겠습니까?")) {
+        // 저장
+        saveInputData();
+  
+        // 이동
+        const url = `/${customer_id}`;
+        const state = {
+          tgp_name: tgp_name,
+          customer_name: customer_name
+        };
+  
+        navigate(url, { state: state });
+        alert("작성 완료되었습니다.");
+      }
+    }
+    else {
+      if (window.confirm("저장하시겠습니까?"))
+        saveInputData();
+    }
+    
+    return;
+  }
 
-  const handleNext = () => {
+  const handleSave = () => {
     saveInputData();
-  };
+    alert("저장되었습니다.");      
+  }
 
   const saveInputData = () => {
     const api = '/tgp/' + tgp_id + '/' + form_id + '/step3';
@@ -130,8 +165,8 @@ function TGPDetail3(props) {
 
     const config = {
       headers: { 'content-type': 'application/json' }
-    };
-
+    };    
+      
     return post(api, data, config);
   }
 
@@ -142,11 +177,16 @@ function TGPDetail3(props) {
       <div className="paper">
         <div className="paper_title">
           <PlayArrowIcon />&nbsp;
-          <Link className="title_link" to={"/"}>거래처</Link>&nbsp;
+          <Link className="title_link"
+            to={"/"}
+            onClick={handleMove}>
+              거래처
+          </Link>&nbsp;
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
             to={"/" + customer_id}
-            state={{ customer_name: customer_name }}>
+            state={{ customer_name: customer_name }}
+            onClick={handleMove}>
             {customer_name}
           </Link>&nbsp;
           <PlayArrowOutlinedIcon />&nbsp;
@@ -157,7 +197,10 @@ function TGPDetail3(props) {
 
         <div sx={{ mt: 2, mb: 1 }}>
           <Card>
-            <Card.Header>전략 분석</Card.Header>
+            <Card.Header>
+              전략 분석
+              <Button size="sm" variant="success" style={{float: "right"}} onClick={handleSave}>중간 저장</Button>
+            </Card.Header>
             {(inputs1.flag && inputs2.flag) ?
               <Card.Body>
                 <Table>
@@ -233,7 +276,10 @@ function TGPDetail3(props) {
           </Card>
 
           <Card>
-            <Card.Header>Action Plan (중요하고 시급한 액션)</Card.Header>
+            <Card.Header>
+              Action Plan (중요하고 시급한 액션)
+              <Button size="sm" variant="success" style={{float: "right"}} onClick={handleSave}>중간 저장</Button>
+            </Card.Header>
             <Card.Body>
               <Table id="TBActionPlan">
                 <colgroup className="col_form3_2">
@@ -293,16 +339,12 @@ function TGPDetail3(props) {
           <Link
             to={`/${customer_id}/${tgp_id}/${form_id}/step2`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
-            <Button variant="secondary" onClick={handleBack}>&lt; 저장 후 이전</Button>
+            <Button variant="secondary" onClick={handleMove}>&lt; 이전 단계</Button>
           </Link>
           <Box sx={{ flex: '1 1 auto' }} />
           <Button variant="secondary">미리보기</Button>
           &nbsp;&nbsp;
-          <Link
-            to={`/${customer_id}`}
-            state={{ tgp_name: tgp_name, customer_name: customer_name }}>
-            <Button variant="success" onClick={handleNext}>저장 완료</Button>
-          </Link>
+          <Button variant="primary" onClick={handleMove}>작성 완료</Button>
         </Box>
       </div>
     </div>

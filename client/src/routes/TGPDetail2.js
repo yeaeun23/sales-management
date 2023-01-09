@@ -20,10 +20,7 @@ import SelectSign from '../components/SelectSign';
 
 function TGPDetail2(props) {
   const { customer_id, tgp_id, form_id } = useParams();
-  //const customer_name = useLocation().state.customer_name;
-  //const tgp_name = useLocation().state.tgp_name;
-  const customer_name = "";
-  const tgp_name = "";
+  const { customer_name, tgp_name } = useLocation().state;
 
   const [inputs1, setInputs1] = useState({
     flag: false,
@@ -88,7 +85,6 @@ function TGPDetail2(props) {
     }
 
     setInputData1().then(res => setInputs1({
-      ...inputs1,
       flag: true,
       position1: res[0].position1,
       position1_sign: res[0].position1_sign,
@@ -105,7 +101,7 @@ function TGPDetail2(props) {
       competition2_type: res[0].competition2_type,
       competition2_type_sign: res[0].competition2_type_sign
     })).catch(err => console.log(err));
-  }, [tgp_id]);
+  }, [tgp_id, form_id]);
 
   useEffect(() => {
     const setInputData2 = async () => {
@@ -114,28 +110,33 @@ function TGPDetail2(props) {
       return body;
     }
 
-    setInputData2().then(res => setInputs2({
-      ...inputs2,
-      flag: true,
-      title: res[0].title,
-      title_sign: res[0].title_sign,
-      power: res[0].power,
-      power_sign: res[0].power_sign,
-      barrier: res[0].barrier,
-      barrier_sign: res[0].barrier_sign,
-      dynamic: res[0].dynamic,
-      dynamic_sign: res[0].dynamic_sign,
-      score_sales: res[0].score_sales,
-      score_sales_sign: res[0].score_sales_sign,
-      score_product: res[0].score_product,
-      score_product_sign: res[0].score_product_sign,
-      score_service: res[0].score_service,
-      score_service_sign: res[0].score_service_sign,
-      score_company: res[0].score_company,
-      score_company_sign: res[0].score_company_sign,
-      score_opinion: res[0].score_opinion
-    })).catch(err => console.log(err));
-  }, [tgp_id]);
+    setInputData2().then(res => {
+      setInputs2({ flag: true });
+
+      if (res[0] !== undefined) {
+        setInputs2({
+          flag: true,
+          title: res[0].title,
+          title_sign: res[0].title_sign,
+          power: res[0].power,
+          power_sign: res[0].power_sign,
+          barrier: res[0].barrier,
+          barrier_sign: res[0].barrier_sign,
+          dynamic: res[0].dynamic,
+          dynamic_sign: res[0].dynamic_sign,
+          score_sales: res[0].score_sales,
+          score_sales_sign: res[0].score_sales_sign,
+          score_product: res[0].score_product,
+          score_product_sign: res[0].score_product_sign,
+          score_service: res[0].score_service,
+          score_service_sign: res[0].score_service_sign,
+          score_company: res[0].score_company,
+          score_company_sign: res[0].score_company_sign,
+          score_opinion: res[0].score_opinion
+        })
+      }
+    }).catch(err => console.log(err));
+  }, [tgp_id, form_id]);
 
   useEffect(() => {
     const setInputData3 = async () => {
@@ -144,15 +145,20 @@ function TGPDetail2(props) {
       return body;
     }
 
-    setInputData3().then(res => setInputs3({
-      ...inputs3,
-      flag: true,
-      strength1: res[0].strength1,
-      strength1_sign: res[0].strength1_sign,
-      strength2: res[0].strength2,
-      strength2_sign: res[0].strength2_sign
-    })).catch(err => console.log(err));
-  }, [tgp_id]);
+    setInputData3().then(res => {
+      setInputs3({ flag: true });
+
+      if (res[0] !== undefined) {
+        setInputs3({
+          flag: true,
+          strength1: res[0].strength1,
+          strength1_sign: res[0].strength1_sign,
+          strength2: res[0].strength2,
+          strength2_sign: res[0].strength2_sign
+        })
+      }
+    }).catch(err => console.log(err));
+  }, [tgp_id, form_id]);
 
   useEffect(() => {
     const setInputData4 = async () => {
@@ -161,15 +167,20 @@ function TGPDetail2(props) {
       return body;
     }
 
-    setInputData4().then(res => setInputs4({
-      ...inputs4,
-      flag: true,
-      weakness1: res[0].weakness1,
-      weakness1_sign: res[0].weakness1_sign,
-      weakness2: res[0].weakness2,
-      weakness2_sign: res[0].weakness2_sign
-    })).catch(err => console.log(err));
-  }, [tgp_id]);
+    setInputData4().then(res => {
+      setInputs4({ flag: true });
+
+      if (res[0] !== undefined) {
+        setInputs4({
+          flag: true,
+          weakness1: res[0].weakness1,
+          weakness1_sign: res[0].weakness1_sign,
+          weakness2: res[0].weakness2,
+          weakness2_sign: res[0].weakness2_sign
+        })
+      }
+    }).catch(err => console.log(err));
+  }, [tgp_id, form_id]);
 
   const handleValueChange1 = (e) => {
     const { name, value } = e.target;
@@ -191,13 +202,15 @@ function TGPDetail2(props) {
     setInputs4({ ...inputs4, [name]: value });
   };
 
-  const handleBack = () => {
-    saveInputData();
-  };
+  const handleMove = () => {
+    if (window.confirm("저장하시겠습니까?"))
+      saveInputData();
+  }
 
-  const handleNext = () => {
+  const handleSave = () => {
     saveInputData();
-  };
+    alert("저장되었습니다.");      
+  }
 
   const saveInputData = () => {
     const api = '/tgp/' + tgp_id + '/' + form_id + '/step2';
@@ -266,11 +279,16 @@ function TGPDetail2(props) {
       <div className="paper">
         <div className="paper_title">
           <PlayArrowIcon />&nbsp;
-          <Link className="title_link" to={"/"}>거래처</Link>&nbsp;
+          <Link className="title_link" 
+            to={"/"}
+            onClick={handleMove}>
+              거래처
+          </Link>&nbsp;
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
             to={"/" + customer_id}
-            state={{ customer_name: customer_name }}>
+            state={{ customer_name: customer_name }}
+            onClick={handleMove}>
             {customer_name}
           </Link>&nbsp;
           <PlayArrowOutlinedIcon />&nbsp;
@@ -281,7 +299,10 @@ function TGPDetail2(props) {
 
         <div sx={{ mt: 2, mb: 1 }}>
           <Card>
-            <Card.Header>Target Goal Plan</Card.Header>
+            <Card.Header>
+              Target Goal Plan
+              <Button size="sm" variant="success" style={{float: "right"}} onClick={handleSave}>중간 저장</Button>
+            </Card.Header>
             <Card.Body>
               <Table>
                 <colgroup className="col_form2_1">
@@ -364,7 +385,10 @@ function TGPDetail2(props) {
             </Card.Body>
           </Card>
           <Card>
-            <Card.Header>구매 영향력 (Personal과 Business를 모두 고려)</Card.Header>
+            <Card.Header>
+              구매 영향력 (Personal과 Business를 모두 고려)
+              <Button size="sm" variant="success" style={{float: "right"}} onClick={handleSave}>중간 저장</Button>
+            </Card.Header>
             <Card.Body>
               <Table style={{ marginBottom: 0 }}>
                 <colgroup className="col_form2_2">
@@ -419,7 +443,10 @@ function TGPDetail2(props) {
             </Card.Body>
           </Card>
           <Card>
-            <Card.Header>구매 영향력 평가</Card.Header>
+            <Card.Header>
+              구매 영향력 평가
+              <Button size="sm" variant="success" style={{float: "right"}} onClick={handleSave}>중간 저장</Button>
+            </Card.Header>
             <Card.Body>
               <Table style={{ marginBottom: 0 }}>
                 <colgroup className="col_form2_3">
@@ -477,7 +504,10 @@ function TGPDetail2(props) {
             </Card.Body>
           </Card>
           <Card>
-            <Card.Header>경쟁</Card.Header>
+            <Card.Header>
+            <Button size="sm" variant="success" style={{float: "right"}} onClick={handleSave}>중간 저장</Button>
+              경쟁
+            </Card.Header>
             {(inputs3.flag && inputs4.flag) ?
               <Card.Body>
                 <Table style={{ marginBottom: 0 }}>
@@ -553,13 +583,15 @@ function TGPDetail2(props) {
           <Link
             to={`/${customer_id}/${tgp_id}/${form_id}/step1`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
-            <Button variant="secondary" onClick={handleBack}>&lt; 저장 후 이전</Button>
+            <Button variant="secondary" onClick={handleMove}>&lt; 이전 단계</Button>
           </Link>
           <Box sx={{ flex: '1 1 auto' }} />
+          <Button variant="secondary">미리보기</Button>
+          &nbsp;&nbsp;
           <Link
             to={`/${customer_id}/${tgp_id}/${form_id}/step3`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
-            <Button variant="secondary" onClick={handleNext}>저장 후 다음 &gt;</Button>
+            <Button variant="primary" onClick={handleMove}>다음 단계 &gt;</Button>
           </Link>
         </Box>
       </div>

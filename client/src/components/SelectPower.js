@@ -17,7 +17,7 @@ function SelectPower(props) {
   });
   
   const styles = {
-    width: props.size === "sm" ? "57px" : "62px",
+    width: props.size === "sm" ? "60px" : "65px",
     float: "right"
   };
 

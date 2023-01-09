@@ -22,7 +22,7 @@ function SelectScore(props) {
   });
   
   const styles = {
-    width: props.size == "sm" ? "62px" : "68px",
+    width: props.size == "sm" ? "65px" : "70px",
     float: "right"
   };
 
