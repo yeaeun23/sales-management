@@ -172,7 +172,7 @@ app.get('/tgp/:tgp_id/:form_id/copy', (req, res) => {
     // 복사 - FORM_TDM
     new_form_id = rows[0].form_id;
     
-    sql = "INSERT INTO FORM_TDM (`form_id`, `tdm_id`, `title`, `title_sign`, `power`, `power_sign`, `barrier`, `barrier_sign`, `dynamic`, `dynamic_sign`, `score_sales`, `score_sales_sign`, `score_product`, `score_product_sign`, `score_service`, `score_service_sign`, `score_company`, `score_company_sign`, `score_opinion`) SELECT " + new_form_id + ", `tdm_id`, `title`, `title_sign`, `power`, `power_sign`, `barrier`, `barrier_sign`, `dynamic`, `dynamic_sign`, `score_sales`, `score_sales_sign`, `score_product`, `score_product_sign`, `score_service`, `score_service_sign`, `score_company`, `score_company_sign`, `score_opinion` FROM FORM_TDM WHERE form_id = " + form_id;
+    sql = "INSERT INTO FORM_TDM (`form_id`, `tdm_id`, `role`, `title`, `title_sign`, `power`, `power_sign`, `barrier`, `barrier_sign`, `dynamic`, `dynamic_sign`, `score_sales`, `score_sales_sign`, `score_product`, `score_product_sign`, `score_service`, `score_service_sign`, `score_company`, `score_company_sign`, `score_opinion`) SELECT " + new_form_id + ", `tdm_id`, `role`, `title`, `title_sign`, `power`, `power_sign`, `barrier`, `barrier_sign`, `dynamic`, `dynamic_sign`, `score_sales`, `score_sales_sign`, `score_product`, `score_product_sign`, `score_service`, `score_service_sign`, `score_company`, `score_company_sign`, `score_opinion` FROM FORM_TDM WHERE form_id = " + form_id;
 
     console.log("STEP1 복사: " + sql);
     connection.query(sql);
@@ -285,9 +285,9 @@ app.post('/tgp/:tgp_id/:form_id/step2', (req, res) => {
   console.log("STEP2 저장(삭제): " + sql);
   connection.query(sql);
 
-  sql = "INSERT INTO FORM_TDM (`form_id`, `tdm_id`, `title`, `title_sign`, `power`, `power_sign`, `barrier`, `barrier_sign`, `dynamic`, `dynamic_sign`, `score_sales`, `score_sales_sign`, `score_product`, `score_product_sign`, `score_service`, `score_service_sign`, `score_company`, `score_company_sign`, `score_opinion`) VALUES(" + form_id + ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  sql = "INSERT INTO FORM_TDM (`form_id`, `tdm_id`, `role`, `title`, `title_sign`, `power`, `power_sign`, `barrier`, `barrier_sign`, `dynamic`, `dynamic_sign`, `score_sales`, `score_sales_sign`, `score_product`, `score_product_sign`, `score_service`, `score_service_sign`, `score_company`, `score_company_sign`, `score_opinion`) VALUES(" + form_id + ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   params = [
-    0,
+    0, req.body.role,
     req.body.title, req.body.title_sign,
     req.body.power, req.body.power_sign,
     req.body.barrier, req.body.barrier_sign,

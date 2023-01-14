@@ -16,14 +16,8 @@ import { useParams, useLocation, Link } from "react-router-dom";
 function TGPDetail1(props) {
   const { customer_id, tgp_id, form_id } = useParams();
   const { customer_name, tgp_name } = useLocation().state;
-
-  const [inputs, setInputs] = useState({
-    account: "",
-    department: "",
-    solution: "",
-    amount: "",
-    closingdate: ""
-  });
+  const [inputs, setInputs] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const setInputData = async () => {
@@ -32,14 +26,13 @@ function TGPDetail1(props) {
       return body;
     }
 
-    setInputData().then(res => setInputs({
-      account: customer_name,
-      department: res[0].department,
-      solution: res[0].solution,
-      amount: res[0].amount,
-      closingdate: res[0].closingdate
-    })).catch(err => console.log(err));
-  }, [tgp_id, form_id, customer_name]);
+    setInputData()
+    .then(res => {
+      setInputs(res[0]);
+      setLoading(false); 
+    })
+    .catch(err => console.log(err));
+  }, []);
 
   const handleValueChange = (e) => {
     const { name, value } = e.target;
@@ -110,7 +103,7 @@ function TGPDetail1(props) {
                 <colgroup className="col_form1_1">
                   <col /><col /><col /><col />
                 </colgroup>
-                {inputs.account !== "" ?
+                {!loading ?
                   <tbody>
                     <tr>
                       <th><Form.Label column={props.inputSize}>거래처</Form.Label></th>

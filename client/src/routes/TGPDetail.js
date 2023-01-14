@@ -14,10 +14,10 @@ import { useParams, useLocation, Link, useNavigate } from "react-router-dom";
 function TGPDetail(props) {
   const { customer_id, tgp_id } = useParams();
   const { customer_name, tgp_name } = useLocation().state;
-  const navigate = useNavigate();
   const [selectedMode, setSelectedMode] = useState("0");
   const [selectedFormId, setSelectedFormId] = useState("");
   const [history, setHistory] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getHistory = async () => {
@@ -160,8 +160,8 @@ function TGPDetail(props) {
                         >
                           <option value="">완료일자 선택</option>
                           {
-                            history.map((c, i) => {
-                              return <option key={c.form_id} value={c.form_id}>{c.form_id}: {c.update_time}</option>
+                            history.map((item) => {
+                              return <option key={item.form_id} value={item.form_id}>{item.form_id}: {item.update_time}</option>
                             })
                           }
                         </Form.Select>

@@ -148,10 +148,10 @@ form {
 
 /* */
 .col_form2_2 col:nth-child(1) {
-  min-width: 80px;
+  width: 16%;
 }
 
-.col_form2_2 col:nth-child(1),
+.col_form2_2 col:nth-child(2),
 .col_form2_2 col:nth-child(3),
 .col_form2_2 col:nth-child(4),
 .col_form2_2 col:nth-child(5),
@@ -160,26 +160,25 @@ form {
   width: 5%;
 }
 
-.col_form2_2 col:nth-child(2),
 .col_form2_2 col:nth-child(6),
 .col_form2_2 col:nth-child(8) {
-  width: 22%;
+  width: 25%;
 }
 
 .col_form2_2 col:nth-child(10) {
-  width: 3%;
+  width: 4%;
 }
 
 /* */
-.col_form2_3 col:nth-child(1) {
-  min-width: 80px;
-}
-
 .col_form2_3 col:nth-child(2) {
-  width: 22%;
+  min-width: 85px;
 }
 
-.col_form2_3 col:nth-child(1),
+.col_form2_3 col:nth-child(1) {
+  width: 12%;
+}
+
+.col_form2_3 col:nth-child(2),
 .col_form2_3 col:nth-child(3),
 .col_form2_3 col:nth-child(4),
 .col_form2_3 col:nth-child(5),
@@ -188,11 +187,11 @@ form {
 .col_form2_3 col:nth-child(8),
 .col_form2_3 col:nth-child(9),
 .col_form2_3 col:nth-child(10) {
-  width: 5%;
+  width: 7%;
 }
 
 .col_form2_3 col:nth-child(11) {
-  width: 33%;
+  width: 25%;
 }
 
 /* */
