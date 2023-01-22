@@ -33,7 +33,7 @@ function TGPDetail(props) {
 
     // 모드(radio) 세팅
     document.getElementsByName("mode")[selectedMode].checked = true;
-  }, [tgp_id, selectedMode]);  
+  }, [tgp_id, selectedMode]);
 
   useEffect(() => {
     // 완료일자(select) 활성화 여부
@@ -74,18 +74,16 @@ function TGPDetail(props) {
       }
     }
 
-    getFormId(api)
-      .then(res => {
-        const returnedFormId = res[0].form_id;
-        const url = `/${customer_id}/${tgp_id}/${returnedFormId}/step1`;
-        const state = {
-          tgp_name: tgp_name,
-          customer_name: customer_name
-        };
+    getFormId(api).then(res => {
+      const returnedFormId = res[0].form_id;
+      const url = `/${customer_id}/${tgp_id}/${returnedFormId}/step1`;
+      const state = {
+        tgp_name: tgp_name,
+        customer_name: customer_name
+      };
 
-        navigate(url, { state: state }); // 페이지 이동
-      })
-      .catch(err => console.log(err));
+      navigate(url, { state: state }); // 페이지 이동
+    }).catch(err => console.log(err));
   }
 
   const getFormId = async (api) => {
@@ -117,59 +115,57 @@ function TGPDetail(props) {
         <div sx={{ mt: 2, mb: 1 }}>
           <Card>
             <Card.Header>Getting Start</Card.Header>
-              <Card.Body>
-                <Table>
+            <Card.Body>
+              <Table>
                 <colgroup>
                   <col width="10%" />
                   <col width="40%" />
                   <col width="40%" />
                 </colgroup>
-                  <tbody>
-                    <tr>
-                      <th rowSpan={2}>
-                        <Form.Label column={props.inputSize}>작업 선택</Form.Label>
-                      </th>
-                      <td>
-                        <Form.Check
-                          type="radio"
-                          name="mode"
-                          id="mode1"
-                          value={0}
-                          label="이어서(새로) 작성하기"
-                          onChange={handleChangeMode}
-                        />
-                      </td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <Form.Check
-                          type="radio"
-                          name="mode"
-                          id="mode2"
-                          value={1}
-                          label="완료된 시트 복사 후 불러오기"
-                          onChange={handleChangeMode}
-                        />
-                      </td>
-                      <td>
-                        <Form.Select
-                          size={props.inputSize}
-                          name="history"
-                          onChange={handleChangeHistory}
-                        >
-                          <option value="">완료일자 선택</option>
-                          {
-                            history.map((item) => {
-                              return <option key={item.form_id} value={item.form_id}>{item.form_id}: {item.update_time}</option>
-                            })
-                          }
-                        </Form.Select>
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Card.Body>            
+                <tbody>
+                  <tr>
+                    <th rowSpan={2}>
+                      <Form.Label column={props.inputSize}>작업 선택</Form.Label>
+                    </th>
+                    <td>
+                      <Form.Check
+                        type="radio"
+                        name="mode"
+                        id="mode1"
+                        value={0}
+                        label="이어서(새로) 작성하기"
+                        onChange={handleChangeMode}
+                      />
+                    </td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <Form.Check
+                        type="radio"
+                        name="mode"
+                        id="mode2"
+                        value={1}
+                        label="완료된 시트 복사 후 불러오기"
+                        onChange={handleChangeMode}
+                      />
+                    </td>
+                    <td>
+                      <Form.Select
+                        size={props.inputSize}
+                        name="history"
+                        onChange={handleChangeHistory}
+                      >
+                        <option value="">완료일자 선택</option>
+                        {history.map((item) => {
+                          return <option key={item.form_id} value={item.form_id}>{item.form_id}: {item.update_time}</option>
+                        })}
+                      </Form.Select>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            </Card.Body>
           </Card>
         </div>
 

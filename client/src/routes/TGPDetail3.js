@@ -12,15 +12,34 @@ import { post } from "axios";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
-import LineAdd from '../components/LineAdd';
-import LineDelete from '../components/LineDelete';
+import BtnAddRow from '../components/BtnAddRow';
+import BtnDeleteRow from '../components/BtnDeleteRow';
 
 function TGPDetail3(props) {
   const { customer_id, tgp_id, form_id } = useParams();
   const { customer_name, tgp_name } = useLocation().state;
-  const [inputs1, setInputs1] = useState([]);
-  const [inputs2, setInputs2] = useState([]);
-  const [inputs3, setInputs3] = useState([]);
+  const input1 = {
+    strength1: '', strength1_sign: '',
+    strength2: '', strength2_sign: ''
+  }
+  const input2 = {
+    title: '', role: '', title_sign: '',
+    power: '', power_sign: '',
+    barrier: '', barrier_sign: '',
+    dynamic: '', dynamic_sign: '',
+    score_sales: '', score_sales_sign: '',
+    score_product: '', score_product_sign: '',
+    score_service: '', score_service_sign: '',
+    score_company: '', score_company_sign: '',
+    score_opinion: ''
+  }
+  const input3 = {
+    strength1: '', strength1_sign: '',
+    strength2: '', strength2_sign: ''
+  }
+  const [inputs1, setInputs1] = useState([input1]);
+  const [inputs2, setInputs2] = useState([input2]);
+  const [inputs3, setInputs3] = useState([input3]);
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
   const [loading3, setLoading3] = useState(true);
@@ -32,9 +51,10 @@ function TGPDetail3(props) {
       const body = await response.json();
       return body;
     }
-
     setInputData1().then(res => {
-      setInputs1(res);
+      if (res.length != 0) {
+        setInputs1(res);
+      }
       setLoading1(false);
     }).catch(err => console.log(err));
   }, []);
@@ -45,9 +65,10 @@ function TGPDetail3(props) {
       const body = await response.json();
       return body;
     }
-
     setInputData2().then(res => {
-      setInputs2(res);
+      if (res.length != 0) {
+        setInputs2(res);
+      }
       setLoading2(false);
     }).catch(err => console.log(err));
   }, []);
@@ -58,9 +79,10 @@ function TGPDetail3(props) {
       const body = await response.json();
       return body;
     }
-
     setInputData3().then(res => {
-      setInputs3(res);
+      if (res.length != 0) {
+        setInputs3(res);
+      }
       setLoading3(false);
     }).catch(err => console.log(err));
   }, []);
@@ -98,10 +120,39 @@ function TGPDetail3(props) {
     setInputs3(newArray);
   };
 
+  const handleAddRow1 = () => {
+    setInputs1([...inputs1, input1]);
+  }
+
+  const handleAddRow2 = () => {
+    setInputs2([...inputs2, input2]);
+  }
+
+  const handleAddRow3 = () => {
+    setInputs3([...inputs3, input3]);
+  }
+
+  const handleDeleteRow1 = (index) => {
+    const newArray = [...inputs1];
+    newArray.splice(index, 1);
+    setInputs1(newArray);
+  }
+
+  const handleDeleteRow2 = (index) => {
+    const newArray = [...inputs2];
+    newArray.splice(index, 1);
+    setInputs2(newArray);
+  }
+
+  const handleDeleteRow3 = (index) => {
+    const newArray = [...inputs3];
+    newArray.splice(index, 1);
+    setInputs3(newArray);
+  }
+
   const handleMove = (e) => {
     if (e.target.innerHTML === "작성 완료") {
       if (window.confirm("작성 완료하시겠습니까?")) {
-        // 저장
         saveInputData();
 
         // 이동
@@ -130,24 +181,12 @@ function TGPDetail3(props) {
 
   const saveInputData = () => {
     const api = '/tgp/' + tgp_id + '/' + form_id + '/step3';
-
     const data = {
-      strength: inputs1.strength,
-      behavior1: inputs1.behavior1,
-
-      weakness: inputs2.weakness,
-      behavior2: inputs2.behavior2,
-
-      action: inputs3.action,
-      date: inputs3.date,
-      owner: inputs3.owner,
-      collaborator: inputs3.collaborator
+      inputs1, inputs2, inputs3
     };
-
     const config = {
       headers: { 'content-type': 'application/json' }
     };
-
     return post(api, data, config);
   }
 
@@ -198,24 +237,25 @@ function TGPDetail3(props) {
                       </th>
                       <th></th>
                     </tr>
-                    {
-                      inputs1.map((item, i) => {
-                        return (
-                          <tr key={item.strategy1_id}>
-                      <td>
-                        <Form.Control size={props.inputSize} type="text" name="strength" value={item.strength || ''} onChange={handleValueChange1(i)} />
-                      </td>
-                      <td>
-                        <Form.Control size={props.inputSize} type="text" name="behavior1" value={item.behavior1 || ''} onChange={handleValueChange1(i)} />
-                      </td>
-                      <td>
-                        <LineAdd size={props.inputSize} />
-                        <LineDelete size={props.inputSize} />
-                      </td>
-                    </tr>
-                    )
-                  })
-                }
+                    {inputs1.map((item, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>
+                            <Form.Control size={props.inputSize} type="text" name="strength" value={item.strength || ''} onChange={handleValueChange1(i)} />
+                          </td>
+                          <td>
+                            <Form.Control size={props.inputSize} type="text" name="behavior1" value={item.behavior1 || ''} onChange={handleValueChange1(i)} />
+                          </td>
+                          <td>
+                            {i === 0 ?
+                              <BtnAddRow size={props.inputSize} handleClick={handleAddRow1} />
+                              :
+                              <BtnDeleteRow size={props.inputSize} handleClick={() => handleDeleteRow1(i)} />
+                            }
+                          </td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </Table>
                 <Table>
@@ -232,24 +272,25 @@ function TGPDetail3(props) {
                       </th>
                       <th></th>
                     </tr>
-                    {
-                      inputs2.map((item, i) => {
-                        return (
-                          <tr key={item.strategy2_id}>
-                      <td>
-                        <Form.Control size={props.inputSize} type="text" name="weakness" value={item.weakness || ''} onChange={handleValueChange2(i)} />
-                      </td>
-                      <td>
-                        <Form.Control size={props.inputSize} type="text" name="behavior2" value={item.behavior2 || ''} onChange={handleValueChange2(i)} />
-                      </td>
-                      <td>
-                        <LineAdd size={props.inputSize} />
-                        <LineDelete size={props.inputSize} />
-                      </td>
-                    </tr>
-                    )
-                  })
-                }
+                    {inputs2.map((item, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>
+                            <Form.Control size={props.inputSize} type="text" name="weakness" value={item.weakness || ''} onChange={handleValueChange2(i)} />
+                          </td>
+                          <td>
+                            <Form.Control size={props.inputSize} type="text" name="behavior2" value={item.behavior2 || ''} onChange={handleValueChange2(i)} />
+                          </td>
+                          <td>
+                            {i === 0 ?
+                              <BtnAddRow size={props.inputSize} handleClick={handleAddRow2} />
+                              :
+                              <BtnDeleteRow size={props.inputSize} handleClick={() => handleDeleteRow2(i)} />
+                            }
+                          </td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </Table>
               </Card.Body>
@@ -295,30 +336,31 @@ function TGPDetail3(props) {
                       </th>
                       <th></th>
                     </tr>
-                    {
-                      inputs3.map((item, i) => {
-                        return (
-                          <tr key={item.action_id}>
-                      <td>
-                        <Form.Control size={props.inputSize} type="text" name="action" value={item.action || ''} onChange={handleValueChange3(i)} />
-                      </td>
-                      <td>
-                        <Form.Control size={props.inputSize} type="date" name="date" value={item.date || ''} onChange={handleValueChange3(i)} max="2999-12-31" />
-                      </td>
-                      <td>
-                        <Form.Control size={props.inputSize} type="text" name="owner" value={item.owner || ''} onChange={handleValueChange3(i)} />
-                      </td>
-                      <td>
-                        <Form.Control size={props.inputSize} type="text" name="collaborator" value={item.collaborator || ''} onChange={handleValueChange3(i)} />
-                      </td>
-                      <td>
-                        <LineAdd size={props.inputSize} />
-                        <LineDelete size={props.inputSize} />
-                      </td>
-                    </tr>
-                    )
-                  })
-                }
+                    {inputs3.map((item, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>
+                            <Form.Control size={props.inputSize} type="text" name="action" value={item.action || ''} onChange={handleValueChange3(i)} />
+                          </td>
+                          <td>
+                            <Form.Control size={props.inputSize} type="date" name="date" value={item.date || ''} onChange={handleValueChange3(i)} max="2999-12-31" />
+                          </td>
+                          <td>
+                            <Form.Control size={props.inputSize} type="text" name="owner" value={item.owner || ''} onChange={handleValueChange3(i)} />
+                          </td>
+                          <td>
+                            <Form.Control size={props.inputSize} type="text" name="collaborator" value={item.collaborator || ''} onChange={handleValueChange3(i)} />
+                          </td>
+                          <td>
+                            {i === 0 ?
+                              <BtnAddRow size={props.inputSize} handleClick={handleAddRow3} />
+                              :
+                              <BtnDeleteRow size={props.inputSize} handleClick={() => handleDeleteRow3(i)} />
+                            }
+                          </td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                   :
                   <tbody>

@@ -25,13 +25,10 @@ function TGPDetail1(props) {
       const body = await response.json();
       return body;
     }
-
-    setInputData()
-    .then(res => {
+    setInputData().then(res => {
       setInputs(res[0]);
-      setLoading(false); 
-    })
-    .catch(err => console.log(err));
+      setLoading(false);
+    }).catch(err => console.log(err));
   }, []);
 
   const handleValueChange = (e) => {
@@ -46,24 +43,15 @@ function TGPDetail1(props) {
 
   const handleSave = () => {
     saveInputData();
-    alert("저장되었습니다.");      
+    alert("저장되었습니다.");
   }
 
   const saveInputData = () => {
     const api = '/tgp/' + tgp_id + '/' + form_id + '/step1';
-
-    const data = {
-			account: inputs.account,
-			department: inputs.department,
-			solution: inputs.solution,
-			amount: inputs.amount,
-			closingdate: inputs.closingdate
-		};
-
+    const data = { inputs };
     const config = {
       headers: { 'content-type': 'application/json' }
     };
-
     return post(api, data, config);
   }
 
@@ -77,7 +65,7 @@ function TGPDetail1(props) {
           <Link className="title_link"
             to={"/"}
             onClick={handleMove}>
-              거래처
+            거래처
           </Link>&nbsp;
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
@@ -96,7 +84,7 @@ function TGPDetail1(props) {
           <Card>
             <Card.Header>
               Target Goal Plan
-              <Button size="sm" variant="success" style={{float: "right"}} onClick={handleSave}>중간 저장</Button>
+              <Button size="sm" variant="success" style={{ float: "right" }} onClick={handleSave}>중간 저장</Button>
             </Card.Header>
             <Card.Body>
               <Table>
@@ -107,7 +95,7 @@ function TGPDetail1(props) {
                   <tbody>
                     <tr>
                       <th><Form.Label column={props.inputSize}>거래처</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="account" value={inputs.account || ''} readOnly /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="account" value={inputs.account || customer_name} readOnly /></td>
                       <th><Form.Label column={props.inputSize}>부서</Form.Label></th>
                       <td><Form.Control size={props.inputSize} type="text" name="department" value={inputs.department || ''} onChange={handleValueChange} /></td>
                     </tr>

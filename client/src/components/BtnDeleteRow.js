@@ -1,17 +1,17 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 
-function LineDelete(props) {
+function BtnDeleteRow(props) {
     return (
         <Button
-            className="deleteRowBtn"
+            className="btnDeleteRow"
             variant="light"
             size={props.size}
             title="행 삭제"
-            style={{ display: 'none' }}>
+            onClick={props.handleClick}>
             ×
         </Button>
     );
 }
 
-export default LineDelete;
+export default BtnDeleteRow;

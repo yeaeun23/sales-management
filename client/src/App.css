@@ -111,13 +111,13 @@ form {
   margin-bottom: 20px;
 }
 
-.addRowBtn,
-.deleteRowBtn {
+.btnAddRow,
+.btnDeleteRow {
   font-weight: bold !important;
   float: right;
 }
 
-.deleteRowBtn {
+.btnDeleteRow {
   color: red !important;
 }
 
@@ -134,12 +134,12 @@ form {
 
 /* */
 .col_form2_1 col:nth-child(1) {
-  min-width: 150px;
-  width: 15%;
+  min-width: 180px;
+  width: 23%;
 }
 
 .col_form2_1 col:nth-child(2) {
-  width: 80%;
+  width: 72%;
 }
 
 .col_form2_1 col:nth-child(3) {

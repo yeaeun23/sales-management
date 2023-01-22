@@ -11,9 +11,9 @@ import Button from 'react-bootstrap/Button';
 import { post } from "axios";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
-import { useParams, useLocation, Link } from 'react-router-dom';
-import LineAdd from '../components/LineAdd';
-import LineDelete from '../components/LineDelete';
+import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
+import BtnAddRow from '../components/BtnAddRow';
+import BtnDeleteRow from '../components/BtnDeleteRow';
 import SelectScore from '../components/SelectScore';
 import SelectPower from "../components/SelectPower";
 import SelectSign from '../components/SelectSign';
@@ -22,14 +22,34 @@ import SelectRole from '../components/SelectRole';
 function TGPDetail2(props) {
   const { customer_id, tgp_id, form_id } = useParams();
   const { customer_name, tgp_name } = useLocation().state;
+  const input2 = {
+    title: '', role: '', title_sign: '',
+    power: '', power_sign: '',
+    barrier: '', barrier_sign: '',
+    dynamic: '', dynamic_sign: '',
+    score_sales: '', score_sales_sign: '',
+    score_product: '', score_product_sign: '',
+    score_service: '', score_service_sign: '',
+    score_company: '', score_company_sign: '',
+    score_opinion: ''
+  }
+  const input3 = {
+    strength1: '', strength1_sign: '',
+    strength2: '', strength2_sign: ''
+  }
+  const input4 = {
+    weakness1: '', weakness1_sign: '',
+    weakness2: '', weakness2_sign: ''
+  }
   const [inputs1, setInputs1] = useState({});
-  const [inputs2, setInputs2] = useState([]);
-  const [inputs3, setInputs3] = useState([]);
-  const [inputs4, setInputs4] = useState([]);
+  const [inputs2, setInputs2] = useState([input2]);
+  const [inputs3, setInputs3] = useState([input3]);
+  const [inputs4, setInputs4] = useState([input4]);
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
   const [loading3, setLoading3] = useState(true);
   const [loading4, setLoading4] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const setInputData1 = async () => {
@@ -37,7 +57,6 @@ function TGPDetail2(props) {
       const body = await response.json();
       return body;
     }
-
     setInputData1().then(res => {
       setInputs1(res[0]);
       setLoading1(false);
@@ -50,9 +69,10 @@ function TGPDetail2(props) {
       const body = await response.json();
       return body;
     }
-
     setInputData2().then(res => {
-      setInputs2(res);
+      if (res.length != 0) {
+        setInputs2(res);
+      }
       setLoading2(false);
     }).catch(err => console.log(err));
   }, []);
@@ -63,9 +83,10 @@ function TGPDetail2(props) {
       const body = await response.json();
       return body;
     }
-
     setInputData3().then(res => {
-      setInputs3(res);
+      if (res.length != 0) {
+        setInputs3(res);
+      }
       setLoading3(false);
     }).catch(err => console.log(err));
   }, []);
@@ -76,9 +97,10 @@ function TGPDetail2(props) {
       const body = await response.json();
       return body;
     }
-
     setInputData4().then(res => {
-      setInputs4(res);
+      if (res.length != 0) {
+        setInputs4(res);
+      }
       setLoading4(false);
     }).catch(err => console.log(err));
   }, []);
@@ -121,9 +143,49 @@ function TGPDetail2(props) {
     setInputs4(newArray);
   };
 
-  const handleMove = () => {
-    if (window.confirm("저장하시겠습니까?"))
-      saveInputData();
+  const handleAddRow2 = () => {
+    setInputs2([...inputs2, input2]);
+  }
+
+  const handleAddRow3 = () => {
+    setInputs3([...inputs3, input3]);
+  }
+
+  const handleAddRow4 = () => {
+    setInputs4([...inputs4, input4]);
+  }
+
+  const handleDeleteRow2 = (index) => {
+    const newArray = [...inputs2];
+    newArray.splice(index, 1);
+    setInputs2(newArray);
+  }
+
+  const handleDeleteRow3 = (index) => {
+    const newArray = [...inputs3];
+    newArray.splice(index, 1);
+    setInputs3(newArray);
+  }
+
+  const handleDeleteRow4 = (index) => {
+    const newArray = [...inputs4];
+    newArray.splice(index, 1);
+    setInputs4(newArray);
+  }
+
+  const handleMove = (e) => {
+    if (window.confirm("저장하시겠습니까?")) {
+      saveInputData();      
+    }
+
+    // 이동: STRATEGY 자동 생성 후에 넘어가야 하므로 LINK 사용 X
+    const url = `/${customer_id}/${tgp_id}/${form_id}/` + e.target.innerHTML === "이전 단계" ? `step1` : `step3`;
+    const state = {
+      tgp_name: tgp_name,
+      customer_name: customer_name
+    };
+
+    navigate(url, { state: state });
   }
 
   const handleSave = () => {
@@ -133,62 +195,12 @@ function TGPDetail2(props) {
 
   const saveInputData = () => {
     const api = '/tgp/' + tgp_id + '/' + form_id + '/step2';
-
     const data = {
-      // TGP 현재 위치
-      position1: inputs1.position1,
-      position1_sign: inputs1.position1_sign,
-      position2: inputs1.position2,
-      position2_sign: inputs1.position2_sign,
-      position3: inputs1.position3,
-      position3_sign: inputs1.position3_sign,
-
-      // 구매 영향력, 평가
-      role: inputs2.role,
-      title: inputs2.title,
-      title_sign: inputs2.title_sign,
-      power: inputs2.power,
-      power_sign: inputs2.power_sign,
-      barrier: inputs2.barrier,
-      barrier_sign: inputs2.barrier_sign,
-      dynamic: inputs2.dynamic,
-      dynamic_sign: inputs2.dynamic_sign,
-
-      score_sales: inputs2.score_sales,
-      score_sales_sign: inputs2.score_sales_sign,
-      score_product: inputs2.score_product,
-      score_product_sign: inputs2.score_product_sign,
-      score_service: inputs2.score_service,
-      score_service_sign: inputs2.score_service_sign,
-      score_company: inputs2.score_company,
-      score_company_sign: inputs2.score_company_sign,
-      score_opinion: inputs2.score_opinion,
-
-      // 경쟁
-      competition1_name: inputs1.competition1_name,
-      competition1_name_sign: inputs1.competition1_name_sign,
-      competition1_type: inputs1.competition1_type,
-      competition1_type_sign: inputs1.competition1_type_sign,
-      competition2_name: inputs1.competition2_name,
-      competition2_name_sign: inputs1.competition2_name_sign,
-      competition2_type: inputs1.competition2_type,
-      competition2_type_sign: inputs1.competition2_type_sign,
-
-      strength1: inputs3.strength1,
-      strength1_sign: inputs3.strength1_sign,
-      strength2: inputs3.strength2,
-      strength2_sign: inputs3.strength2_sign,
-
-      weakness1: inputs4.weakness1,
-      weakness1_sign: inputs4.weakness1_sign,
-      weakness2: inputs4.weakness2,
-      weakness2_sign: inputs4.weakness2_sign
+      inputs1, inputs2, inputs3, inputs4
     };
-
     const config = {
       headers: { 'content-type': 'application/json' }
     };
-
     return post(api, data, config);
   }
 
@@ -232,7 +244,7 @@ function TGPDetail2(props) {
                   <tbody>
                     <tr>
                       <th>
-                        <Form.Label column={props.inputSize}>고객관점<br />세일즈 퍼널 위치</Form.Label>
+                        <Form.Label column={props.inputSize}>고객관점 세일즈 퍼널</Form.Label>
                       </th>
                       <td>
                         {["Lead", "Filtering", "Opportunity", "Closing"].map((label) => (
@@ -252,7 +264,7 @@ function TGPDetail2(props) {
                     </tr>
                     <tr>
                       <th>
-                        <Form.Label column={props.inputSize}>고객관점<br />경쟁대비 위치</Form.Label>
+                        <Form.Label column={props.inputSize}>고객관점 경쟁대비</Form.Label>
                       </th>
                       <td>
                         {["Late Runner", "Same Line", "Consider First", "Exclusive"].map((label) => (
@@ -272,7 +284,7 @@ function TGPDetail2(props) {
                     </tr>
                     <tr>
                       <th>
-                        <Form.Label column={props.inputSize}>내가 생각하는<br />성공 가능성</Form.Label>
+                        <Form.Label column={props.inputSize}>내가 생각하는 성공 가능성</Form.Label>
                       </th>
                       <td>
                         {["0%", "15%", "30%", "45%", "60%", "75%", "90%"].map((label) => (
@@ -334,27 +346,28 @@ function TGPDetail2(props) {
                       </th>
                       <th></th>
                     </tr>
-                    {
-                      inputs2.map((item, i) => {
-                        return (
-                          <tr key={item.tdm_id}>
-                            <td><Form.Control size={props.inputSize} type="text" name="title" value={item.title || ''} onChange={handleValueChange2(i)} /></td>
-                            <td><SelectRole size={props.inputSize} name="role" value={item.role || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><SelectSign size={props.inputSize} name="title_sign" value={item.title_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><SelectPower size={props.inputSize} name="power" value={item.power || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><SelectSign size={props.inputSize} name="power_sign" value={item.power_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><Form.Control size={props.inputSize} type="text" name="barrier" value={item.barrier || ''} onChange={handleValueChange2(i)} /></td>
-                            <td><SelectSign size={props.inputSize} name="barrier_sign" value={item.barrier_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><Form.Control size={props.inputSize} type="text" name="dynamic" value={item.dynamic || ''} onChange={handleValueChange2(i)} /></td>
-                            <td><SelectSign size={props.inputSize} name="dynamic_sign" value={item.dynamic_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td>
-                              <LineAdd size={props.inputSize} />
-                              <LineDelete size={props.inputSize} />
-                            </td>
-                          </tr>
-                        )
-                      })
-                    }
+                    {inputs2.map((item, i) => {
+                      return (
+                        <tr key={i}>
+                          <td><Form.Control size={props.inputSize} type="text" name="title" value={item.title || ''} onChange={handleValueChange2(i)} /></td>
+                          <td><SelectRole size={props.inputSize} name="role" value={item.role || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="title_sign" value={item.title_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectPower size={props.inputSize} name="power" value={item.power || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="power_sign" value={item.power_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="barrier" value={item.barrier || ''} onChange={handleValueChange2(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="barrier_sign" value={item.barrier_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="dynamic" value={item.dynamic || ''} onChange={handleValueChange2(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="dynamic_sign" value={item.dynamic_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td>
+                            {i === 0 ?
+                              <BtnAddRow size={props.inputSize} handleClick={handleAddRow2} />
+                              :
+                              <BtnDeleteRow size={props.inputSize} handleClick={() => handleDeleteRow2(i)} />
+                            }
+                          </td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                   :
                   <tbody>
@@ -403,25 +416,23 @@ function TGPDetail2(props) {
                         <Form.Label column={props.inputSize}>평가 의견</Form.Label>
                       </th>
                     </tr>
-                    {
-                      inputs2.map((item, i) => {
-                        return (
-                          <tr key={item.tdm_id}>
-                            <td><Form.Control size={props.inputSize} type="text" value={item.title || ''} disabled /></td>
-                            <td><Form.Control size={props.inputSize} type="text" value={item.role || ''} disabled /></td>
-                            <td><SelectScore size={props.inputSize} name="score_sales" value={item.score_sales || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><SelectSign size={props.inputSize} name="score_sales_sign" value={item.score_sales_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><SelectScore size={props.inputSize} name="score_product" value={item.score_product || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><SelectSign size={props.inputSize} name="score_product_sign" value={item.score_product_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><SelectScore size={props.inputSize} name="score_service" value={item.score_service || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><SelectSign size={props.inputSize} name="score_service_sign" value={item.score_service_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><SelectScore size={props.inputSize} name="score_company" value={item.score_company || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><SelectSign size={props.inputSize} name="score_company_sign" value={item.score_company_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                            <td><Form.Control size={props.inputSize} type="text" name="score_opinion" value={item.score_opinion || ''} onChange={handleValueChange2(i)} /></td>
-                          </tr>
-                        )
-                      })
-                    }
+                    {inputs2.map((item, i) => {
+                      return (
+                        <tr key={i}>
+                          <td><Form.Control size={props.inputSize} type="text" value={item.title || ''} disabled /></td>
+                          <td><Form.Control size={props.inputSize} type="text" value={item.role || ''} disabled /></td>
+                          <td><SelectScore size={props.inputSize} name="score_sales" value={item.score_sales || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="score_sales_sign" value={item.score_sales_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectScore size={props.inputSize} name="score_product" value={item.score_product || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="score_product_sign" value={item.score_product_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectScore size={props.inputSize} name="score_service" value={item.score_service || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="score_service_sign" value={item.score_service_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectScore size={props.inputSize} name="score_company" value={item.score_company || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="score_company_sign" value={item.score_company_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="score_opinion" value={item.score_opinion || ''} onChange={handleValueChange2(i)} /></td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                   :
                   <tbody>
@@ -463,25 +474,26 @@ function TGPDetail2(props) {
                       <td><SelectSign size={props.inputSize} name="competition2_type_sign" value={inputs1.competition2_type_sign || ''} handleValueChange={handleValueChange1} /></td>
                       <td></td>
                     </tr>
-                    {
-                      inputs3.map((item, i) => {
-                        return (
-                          <tr key={item.strength_id}>
-                            <th><Form.Label column={props.inputSize}>
-                              { i === 0 ? "강점과 기회" : "" }
-                            </Form.Label></th>
-                            <td><Form.Control size={props.inputSize} type="text" name="strength1" value={item.strength1 || ''} onChange={handleValueChange3(i)} /></td>
-                            <td><SelectSign size={props.inputSize} name="strength1_sign" value={item.strength1_sign || ''} handleValueChange={handleValueChange3(i)} /></td>
-                            <td><Form.Control size={props.inputSize} type="text" name="strength2" value={item.strength2 || ''} onChange={handleValueChange3(i)} /></td>
-                            <td><SelectSign size={props.inputSize} name="strength2_sign" value={item.strength2_sign || ''} handleValueChange={handleValueChange3(i)} /></td>
-                            <td>
-                              <LineAdd size={props.inputSize} />
-                              <LineDelete size={props.inputSize} />
-                            </td>
-                          </tr>
-                        )
-                      })
-                    }
+                    {inputs3.map((item, i) => {
+                      return (
+                        <tr key={i}>
+                          <th><Form.Label column={props.inputSize}>
+                            {i === 0 ? "강점과 기회" : ""}
+                          </Form.Label></th>
+                          <td><Form.Control size={props.inputSize} type="text" name="strength1" value={item.strength1 || ''} onChange={handleValueChange3(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="strength1_sign" value={item.strength1_sign || ''} handleValueChange={handleValueChange3(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="strength2" value={item.strength2 || ''} onChange={handleValueChange3(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="strength2_sign" value={item.strength2_sign || ''} handleValueChange={handleValueChange3(i)} /></td>
+                          <td>
+                            {i === 0 ?
+                              <BtnAddRow size={props.inputSize} handleClick={handleAddRow3} />
+                              :
+                              <BtnDeleteRow size={props.inputSize} handleClick={() => handleDeleteRow3(i)} />
+                            }
+                          </td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </Table>
                 <Table>
@@ -489,25 +501,26 @@ function TGPDetail2(props) {
                     <col /><col /><col /><col /><col /><col />
                   </colgroup>
                   <tbody>
-                    {
-                      inputs4.map((item, i) => {
-                        return (
-                          <tr key={item.weakness_id}>
-                            <th><Form.Label column={props.inputSize}>
-                              { i === 0 ? "약점과 위협" : "" }
-                            </Form.Label></th>
-                            <td><Form.Control size={props.inputSize} type="text" name="weakness1" value={item.weakness1 || ''} onChange={handleValueChange4(i)} /></td>
-                            <td><SelectSign size={props.inputSize} name="weakness1_sign" value={item.weakness1_sign || ''} handleValueChange={handleValueChange4(i)} /></td>
-                            <td><Form.Control size={props.inputSize} type="text" name="weakness2" value={item.weakness2 || ''} onChange={handleValueChange4(i)} /></td>
-                            <td><SelectSign size={props.inputSize} name="weakness2_sign" value={item.weakness2_sign || ''} handleValueChange={handleValueChange4(i)} /></td>
-                            <td>
-                              <LineAdd size={props.inputSize} />
-                              <LineDelete size={props.inputSize} />
-                            </td>
-                          </tr>
-                        )
-                      })
-                    }
+                    {inputs4.map((item, i) => {
+                      return (
+                        <tr key={i}>
+                          <th><Form.Label column={props.inputSize}>
+                            {i === 0 ? "약점과 위협" : ""}
+                          </Form.Label></th>
+                          <td><Form.Control size={props.inputSize} type="text" name="weakness1" value={item.weakness1 || ''} onChange={handleValueChange4(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="weakness1_sign" value={item.weakness1_sign || ''} handleValueChange={handleValueChange4(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="weakness2" value={item.weakness2 || ''} onChange={handleValueChange4(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="weakness2_sign" value={item.weakness2_sign || ''} handleValueChange={handleValueChange4(i)} /></td>
+                          <td>
+                            {i === 0 ?
+                              <BtnAddRow size={props.inputSize} handleClick={handleAddRow4} />
+                              :
+                              <BtnDeleteRow size={props.inputSize} handleClick={() => handleDeleteRow4(i)} />
+                            }
+                          </td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </Table>
               </Card.Body>
@@ -528,19 +541,11 @@ function TGPDetail2(props) {
         </div>
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-          <Link
-            to={`/${customer_id}/${tgp_id}/${form_id}/step1`}
-            state={{ tgp_name: tgp_name, customer_name: customer_name }}>
-            <Button variant="secondary" onClick={handleMove}>&lt; 이전 단계</Button>
-          </Link>
+          <Button variant="secondary" onClick={handleMove}>&lt; 이전 단계</Button>
           <Box sx={{ flex: '1 1 auto' }} />
           <Button variant="secondary">미리보기</Button>
           &nbsp;&nbsp;
-          <Link
-            to={`/${customer_id}/${tgp_id}/${form_id}/step3`}
-            state={{ tgp_name: tgp_name, customer_name: customer_name }}>
-            <Button variant="primary" onClick={handleMove}>다음 단계 &gt;</Button>
-          </Link>
+          <Button variant="primary" onClick={handleMove}>다음 단계 &gt;</Button>
         </Box>
       </div>
     </div>
