@@ -37,8 +37,9 @@ function TGPDetail1(props) {
   }
 
   const handleMove = () => {
-    if (window.confirm("저장하시겠습니까?"))
+    if (window.confirm("저장하시겠습니까?")) {
       saveInputData();
+    }
   }
 
   const handleSave = () => {

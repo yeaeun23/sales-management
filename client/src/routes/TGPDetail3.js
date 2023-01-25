@@ -17,7 +17,7 @@ import BtnDeleteRow from '../components/BtnDeleteRow';
 
 function TGPDetail3(props) {
   const { customer_id, tgp_id, form_id } = useParams();
-  const { customer_name, tgp_name } = useLocation().state;
+  const { customer_name, tgp_name, initStrategy } = useLocation().state;
   const input1 = {
     strength1: '', strength1_sign: '',
     strength2: '', strength2_sign: ''
@@ -47,29 +47,27 @@ function TGPDetail3(props) {
 
   useEffect(() => {
     const setInputData1 = async () => {
-      const response = await fetch('/tgp/' + form_id + '/strategy1');
+      const response = await fetch('/tgp/' + tgp_id + '/' + form_id + '/strategy1/' + initStrategy);
       const body = await response.json();
       return body;
     }
-    setInputData1().then(res => {
-      if (res.length != 0) {
-        setInputs1(res);
-      }
-      setLoading1(false);
-    }).catch(err => console.log(err));
-  }, []);
-
-  useEffect(() => {
     const setInputData2 = async () => {
       const response = await fetch('/tgp/' + form_id + '/strategy2');
       const body = await response.json();
       return body;
     }
-    setInputData2().then(res => {
-      if (res.length != 0) {
-        setInputs2(res);
+    setInputData1().then(res => {
+      if (res.length !== 0) {
+        setInputs1(res);
       }
-      setLoading2(false);
+      setLoading1(false);
+    }).then(() => {
+      setInputData2().then(res => {
+        if (res.length !== 0) {
+          setInputs2(res);
+        }
+        setLoading2(false);
+      })
     }).catch(err => console.log(err));
   }, []);
 
@@ -80,7 +78,7 @@ function TGPDetail3(props) {
       return body;
     }
     setInputData3().then(res => {
-      if (res.length != 0) {
+      if (res.length !== 0) {
         setInputs3(res);
       }
       setLoading3(false);
@@ -153,7 +151,7 @@ function TGPDetail3(props) {
   const handleMove = (e) => {
     if (e.target.innerHTML === "작성 완료") {
       if (window.confirm("작성 완료하시겠습니까?")) {
-        saveInputData();
+        saveInputData("1");
 
         // 이동
         const url = `/${customer_id}`;
@@ -168,19 +166,19 @@ function TGPDetail3(props) {
     }
     else {
       if (window.confirm("저장하시겠습니까?"))
-        saveInputData();
+        saveInputData("0");
     }
 
     return;
   }
 
   const handleSave = () => {
-    saveInputData();
+    saveInputData("0");
     alert("저장되었습니다.");
   }
 
-  const saveInputData = () => {
-    const api = '/tgp/' + tgp_id + '/' + form_id + '/step3';
+  const saveInputData = (setComplete) => {
+    const api = '/tgp/' + tgp_id + '/' + form_id + '/step3/' + setComplete;
     const data = {
       inputs1, inputs2, inputs3
     };

@@ -172,7 +172,7 @@ app.get('/tgp/:tgp_id/:form_id/copy', (req, res) => {
     // 복사 - FORM_TDM
     new_form_id = rows[0].form_id;
 
-    sql = "INSERT INTO FORM_TDM (`form_id`, `tdm_id`, `title`, `role`, `title_sign`, `power`, `power_sign`, `barrier`, `barrier_sign`, `dynamic`, `dynamic_sign`, `score_sales`, `score_sales_sign`, `score_product`, `score_product_sign`, `score_service`, `score_service_sign`, `score_company`, `score_company_sign`, `score_opinion`) SELECT " + new_form_id + ", `tdm_id`, `title`, `role`, `title_sign`, `power`, `power_sign`, `barrier`, `barrier_sign`, `dynamic`, `dynamic_sign`, `score_sales`, `score_sales_sign`, `score_product`, `score_product_sign`, `score_service`, `score_service_sign`, `score_company`, `score_company_sign`, `score_opinion` FROM FORM_TDM WHERE form_id = " + form_id;
+    sql = "INSERT INTO FORM_TDM (`form_id`, `tdm_id`, `title`, `role`, `role_sign`, `power`, `power_sign`, `barrier`, `barrier_sign`, `dynamic`, `dynamic_sign`, `score_sales`, `score_sales_sign`, `score_product`, `score_product_sign`, `score_service`, `score_service_sign`, `score_company`, `score_company_sign`, `score_opinion`) SELECT " + new_form_id + ", `tdm_id`, `title`, `role`, `role_sign`, `power`, `power_sign`, `barrier`, `barrier_sign`, `dynamic`, `dynamic_sign`, `score_sales`, `score_sales_sign`, `score_product`, `score_product_sign`, `score_service`, `score_service_sign`, `score_company`, `score_company_sign`, `score_opinion` FROM FORM_TDM WHERE form_id = " + form_id;
 
     console.log("STEP1 복사: " + sql);
     connection.query(sql);
@@ -246,17 +246,25 @@ app.get('/tgp/:tgp_id/:form_id/step2', (req, res) => {
 
 // TGP STEP2/3 조회
 app.get('/tgp/:form_id/:table', (req, res) => {
+  let form_id = req.params.form_id;
   let table = req.params.table.toUpperCase();
-  let sql = "SELECT * FROM FORM_" + table + " WHERE form_id = " + req.params.form_id + " ORDER BY ";
+  let sql = "";
 
-  if (table === "STRATEGY1" || table === "STRATEGY2") {
-    sql += "auto_complete DESC, " + table + "_id ASC";
+  if (table === "STRATEGY2") {
+    sql = "SELECT * FROM FORM_STRATEGY2 WHERE form_id = " + form_id + " ORDER BY auto_complete DESC, strategy2_id ASC";
+    console.log("STEP3 조회: " + sql);
   }
   else {
-    sql += table + "_id ASC";
-  }
+    sql = "SELECT * FROM FORM_" + table + " WHERE form_id = " + form_id + " ORDER BY " + table + "_id ASC";
 
-  console.log("STEP2/3 조회: " + sql);
+    if (table === "ACTION"){
+      console.log("STEP3 조회: " + sql);
+    }
+    else {
+      console.log("STEP2 조회: " + sql);
+    }    
+  }
+  
   connection.query(sql, (err, rows, fields) => {
     res.send(rows);
   });
@@ -289,9 +297,9 @@ app.post('/tgp/:tgp_id/:form_id/step2', (req, res) => {
   connection.query(sql);
 
   req.body.inputs2.map((item, i) => {
-    sql = "INSERT INTO FORM_TDM (`form_id`, `tdm_id`, `title`, `role`, `title_sign`, `power`, `power_sign`, `barrier`, `barrier_sign`, `dynamic`, `dynamic_sign`, `score_sales`, `score_sales_sign`, `score_product`, `score_product_sign`, `score_service`, `score_service_sign`, `score_company`, `score_company_sign`, `score_opinion`) VALUES(" + form_id + ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    sql = "INSERT INTO FORM_TDM (`form_id`, `tdm_id`, `title`, `role`, `role_sign`, `power`, `power_sign`, `barrier`, `barrier_sign`, `dynamic`, `dynamic_sign`, `score_sales`, `score_sales_sign`, `score_product`, `score_product_sign`, `score_service`, `score_service_sign`, `score_company`, `score_company_sign`, `score_opinion`) VALUES(" + form_id + ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     params = [
-      i, item.title, item.role, item.title_sign,
+      i, item.title, item.role, item.role_sign,
       item.power, item.power_sign,
       item.barrier, item.barrier_sign,
       item.dynamic, item.dynamic_sign,
@@ -339,56 +347,210 @@ app.post('/tgp/:tgp_id/:form_id/step2', (req, res) => {
     console.log("STEP2 저장: " + sql);
     connection.query(sql, params);
   });
-
-  // 삭제 - FORM_STRATEGY1/2
-  sql = "DELETE FROM FORM_STRATEGY1 WHERE form_id = " + form_id + " AND auto_complete = 1";
-
-  console.log("STRATEGY1(자동) 삭제: " + sql);
-  connection.query(sql);
-
-  sql = "DELETE FROM FORM_STRATEGY2 WHERE form_id = " + form_id + " AND auto_complete = 1";
-
-  console.log("STRATEGY2(자동) 삭제: " + sql);
-  connection.query(sql);
-
-  // 인서트 - FORM_STRATEGY1/2
-  sql = "SELECT position1_sign, position2_sign, position3_sign FROM FORM WHERE tgp_id = " + req.params.tgp_id + " AND form_id = " + req.params.form_id + " AND complete = 0 AND delete_time IS NULL";
-
-  console.log("사인 조회: " + sql);
-  connection.query(sql, (err, rows, fields) => {
-    if (rows[0].position1_sign === "G") {
-      sql = "INSERT INTO FORM_STRATEGY2 (`form_id`, `weakness`, `auto_complete`) VALUES(" + form_id + ", '고객관점 세일즈 퍼널이 불명확', 1)";
-
-      console.log("STRATEGY2(자동) 생성: " + sql);
-      connection.query(sql);
-    }
-
-    if (rows[0].position2_sign === "G") {
-      sql = "INSERT INTO FORM_STRATEGY2 (`form_id`, `weakness`, `auto_complete`) VALUES(" + form_id + ", '고객관점 경쟁대비가 불명확', 1)";
-
-      console.log("STRATEGY2(자동) 생성: " + sql);
-      connection.query(sql);
-    }
-
-    if (rows[0].position3_sign === "G") {
-      sql = "INSERT INTO FORM_STRATEGY2 (`form_id`, `weakness`, `auto_complete`) VALUES(" + form_id + ", '내가 생각하는 성공 가능성이 불명확', 1)";
-
-      console.log("STRATEGY2(자동) 생성: " + sql);
-      connection.query(sql);
-    }
-  });
 });
 
+// TGP STEP3 조회
+app.get('/tgp/:tgp_id/:form_id/strategy1/:init', (req, res) => {
+  let tgp_id = req.params.tgp_id;
+  let form_id = req.params.form_id;
+  let sql = "";
+
+  if (req.params.init === "true") {
+    // 삭제
+    sql = "DELETE FROM FORM_STRATEGY1 WHERE form_id = " + form_id + " AND auto_complete = 1;";
+
+    console.log("STRATEGY1(자동) 삭제: " + sql);
+    connection.query(sql);
+
+    sql = "DELETE FROM FORM_STRATEGY2 WHERE form_id = " + form_id + " AND auto_complete = 1;";
+
+    console.log("STRATEGY2(자동) 삭제: " + sql);
+    connection.query(sql);
+
+    // 문장 생성
+    sql = "SELECT position1_sign, position2_sign, position3_sign FROM FORM WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND complete = 0 AND delete_time IS NULL";
+
+    console.log("SIGN 조회: " + sql);
+    connection.query(sql, (err, rows, fields) => {
+      if (rows[0].position1_sign === "G") {
+        InsertStrategy2(form_id, "고객관점 세일즈 퍼널이 불명확");
+      }
+
+      if (rows[0].position2_sign === "G") {
+        InsertStrategy2(form_id, "고객관점 경쟁 위치가 불명확");
+      }
+
+      if (rows[0].position3_sign === "G") {
+        InsertStrategy2(form_id, "내가 생각하는 성공 가능성이 불명확");
+      }
+
+      // 조회 - FORM_TDM
+      sql = "SELECT title, role, role_sign, power_sign, barrier_sign, dynamic_sign, score_sales_sign, score_product_sign, score_service_sign, score_company_sign FROM FORM_TDM WHERE form_id = " + form_id + " ORDER BY tdm_id ASC";
+
+      console.log("SIGN 조회: " + sql);
+      connection.query(sql, (err, rows, fields) => {
+        rows.map((item) => {
+          if (item.role_sign === "G") {
+            InsertStrategy2(form_id, item.title + "의 역할이 불명확");
+          }
+          else if (item.role_sign === "R" && item.role === "HELPER") {
+            InsertStrategy2(form_id, item.title + "은(는) 약한 HELPER");
+          }
+          else if (item.role_sign === "B" && item.role === "HELPER") {
+            InsertStrategy1(form_id, item.title + "은(는) 강력한 HELPER");
+          }
+
+          if (item.power_sign === "G") {
+            InsertStrategy2(form_id, item.title + "의 파워가 불명확");
+          }
+
+          if (item.barrier_sign === "G") {
+            InsertStrategy2(form_id, item.title + "의 장벽이 불명확");
+          }
+
+          if (item.dynamic_sign === "G") {
+            InsertStrategy2(form_id, item.title + "의 원동력이 불명확");
+          }
+
+          if (item.score_sales_sign === "G") {
+            InsertStrategy2(form_id, item.title + "의 영업사원 평가가 불명확");
+          }
+          else if (item.score_sales_sign === "R") {
+            InsertStrategy2(form_id, item.title + "은(는) 영업사원에 대하여 부정적 평가");
+          }
+          else if (item.score_sales_sign === "B") {
+            InsertStrategy1(form_id, item.title + "은(는) 영업사원에 대하여 긍정적 평가");
+          }
+
+          if (item.score_product_sign === "G") {
+            InsertStrategy2(form_id, item.title + "의 제품 평가가 불명확");
+          }
+          else if (item.score_product_sign === "R") {
+            InsertStrategy2(form_id, item.title + "은(는) 제품에 대하여 부정적 평가");
+          }
+          else if (item.score_product_sign === "B") {
+            InsertStrategy1(form_id, item.title + "은(는) 제품에 대하여 긍정적 평가");
+          }
+
+          if (item.score_service_sign === "G") {
+            InsertStrategy2(form_id, item.title + "의 서비스 평가가 불명확");
+          }
+          else if (item.score_service_sign === "R") {
+            InsertStrategy2(form_id, item.title + "은(는) 서비스에 대하여 부정적 평가");
+          }
+          else if (item.score_service_sign === "B") {
+            InsertStrategy1(form_id, item.title + "은(는) 서비스에 대하여 긍정적 평가");
+          }
+
+          if (item.score_company_sign === "G") {
+            InsertStrategy2(form_id, item.title + "의 우리 회사 평가가 불명확");
+          }
+          else if (item.score_company_sign === "R") {
+            InsertStrategy2(form_id, item.title + "은(는) 우리 회사에 대하여 부정적 평가");
+          }
+          else if (item.score_company_sign === "B") {
+            InsertStrategy1(form_id, item.title + "은(는) 우리 회사에 대하여 긍정적 평가");
+          }
+        });
+
+        // 조회 - FORM
+        sql = "SELECT competition1_name_sign, competition2_name_sign, competition1_type_sign, competition2_type_sign FROM FORM WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND complete = 0 AND delete_time IS NULL";
+
+        console.log("SIGN 조회: " + sql);
+        connection.query(sql, (err, rows, fields) => {
+          if (rows[0].competition1_name_sign === "G") {
+            InsertStrategy2(form_id, "경쟁분석 시 선정고객1이 불명확");
+          }
+
+          if (rows[0].competition2_name_sign === "G") {
+            InsertStrategy2(form_id, "경쟁분석 시 선정고객2가 불명확");
+          }
+
+          if (rows[0].competition1_type_sign === "G") {
+            InsertStrategy2(form_id, "경쟁분석 시 선정고객1의 대체안이 불명확");
+          }
+
+          if (rows[0].competition2_type_sign === "G") {
+            InsertStrategy2(form_id, "경쟁분석 시 선정고객2의 대체안이 불명확");
+          }
+
+          // 조회 - FORM_STRENGTH
+          sql = "SELECT strength1_sign, strength2_sign FROM FORM_STRENGTH WHERE form_id = " + form_id;
+
+          console.log("SIGN 조회: " + sql);
+          connection.query(sql, (err, rows, fields) => {
+            rows.map((item, i) => {
+              if (item.strength1_sign === "G") {
+                InsertStrategy2(form_id, "경쟁분석 시 선정고객1의 " + (i + 1) + "번째 강점과 기회가 불명확");
+              }
+
+              if (item.strength1_sign === "G") {
+                InsertStrategy2(form_id, "경쟁분석 시 선정고객2의 " + (i + 1) + "번째 강점과 기회가 불명확");
+              }
+            });
+
+            // 조회 - FORM_WEAKNESS
+            sql = "SELECT weakness1_sign, weakness2_sign FROM FORM_WEAKNESS WHERE form_id = " + form_id;
+
+            console.log("SIGN 조회: " + sql);
+            connection.query(sql, (err, rows, fields) => {
+              rows.map((item, i) => {
+                if (item.weakness1_sign === "G") {
+                  InsertStrategy2(form_id, "경쟁분석 시 선정고객1의 " + (i + 1) + "번째 약점과 위협이 불명확");
+                }
+
+                if (item.weakness2_sign === "G") {
+                  InsertStrategy2(form_id, "경쟁분석 시 선정고객2의 " + (i + 1) + "번째 약점과 위협이 불명확");
+                }
+              });
+
+              // 조회
+              sql = "SELECT * FROM FORM_STRATEGY1 WHERE form_id = " + form_id + " ORDER BY auto_complete DESC, strategy1_id ASC";
+
+              console.log("STEP3 조회: " + sql);
+              connection.query(sql, (err, rows, fields) => {
+                res.send(rows);
+              });
+            });
+          });
+        });
+      });
+    });
+  }
+  else {
+    sql = "SELECT * FROM FORM_STRATEGY1 WHERE form_id = " + form_id + " ORDER BY auto_complete DESC, strategy1_id ASC";
+
+    console.log("STEP3 조회: " + sql);
+    connection.query(sql, (err, rows, fields) => {
+      res.send(rows);
+    });
+  }
+});
+
+function InsertStrategy1(form_id, sentence) {
+  const sql = "INSERT INTO FORM_STRATEGY1 (`form_id`, `strength`, `auto_complete`) VALUES(" + form_id + ", '" + sentence + "', 1)";
+
+  console.log("STRATEGY1(자동) 생성: " + sql);
+  connection.query(sql);
+}
+
+function InsertStrategy2(form_id, sentence) {
+  const sql = "INSERT INTO FORM_STRATEGY2 (`form_id`, `weakness`, `auto_complete`) VALUES(" + form_id + ", '" + sentence + "', 1)";
+
+  console.log("STRATEGY2(자동) 생성: " + sql);
+  connection.query(sql);
+}
+
 // TGP STEP3 저장
-app.post('/tgp/:tgp_id/:form_id/step3', (req, res) => {
+app.post('/tgp/:tgp_id/:form_id/step3/:complete', (req, res) => {
   let tgp_id = req.params.tgp_id;
   let form_id = req.params.form_id;
 
   // 업데이트 - FORM
-  let sql = "UPDATE FORM SET update_time = NOW(), complete = 1 WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND complete = 0 AND delete_time IS NULL";
+  let sql = "UPDATE FORM SET update_time = NOW(), complete = " + req.params.complete + " WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND complete = 0 AND delete_time IS NULL";
 
   console.log("STEP3 저장(수정): " + sql);
-  connection.query(sql, params);
+  connection.query(sql);
 
   // 삭제 후 인서트 - FORM_STRATEGY1
   sql = "DELETE FROM FORM_STRATEGY1 WHERE form_id = " + form_id;

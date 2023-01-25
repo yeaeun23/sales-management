@@ -23,7 +23,7 @@ function TGPDetail2(props) {
   const { customer_id, tgp_id, form_id } = useParams();
   const { customer_name, tgp_name } = useLocation().state;
   const input2 = {
-    title: '', role: '', title_sign: '',
+    title: '', role: '', role_sign: '',
     power: '', power_sign: '',
     barrier: '', barrier_sign: '',
     dynamic: '', dynamic_sign: '',
@@ -70,7 +70,7 @@ function TGPDetail2(props) {
       return body;
     }
     setInputData2().then(res => {
-      if (res.length != 0) {
+      if (res.length !== 0) {
         setInputs2(res);
       }
       setLoading2(false);
@@ -84,7 +84,7 @@ function TGPDetail2(props) {
       return body;
     }
     setInputData3().then(res => {
-      if (res.length != 0) {
+      if (res.length !== 0) {
         setInputs3(res);
       }
       setLoading3(false);
@@ -98,7 +98,7 @@ function TGPDetail2(props) {
       return body;
     }
     setInputData4().then(res => {
-      if (res.length != 0) {
+      if (res.length !== 0) {
         setInputs4(res);
       }
       setLoading4(false);
@@ -175,17 +175,29 @@ function TGPDetail2(props) {
 
   const handleMove = (e) => {
     if (window.confirm("저장하시겠습니까?")) {
-      saveInputData();      
+      saveInputData();
+
+      if (e.target.innerHTML.indexOf("다음") !== -1) {
+        const url = `/${customer_id}/${tgp_id}/${form_id}/step3`;
+        const state = {
+          tgp_name: tgp_name,
+          customer_name: customer_name,
+          initStrategy: "true"
+        };
+        navigate(url, { state: state });
+      }
     }
-
-    // 이동: STRATEGY 자동 생성 후에 넘어가야 하므로 LINK 사용 X
-    const url = `/${customer_id}/${tgp_id}/${form_id}/` + e.target.innerHTML === "이전 단계" ? `step1` : `step3`;
-    const state = {
-      tgp_name: tgp_name,
-      customer_name: customer_name
-    };
-
-    navigate(url, { state: state });
+    else {
+      if (e.target.innerHTML.indexOf("다음") !== -1) {
+        const url = `/${customer_id}/${tgp_id}/${form_id}/step3`;
+        const state = {
+          tgp_name: tgp_name,
+          customer_name: customer_name,
+          initStrategy: "false"
+        };
+        navigate(url, { state: state });
+      }
+    }
   }
 
   const handleSave = () => {
@@ -264,7 +276,7 @@ function TGPDetail2(props) {
                     </tr>
                     <tr>
                       <th>
-                        <Form.Label column={props.inputSize}>고객관점 경쟁대비</Form.Label>
+                        <Form.Label column={props.inputSize}>고객관점 경쟁 위치</Form.Label>
                       </th>
                       <td>
                         {["Late Runner", "Same Line", "Consider First", "Exclusive"].map((label) => (
@@ -351,7 +363,7 @@ function TGPDetail2(props) {
                         <tr key={i}>
                           <td><Form.Control size={props.inputSize} type="text" name="title" value={item.title || ''} onChange={handleValueChange2(i)} /></td>
                           <td><SelectRole size={props.inputSize} name="role" value={item.role || ''} handleValueChange={handleValueChange2(i)} /></td>
-                          <td><SelectSign size={props.inputSize} name="title_sign" value={item.title_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectSign size={props.inputSize} name="role_sign" value={item.role_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
                           <td><SelectPower size={props.inputSize} name="power" value={item.power || ''} handleValueChange={handleValueChange2(i)} /></td>
                           <td><SelectSign size={props.inputSize} name="power_sign" value={item.power_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
                           <td><Form.Control size={props.inputSize} type="text" name="barrier" value={item.barrier || ''} onChange={handleValueChange2(i)} /></td>
@@ -541,7 +553,11 @@ function TGPDetail2(props) {
         </div>
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-          <Button variant="secondary" onClick={handleMove}>&lt; 이전 단계</Button>
+          <Link
+            to={`/${customer_id}/${tgp_id}/${form_id}/step1`}
+            state={{ tgp_name: tgp_name, customer_name: customer_name }}>
+            <Button variant="secondary" onClick={handleMove}>&lt; 이전 단계</Button>
+          </Link>
           <Box sx={{ flex: '1 1 auto' }} />
           <Button variant="secondary">미리보기</Button>
           &nbsp;&nbsp;

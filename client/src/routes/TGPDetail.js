@@ -81,7 +81,6 @@ function TGPDetail(props) {
         tgp_name: tgp_name,
         customer_name: customer_name
       };
-
       navigate(url, { state: state }); // 페이지 이동
     }).catch(err => console.log(err));
   }
