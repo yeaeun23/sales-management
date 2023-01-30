@@ -264,7 +264,7 @@ app.get('/tgp/:form_id/:table', (req, res) => {
       console.log("STEP2 조회: " + sql);
     }    
   }
-  
+
   connection.query(sql, (err, rows, fields) => {
     res.send(rows);
   });
@@ -303,10 +303,10 @@ app.post('/tgp/:tgp_id/:form_id/step2', (req, res) => {
       item.power, item.power_sign,
       item.barrier, item.barrier_sign,
       item.dynamic, item.dynamic_sign,
-      item.score_sales, item.score_sales_sign,
-      item.score_product, item.score_product_sign,
-      item.score_service, item.score_service_sign,
-      item.score_company, item.score_company_sign,
+      (item.score_sales === "" ? "0" : item.score_sales), item.score_sales_sign,
+      (item.score_product === "" ? "0" : item.score_product), item.score_product_sign,
+      (item.score_service === "" ? "0" : item.score_service), item.score_service_sign,
+      (item.score_company === "" ? "0" : item.score_company), item.score_company_sign,
       item.score_opinion
     ];
 
@@ -392,16 +392,16 @@ app.get('/tgp/:tgp_id/:form_id/strategy1/:init', (req, res) => {
         rows.map((item) => {
           if (item.role_sign === "G") {
             InsertStrategy2(form_id, item.title + "의 역할이 불명확");
-          }
-          else if (item.role_sign === "R" && item.role === "HELPER") {
-            InsertStrategy2(form_id, item.title + "은(는) 약한 HELPER");
-          }
-          else if (item.role_sign === "B" && item.role === "HELPER") {
-            InsertStrategy1(form_id, item.title + "은(는) 강력한 HELPER");
-          }
+          }          
 
           if (item.power_sign === "G") {
             InsertStrategy2(form_id, item.title + "의 파워가 불명확");
+          }
+          else if (item.power_sign === "R" && item.role === "HELPER") {
+            InsertStrategy2(form_id, item.title + "은(는) 약한 HELPER");
+          }
+          else if (item.power_sign === "B" && item.role === "HELPER") {
+            InsertStrategy1(form_id, item.title + "은(는) 강력한 HELPER");
           }
 
           if (item.barrier_sign === "G") {
@@ -443,13 +443,13 @@ app.get('/tgp/:tgp_id/:form_id/strategy1/:init', (req, res) => {
           }
 
           if (item.score_company_sign === "G") {
-            InsertStrategy2(form_id, item.title + "의 우리 회사 평가가 불명확");
+            InsertStrategy2(form_id, item.title + "의 우리회사 평가가 불명확");
           }
           else if (item.score_company_sign === "R") {
-            InsertStrategy2(form_id, item.title + "은(는) 우리 회사에 대하여 부정적 평가");
+            InsertStrategy2(form_id, item.title + "은(는) 우리회사에 대하여 부정적 평가");
           }
           else if (item.score_company_sign === "B") {
-            InsertStrategy1(form_id, item.title + "은(는) 우리 회사에 대하여 긍정적 평가");
+            InsertStrategy1(form_id, item.title + "은(는) 우리회사에 대하여 긍정적 평가");
           }
         });
 
@@ -481,11 +481,11 @@ app.get('/tgp/:tgp_id/:form_id/strategy1/:init', (req, res) => {
           connection.query(sql, (err, rows, fields) => {
             rows.map((item, i) => {
               if (item.strength1_sign === "G") {
-                InsertStrategy2(form_id, "경쟁분석 시 선정고객1의 " + (i + 1) + "번째 강점과 기회가 불명확");
+                InsertStrategy2(form_id, "경쟁분석 시 선정고객1의 " + (i + 1) + "번째 강점/기회가 불명확");
               }
 
               if (item.strength1_sign === "G") {
-                InsertStrategy2(form_id, "경쟁분석 시 선정고객2의 " + (i + 1) + "번째 강점과 기회가 불명확");
+                InsertStrategy2(form_id, "경쟁분석 시 선정고객2의 " + (i + 1) + "번째 강점/기회가 불명확");
               }
             });
 
@@ -496,11 +496,11 @@ app.get('/tgp/:tgp_id/:form_id/strategy1/:init', (req, res) => {
             connection.query(sql, (err, rows, fields) => {
               rows.map((item, i) => {
                 if (item.weakness1_sign === "G") {
-                  InsertStrategy2(form_id, "경쟁분석 시 선정고객1의 " + (i + 1) + "번째 약점과 위협이 불명확");
+                  InsertStrategy2(form_id, "경쟁분석 시 선정고객1의 " + (i + 1) + "번째 약점/위협이 불명확");
                 }
 
                 if (item.weakness2_sign === "G") {
-                  InsertStrategy2(form_id, "경쟁분석 시 선정고객2의 " + (i + 1) + "번째 약점과 위협이 불명확");
+                  InsertStrategy2(form_id, "경쟁분석 시 선정고객2의 " + (i + 1) + "번째 약점/위협이 불명확");
                 }
               });
 

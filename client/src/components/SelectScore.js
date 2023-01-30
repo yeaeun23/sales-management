@@ -13,14 +13,6 @@ function SelectScore(props) {
     { value: "-3" },
     { value: "-4" }
   ];
-
-  let selectedValue = 0;
- 
-  options.map((option, i) => {
-    if (option.value === props.value) 
-      selectedValue = i;   
-  });
-  
   const styles = {
     width: props.size === "sm" ? "65px" : "70px",
     float: "right"

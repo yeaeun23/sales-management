@@ -1,0 +1,42 @@
+.prev {
+  padding: 10px;
+  width: 1350px;
+  font-size: 12px;
+}
+
+.prev table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.prev th, .prev td {
+  border: 1px solid #aaa;
+  padding: 3px 5px;
+  word-break: break-all;
+}
+
+.prev tbody th {
+  background-color: #ddd;
+}
+
+.prev thead th {  
+  background-color: rgba(75, 82, 174, 1);
+  color: #fff;
+}
+
+.prev td {
+  height: 25px;
+}
+
+.prev td.sign {
+  text-align: center;
+}
+
+.prev div.loading {
+  font-weight: bold;
+  font-size: 18px;
+  margin: 80px 0;
+  text-align: center;
+}

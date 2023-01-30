@@ -8,14 +8,6 @@ function SelectPower(props) {
     { value: "M", title: "Middle" },
     { value: "L", title: "Low" },
   ];
-
-  let selectedValue = 0;
- 
-  options.map((option, i) => {
-    if (option.value === props.value) 
-      selectedValue = i;   
-  });
-  
   const styles = {
     width: props.size === "sm" ? "60px" : "65px",
     float: "right"

@@ -213,6 +213,7 @@ function TGPDetail2(props) {
     const config = {
       headers: { 'content-type': 'application/json' }
     };
+    console.log(data);
     return post(api, data, config);
   }
 
@@ -433,13 +434,13 @@ function TGPDetail2(props) {
                         <tr key={i}>
                           <td><Form.Control size={props.inputSize} type="text" value={item.title || ''} disabled /></td>
                           <td><Form.Control size={props.inputSize} type="text" value={item.role || ''} disabled /></td>
-                          <td><SelectScore size={props.inputSize} name="score_sales" value={item.score_sales || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectScore size={props.inputSize} name="score_sales" value={item.score_sales || "0"} handleValueChange={handleValueChange2(i)} /></td>
                           <td><SelectSign size={props.inputSize} name="score_sales_sign" value={item.score_sales_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                          <td><SelectScore size={props.inputSize} name="score_product" value={item.score_product || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectScore size={props.inputSize} name="score_product" value={item.score_product || "0"} handleValueChange={handleValueChange2(i)} /></td>
                           <td><SelectSign size={props.inputSize} name="score_product_sign" value={item.score_product_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                          <td><SelectScore size={props.inputSize} name="score_service" value={item.score_service || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectScore size={props.inputSize} name="score_service" value={item.score_service || "0"} handleValueChange={handleValueChange2(i)} /></td>
                           <td><SelectSign size={props.inputSize} name="score_service_sign" value={item.score_service_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                          <td><SelectScore size={props.inputSize} name="score_company" value={item.score_company || ''} handleValueChange={handleValueChange2(i)} /></td>
+                          <td><SelectScore size={props.inputSize} name="score_company" value={item.score_company || "0"} handleValueChange={handleValueChange2(i)} /></td>
                           <td><SelectSign size={props.inputSize} name="score_company_sign" value={item.score_company_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
                           <td><Form.Control size={props.inputSize} type="text" name="score_opinion" value={item.score_opinion || ''} onChange={handleValueChange2(i)} /></td>
                         </tr>

@@ -10,10 +10,10 @@ function SelectSign(props) {
   ];
 
   let selectedValue = 0;
- 
+
   options.map((option, i) => {
-    if (option.value === props.value) 
-      selectedValue = i;   
+    if (option.value === props.value)
+      selectedValue = i;
   });
 
   const styles = {

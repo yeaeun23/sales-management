@@ -9,14 +9,6 @@ function SelectRole(props) {
     { value: "UDM" },
     { value: "HELPER" }
   ];
-
-  let selectedValue = 0;
-
-  options.map((option, i) => {
-    if (option.value === props.value)
-      selectedValue = i;
-  });
-
   const styles = {
     width: props.size === "sm" ? "95px" : "105px",
     float: "right"
