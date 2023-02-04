@@ -74,6 +74,12 @@ function TGPDetail(props) {
       }
     }
 
+    const getFormId = async (api) => {
+      const response = await fetch(api);
+      const body = await response.json();
+      return body;
+    }
+
     getFormId(api).then(res => {
       const returnedFormId = res[0].form_id;
       const url = `/${customer_id}/${tgp_id}/${returnedFormId}/step1`;
@@ -81,14 +87,13 @@ function TGPDetail(props) {
         tgp_name: tgp_name,
         customer_name: customer_name
       };
-      navigate(url, { state: state }); // 페이지 이동
+      navigate(url, { state: state });
     }).catch(err => console.log(err));
   }
 
-  const getFormId = async (api) => {
-    const response = await fetch(api);
-    const body = await response.json();
-    return body;
+  const handlePreview = () => {
+    const url = `/${customer_id}/${tgp_id}/${selectedFormId}/preview`;
+    window.open(url, "_blank");
   }
 
   return (
@@ -119,7 +124,8 @@ function TGPDetail(props) {
                 <colgroup>
                   <col width="10%" />
                   <col width="40%" />
-                  <col width="40%" />
+                  <col width="30%" />
+                  <col width="10%" />
                 </colgroup>
                 <tbody>
                   <tr>
@@ -136,6 +142,7 @@ function TGPDetail(props) {
                         onChange={handleChangeMode}
                       />
                     </td>
+                    <td></td>
                     <td></td>
                   </tr>
                   <tr>
@@ -161,6 +168,9 @@ function TGPDetail(props) {
                         })}
                       </Form.Select>
                     </td>
+                    <td>
+                      <Button variant="secondary" size={props.inputSize} onClick={handlePreview} disabled={selectedFormId === "" ? "disabled" : ""}>미리보기</Button>
+                    </td>
                   </tr>
                 </tbody>
               </Table>
@@ -170,8 +180,6 @@ function TGPDetail(props) {
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
           <Box sx={{ flex: '1 1 auto' }} />
-          <Button variant="secondary">미리보기</Button>
-          &nbsp;&nbsp;
           <Button variant="primary" onClick={handleNext}>작성 시작 &gt;</Button>
         </Box>
       </div>

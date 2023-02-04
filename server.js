@@ -157,7 +157,7 @@ app.get('/tgp/:tgp_id/:form_id/copy', (req, res) => {
   let new_form_id = '';
 
   // 복사 - FORM           
-  sql = "INSERT INTO FORM (`tgp_id`, `account`, `department`, `solution`, `amount`, `closingdate`, `position1`, `position1_sign`, `position2`, `position2_sign`, `position3`, `position3_sign`, `competition1_name`, `competition1_name_sign`, `competition1_type`, `competition1_type_sign`, `competition2_name`, `competition2_name_sign`, `competition2_type`, `competition2_type_sign`, `update_time`, `make_time`) SELECT `tgp_id`, `account`, `department`, `solution`, `amount`, `closingdate`, `position1`, `position1_sign`, `position2`, `position2_sign`, `position3`, `position3_sign`, `competition1_name`, `competition1_name_sign`, `competition1_type`, `competition1_type_sign`, `competition2_name`, `competition2_name_sign`, `competition2_type`, `competition2_type_sign`, NOW(), NOW() FROM FORM WHERE form_id = " + form_id;
+  sql = "INSERT INTO FORM (`tgp_id`, `update_time`, `make_time`, `account`, `department`, `solution`, `amount`, `closingdate`, `position1`, `position1_sign`, `position2`, `position2_sign`, `position3`, `position3_sign`, `competition1_name`, `competition1_name_sign`, `competition1_type`, `competition1_type_sign`, `competition2_name`, `competition2_name_sign`, `competition2_type`, `competition2_type_sign`, `strategy1_behavior`, `strategy2_behavior`) SELECT `tgp_id`, NOW(), NOW(), `account`, `department`, `solution`, `amount`, `closingdate`, `position1`, `position1_sign`, `position2`, `position2_sign`, `position3`, `position3_sign`, `competition1_name`, `competition1_name_sign`, `competition1_type`, `competition1_type_sign`, `competition2_name`, `competition2_name_sign`, `competition2_type`, `competition2_type_sign`, `strategy1_behavior`, `strategy2_behavior` FROM FORM WHERE form_id = " + form_id;
 
   console.log("STEP1 복사: " + sql);
   connection.query(sql);
@@ -190,13 +190,13 @@ app.get('/tgp/:tgp_id/:form_id/copy', (req, res) => {
     connection.query(sql);
 
     // 복사 - FORM_STRATEGY1
-    sql = "INSERT INTO FORM_STRATEGY1 (`form_id`, `strategy1_id`, `strength`, `behavior1`) SELECT " + new_form_id + ", `strategy1_id`, `strength`, `behavior1` FROM FORM_STRATEGY1 WHERE form_id = " + form_id;
+    sql = "INSERT INTO FORM_STRATEGY1 (`form_id`, `strategy1_id`, `strength`, `auto_complete`) SELECT " + new_form_id + ", `strategy1_id`, `strength`, `auto_complete` FROM FORM_STRATEGY1 WHERE form_id = " + form_id;
 
     console.log("STEP1 복사: " + sql);
     connection.query(sql);
 
     // 복사 - FORM_STRATEGY2
-    sql = "INSERT INTO FORM_STRATEGY2 (`form_id`, `strategy2_id`, `weakness`, `behavior2`) SELECT " + new_form_id + ", `strategy2_id`, `weakness`, `behavior2` FROM FORM_STRATEGY2 WHERE form_id = " + form_id;
+    sql = "INSERT INTO FORM_STRATEGY2 (`form_id`, `strategy2_id`, `weakness`, `auto_complete`) SELECT " + new_form_id + ", `strategy2_id`, `weakness`, `auto_complete` FROM FORM_STRATEGY2 WHERE form_id = " + form_id;
 
     console.log("STEP1 복사: " + sql);
     connection.query(sql);
@@ -213,7 +213,7 @@ app.get('/tgp/:tgp_id/:form_id/copy', (req, res) => {
 app.get('/tgp/:tgp_id/:form_id/step1', (req, res) => {
   let tgp_id = req.params.tgp_id;
   let form_id = req.params.form_id;
-  let sql = "SELECT account, department, solution, amount, date_format(closingdate, '%Y-%m-%d') AS closingdate FROM FORM WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND complete = 0 AND delete_time IS NULL";
+  let sql = "SELECT account, department, solution, amount, date_format(closingdate, '%Y-%m-%d') AS closingdate FROM FORM WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND delete_time IS NULL";
 
   console.log("STEP1 조회: " + sql);
   connection.query(sql, (err, rows, fields) => {
@@ -236,7 +236,7 @@ app.post('/tgp/:tgp_id/:form_id/step1', (req, res) => {
 
 // TGP STEP2 조회
 app.get('/tgp/:tgp_id/:form_id/step2', (req, res) => {
-  let sql = "SELECT * FROM FORM WHERE tgp_id = " + req.params.tgp_id + " AND form_id = " + req.params.form_id + " AND complete = 0 AND delete_time IS NULL";
+  let sql = "SELECT * FROM FORM WHERE tgp_id = " + req.params.tgp_id + " AND form_id = " + req.params.form_id + " AND delete_time IS NULL";
 
   console.log("STEP2 조회: " + sql);
   connection.query(sql, (err, rows, fields) => {
@@ -257,12 +257,12 @@ app.get('/tgp/:form_id/:table', (req, res) => {
   else {
     sql = "SELECT * FROM FORM_" + table + " WHERE form_id = " + form_id + " ORDER BY " + table + "_id ASC";
 
-    if (table === "ACTION"){
+    if (table === "ACTION") {
       console.log("STEP3 조회: " + sql);
     }
     else {
       console.log("STEP2 조회: " + sql);
-    }    
+    }
   }
 
   connection.query(sql, (err, rows, fields) => {
@@ -350,6 +350,17 @@ app.post('/tgp/:tgp_id/:form_id/step2', (req, res) => {
 });
 
 // TGP STEP3 조회
+app.get('/tgp/:tgp_id/:form_id/step3', (req, res) => {
+  let tgp_id = req.params.tgp_id;
+  let form_id = req.params.form_id;
+  let sql = "SELECT strategy1_behavior, strategy2_behavior FROM FORM WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND delete_time IS NULL";
+
+  console.log("STEP3 조회: " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
 app.get('/tgp/:tgp_id/:form_id/strategy1/:init', (req, res) => {
   let tgp_id = req.params.tgp_id;
   let form_id = req.params.form_id;
@@ -392,7 +403,7 @@ app.get('/tgp/:tgp_id/:form_id/strategy1/:init', (req, res) => {
         rows.map((item) => {
           if (item.role_sign === "G") {
             InsertStrategy2(form_id, item.title + "의 역할이 불명확");
-          }          
+          }
 
           if (item.power_sign === "G") {
             InsertStrategy2(form_id, item.title + "의 파워가 불명확");
@@ -545,12 +556,14 @@ function InsertStrategy2(form_id, sentence) {
 app.post('/tgp/:tgp_id/:form_id/step3/:complete', (req, res) => {
   let tgp_id = req.params.tgp_id;
   let form_id = req.params.form_id;
+  let complete = req.params.complete;
 
   // 업데이트 - FORM
-  let sql = "UPDATE FORM SET update_time = NOW(), complete = " + req.params.complete + " WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND complete = 0 AND delete_time IS NULL";
+  let sql = "UPDATE FORM SET strategy1_behavior = ?, strategy2_behavior = ?, update_time = NOW(), complete = " + complete + " WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND complete = 0 AND delete_time IS NULL";
+  params = [req.body.inputs4.strategy1_behavior, req.body.inputs4.strategy2_behavior];
 
   console.log("STEP3 저장(수정): " + sql);
-  connection.query(sql);
+  connection.query(sql, params);
 
   // 삭제 후 인서트 - FORM_STRATEGY1
   sql = "DELETE FROM FORM_STRATEGY1 WHERE form_id = " + form_id;
@@ -559,8 +572,16 @@ app.post('/tgp/:tgp_id/:form_id/step3/:complete', (req, res) => {
   connection.query(sql);
 
   req.body.inputs1.map((item, i) => {
-    sql = "INSERT INTO FORM_STRATEGY1 (`form_id`, `strategy1_id`, `strength`, `behavior1`) VALUES(" + form_id + ", ?, ?, ?)";
-    params = [i, item.strength, item.behavior1];
+    if (item.auto_complete === undefined || item.auto_complete === 0) {
+      sql = "INSERT INTO FORM_STRATEGY1 (`form_id`, `strategy1_id`, `strength`) VALUES(" + form_id + ", ?, ?)";
+    }
+    else {
+      if (complete === "1") {
+        sql = "INSERT INTO FORM_STRATEGY1 (`form_id`, `strategy1_id`, `strength`, `auto_complete`) VALUES(" + form_id + ", ?, ?, 1)";
+      }
+    }
+
+    params = [i, item.strength];
 
     console.log("STEP3 저장: " + sql);
     connection.query(sql, params);
@@ -573,8 +594,16 @@ app.post('/tgp/:tgp_id/:form_id/step3/:complete', (req, res) => {
   connection.query(sql);
 
   req.body.inputs2.map((item, i) => {
-    sql = "INSERT INTO FORM_STRATEGY2 (`form_id`, `strategy2_id`, `weakness`, `behavior2`) VALUES(" + form_id + ", ?, ?, ?)";
-    params = [i, item.weakness, item.behavior2];
+    if (item.auto_complete === undefined || item.auto_complete === 0) {
+      sql = "INSERT INTO FORM_STRATEGY2 (`form_id`, `strategy2_id`, `weakness`) VALUES(" + form_id + ", ?, ?)";
+    }
+    else {
+      if (complete === "1") {
+        sql = "INSERT INTO FORM_STRATEGY2 (`form_id`, `strategy2_id`, `weakness`, `auto_complete`) VALUES(" + form_id + ", ?, ?, 1)";
+      }
+    }
+
+    params = [i, item.weakness];
 
     console.log("STEP3 저장: " + sql);
     connection.query(sql, params);

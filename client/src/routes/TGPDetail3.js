@@ -40,9 +40,11 @@ function TGPDetail3(props) {
   const [inputs1, setInputs1] = useState([input1]);
   const [inputs2, setInputs2] = useState([input2]);
   const [inputs3, setInputs3] = useState([input3]);
+  const [inputs4, setInputs4] = useState({});
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
   const [loading3, setLoading3] = useState(true);
+  const [loading4, setLoading4] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,6 +87,18 @@ function TGPDetail3(props) {
     }).catch(err => console.log(err));
   }, []);
 
+  useEffect(() => {
+    const setInputData4 = async () => {
+      const response = await fetch('/tgp/' + tgp_id + '/' + form_id + '/step3');
+      const body = await response.json();
+      return body;
+    }
+    setInputData4().then(res => {
+      setInputs4(res[0]);
+      setLoading4(false);
+    }).catch(err => console.log(err));
+  }, []);
+
   const handleValueChange1 = (index) => (e) => {
     const newArray = inputs1.map((item, i) => {
       if (index === i) {
@@ -117,6 +131,11 @@ function TGPDetail3(props) {
     });
     setInputs3(newArray);
   };
+
+  const handleValueChange4 = (e) => {
+    const { name, value } = e.target;
+    setInputs4({ ...inputs4, [name]: value });
+  }
 
   const handleAddRow1 = () => {
     setInputs1([...inputs1, input1]);
@@ -180,7 +199,7 @@ function TGPDetail3(props) {
   const saveInputData = (setComplete) => {
     const api = '/tgp/' + tgp_id + '/' + form_id + '/step3/' + setComplete;
     const data = {
-      inputs1, inputs2, inputs3
+      inputs1, inputs2, inputs3, inputs4
     };
     const config = {
       headers: { 'content-type': 'application/json' }
@@ -219,7 +238,7 @@ function TGPDetail3(props) {
               전략 분석
               <Button size="sm" variant="success" style={{ float: "right" }} onClick={handleSave}>중간 저장</Button>
             </Card.Header>
-            {(!loading1 && !loading2) ?
+            {(!loading1 && !loading2 && !loading4) ?
               <Card.Body>
                 <Table>
                   <colgroup className="col_form3_1">
@@ -228,29 +247,36 @@ function TGPDetail3(props) {
                   <tbody>
                     <tr>
                       <th>
+                        <Form.Label column={props.inputSize}>No</Form.Label>
+                      </th>
+                      <th>
                         <Form.Label column={props.inputSize}>강점/기회 요인 (Blue Sign)</Form.Label>
                       </th>
+                      <th></th>
                       <th>
                         <Form.Label column={props.inputSize}>강점/기회를 강화하거나 활용할 수 있는 방안</Form.Label>
                       </th>
-                      <th></th>
                     </tr>
                     {inputs1.map((item, i) => {
                       return (
                         <tr key={i}>
+                          <td style={{ textAlign: "center" }}>{i + 1}.</td>
                           <td>
-                            <Form.Control size={props.inputSize} type="text" name="strength" value={item.strength || ''} onChange={handleValueChange1(i)} />
-                          </td>
-                          <td>
-                            <Form.Control size={props.inputSize} type="text" name="behavior1" value={item.behavior1 || ''} onChange={handleValueChange1(i)} />
+                            <Form.Control size={props.inputSize} type="text" name="strength" value={item.strength || ''} onChange={handleValueChange1(i)} disabled={item.auto_complete === 1 ? "disabled" : ""} />
                           </td>
                           <td>
                             {i === 0 ?
                               <BtnAddRow size={props.inputSize} handleClick={handleAddRow1} />
                               :
-                              <BtnDeleteRow size={props.inputSize} handleClick={() => handleDeleteRow1(i)} />
+                              <BtnDeleteRow size={props.inputSize} handleClick={() => handleDeleteRow1(i)} auto={item.auto_complete} />
                             }
                           </td>
+                          {i === 0 ?
+                            <td rowSpan={inputs1.length} className="behavior">
+                              <textarea className="form-control" name="strategy1_behavior" value={inputs4.strategy1_behavior || ''} onChange={handleValueChange4} />
+                            </td>
+                            : ""
+                          }
                         </tr>
                       )
                     })}
@@ -263,29 +289,36 @@ function TGPDetail3(props) {
                   <tbody>
                     <tr>
                       <th>
+                        <Form.Label column={props.inputSize}>No</Form.Label>
+                      </th>
+                      <th>
                         <Form.Label column={props.inputSize}>약점/위협 요인 (Red/Gray Sign)</Form.Label>
                       </th>
+                      <th></th>
                       <th>
                         <Form.Label column={props.inputSize}>약점/위협을 최소화하거나 제거할 수 있는 방안</Form.Label>
                       </th>
-                      <th></th>
                     </tr>
                     {inputs2.map((item, i) => {
                       return (
                         <tr key={i}>
+                          <td style={{ textAlign: "center" }}>{i + 1}.</td>
                           <td>
-                            <Form.Control size={props.inputSize} type="text" name="weakness" value={item.weakness || ''} onChange={handleValueChange2(i)} />
-                          </td>
-                          <td>
-                            <Form.Control size={props.inputSize} type="text" name="behavior2" value={item.behavior2 || ''} onChange={handleValueChange2(i)} />
+                            <Form.Control size={props.inputSize} type="text" name="weakness" value={item.weakness || ''} onChange={handleValueChange2(i)} disabled={item.auto_complete === 1 ? "disabled" : ""} />
                           </td>
                           <td>
                             {i === 0 ?
                               <BtnAddRow size={props.inputSize} handleClick={handleAddRow2} />
                               :
-                              <BtnDeleteRow size={props.inputSize} handleClick={() => handleDeleteRow2(i)} />
+                              <BtnDeleteRow size={props.inputSize} handleClick={() => handleDeleteRow2(i)} auto={item.auto_complete} />
                             }
                           </td>
+                          {i === 0 ?
+                            <td rowSpan={inputs2.length} className="behavior">
+                              <textarea className="form-control" name="strategy2_behavior" value={inputs4.strategy2_behavior || ''} onChange={handleValueChange4} />
+                            </td>
+                            : ""
+                          }
                         </tr>
                       )
                     })}
@@ -381,7 +414,9 @@ function TGPDetail3(props) {
             <Button variant="secondary" onClick={handleMove}>&lt; 이전 단계</Button>
           </Link>
           <Box sx={{ flex: '1 1 auto' }} />
-          <Button variant="secondary">미리보기</Button>
+          <Link to={`/${customer_id}/${tgp_id}/${form_id}/preview`} target="_blank">
+            <Button variant="secondary">미리보기</Button>
+          </Link>
           &nbsp;&nbsp;
           <Button variant="primary" onClick={handleMove}>작성 완료</Button>
         </Box>

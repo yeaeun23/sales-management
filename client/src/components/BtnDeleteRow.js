@@ -8,7 +8,9 @@ function BtnDeleteRow(props) {
             variant="light"
             size={props.size}
             title="행 삭제"
-            onClick={props.handleClick}>
+            onClick={props.handleClick}
+            style={{ display: props.auto === 1 ? "none" : "block" }}
+        >
             ×
         </Button>
     );

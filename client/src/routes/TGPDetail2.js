@@ -213,7 +213,6 @@ function TGPDetail2(props) {
     const config = {
       headers: { 'content-type': 'application/json' }
     };
-    console.log(data);
     return post(api, data, config);
   }
 
@@ -560,8 +559,6 @@ function TGPDetail2(props) {
             <Button variant="secondary" onClick={handleMove}>&lt; 이전 단계</Button>
           </Link>
           <Box sx={{ flex: '1 1 auto' }} />
-          <Button variant="secondary">미리보기</Button>
-          &nbsp;&nbsp;
           <Button variant="primary" onClick={handleMove}>다음 단계 &gt;</Button>
         </Box>
       </div>
