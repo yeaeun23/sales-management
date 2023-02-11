@@ -32,7 +32,21 @@ function TGPDetail1(props) {
   }, []);
 
   const handleValueChange = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    const comma = (str) => {
+      str = String(str);
+      return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
+    };
+    const uncomma = (str) => {
+      str = String(str);
+      return str.replace(/[^\d]+/g, "");
+    };
+
+    // 금액이면 콤마
+    if (name === "amount") {
+      value = comma(uncomma(value));
+    }
+
     setInputs({ ...inputs, [name]: value });
   }
 

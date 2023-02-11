@@ -416,10 +416,10 @@ function TGPDetail2(props) {
                         <Form.Label column={props.inputSize}>영업사원</Form.Label>
                       </th>
                       <th colSpan={2} style={{ textAlign: 'center' }}>
-                        <Form.Label column={props.inputSize}>제품</Form.Label>
+                        <Form.Label column={props.inputSize}>자사 제품</Form.Label>
                       </th>
                       <th colSpan={2} style={{ textAlign: 'center' }}>
-                        <Form.Label column={props.inputSize}>서비스</Form.Label>
+                        <Form.Label column={props.inputSize}>자사 서비스</Form.Label>
                       </th>
                       <th colSpan={2} style={{ textAlign: 'center' }}>
                         <Form.Label column={props.inputSize}>우리 회사</Form.Label>

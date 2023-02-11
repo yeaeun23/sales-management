@@ -207,6 +207,11 @@ function TGPDetail3(props) {
     return post(api, data, config);
   }
 
+  const handlePreview = () => {
+    const url = `/${customer_id}/${tgp_id}/${form_id}/preview`;
+    window.open(url, "_blank", "width=1365,height=800");
+  }
+
   return (
     <div className="root">
       <Navi />
@@ -371,7 +376,7 @@ function TGPDetail3(props) {
                       return (
                         <tr key={i}>
                           <td>
-                            <Form.Control size={props.inputSize} type="text" name="action" value={item.action || ''} onChange={handleValueChange3(i)} />
+                            <Form.Control size={props.inputSize} type="text" name="action" value={item.action || ''} onChange={handleValueChange3(i)} placeholder="100자 이내" maxLength={10} />
                           </td>
                           <td>
                             <Form.Control size={props.inputSize} type="date" name="date" value={item.date || ''} onChange={handleValueChange3(i)} max="2999-12-31" />
@@ -414,9 +419,7 @@ function TGPDetail3(props) {
             <Button variant="secondary" onClick={handleMove}>&lt; 이전 단계</Button>
           </Link>
           <Box sx={{ flex: '1 1 auto' }} />
-          <Link to={`/${customer_id}/${tgp_id}/${form_id}/preview`} target="_blank">
-            <Button variant="secondary">미리보기</Button>
-          </Link>
+          <Button variant="secondary" onClick={handlePreview}>미리보기</Button>
           &nbsp;&nbsp;
           <Button variant="primary" onClick={handleMove}>작성 완료</Button>
         </Box>

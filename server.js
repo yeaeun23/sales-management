@@ -303,10 +303,10 @@ app.post('/tgp/:tgp_id/:form_id/step2', (req, res) => {
       item.power, item.power_sign,
       item.barrier, item.barrier_sign,
       item.dynamic, item.dynamic_sign,
-      (item.score_sales === "" ? "0" : item.score_sales), item.score_sales_sign,
-      (item.score_product === "" ? "0" : item.score_product), item.score_product_sign,
-      (item.score_service === "" ? "0" : item.score_service), item.score_service_sign,
-      (item.score_company === "" ? "0" : item.score_company), item.score_company_sign,
+      item.score_sales, item.score_sales_sign,
+      item.score_product, item.score_product_sign,
+      item.score_service, item.score_service_sign,
+      item.score_company, item.score_company_sign,
       item.score_opinion
     ];
 
@@ -434,33 +434,33 @@ app.get('/tgp/:tgp_id/:form_id/strategy1/:init', (req, res) => {
           }
 
           if (item.score_product_sign === "G") {
-            InsertStrategy2(form_id, item.title + "의 제품 평가가 불명확");
+            InsertStrategy2(form_id, item.title + "의 자사 제품 평가가 불명확");
           }
           else if (item.score_product_sign === "R") {
-            InsertStrategy2(form_id, item.title + "은(는) 제품에 대하여 부정적 평가");
+            InsertStrategy2(form_id, item.title + "은(는) 자사 제품에 대하여 부정적 평가");
           }
           else if (item.score_product_sign === "B") {
-            InsertStrategy1(form_id, item.title + "은(는) 제품에 대하여 긍정적 평가");
+            InsertStrategy1(form_id, item.title + "은(는) 자사 제품에 대하여 긍정적 평가");
           }
 
           if (item.score_service_sign === "G") {
-            InsertStrategy2(form_id, item.title + "의 서비스 평가가 불명확");
+            InsertStrategy2(form_id, item.title + "의 자사 서비스 평가가 불명확");
           }
           else if (item.score_service_sign === "R") {
-            InsertStrategy2(form_id, item.title + "은(는) 서비스에 대하여 부정적 평가");
+            InsertStrategy2(form_id, item.title + "은(는) 자사 서비스에 대하여 부정적 평가");
           }
           else if (item.score_service_sign === "B") {
-            InsertStrategy1(form_id, item.title + "은(는) 서비스에 대하여 긍정적 평가");
+            InsertStrategy1(form_id, item.title + "은(는) 자사 서비스에 대하여 긍정적 평가");
           }
 
           if (item.score_company_sign === "G") {
-            InsertStrategy2(form_id, item.title + "의 우리회사 평가가 불명확");
+            InsertStrategy2(form_id, item.title + "의 우리 회사 평가가 불명확");
           }
           else if (item.score_company_sign === "R") {
-            InsertStrategy2(form_id, item.title + "은(는) 우리회사에 대하여 부정적 평가");
+            InsertStrategy2(form_id, item.title + "은(는) 우리 회사에 대하여 부정적 평가");
           }
           else if (item.score_company_sign === "B") {
-            InsertStrategy1(form_id, item.title + "은(는) 우리회사에 대하여 긍정적 평가");
+            InsertStrategy1(form_id, item.title + "은(는) 우리 회사에 대하여 긍정적 평가");
           }
         });
 
@@ -566,7 +566,12 @@ app.post('/tgp/:tgp_id/:form_id/step3/:complete', (req, res) => {
   connection.query(sql, params);
 
   // 삭제 후 인서트 - FORM_STRATEGY1
-  sql = "DELETE FROM FORM_STRATEGY1 WHERE form_id = " + form_id;
+  if (complete === "1") {
+    sql = "DELETE FROM FORM_STRATEGY1 WHERE form_id = " + form_id;
+  }
+  else {
+    sql = "DELETE FROM FORM_STRATEGY1 WHERE form_id = " + form_id + " AND auto_complete = 0";
+  }  
 
   console.log("STEP3 저장(삭제): " + sql);
   connection.query(sql);
@@ -588,7 +593,12 @@ app.post('/tgp/:tgp_id/:form_id/step3/:complete', (req, res) => {
   });
 
   // 삭제 후 인서트 - FORM_STRATEGY2
-  sql = "DELETE FROM FORM_STRATEGY2 WHERE form_id = " + form_id;
+  if (complete === "1") {
+    sql = "DELETE FROM FORM_STRATEGY2 WHERE form_id = " + form_id;
+  }
+  else {
+    sql = "DELETE FROM FORM_STRATEGY2 WHERE form_id = " + form_id + " AND auto_complete = 0";
+  }  
 
   console.log("STEP3 저장(삭제): " + sql);
   connection.query(sql);

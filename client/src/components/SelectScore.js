@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 
 function SelectScore(props) {
   const options = [
-    { value: "0" },
+    { value: "" },
     { value: "+4" },
     { value: "+3" },
     { value: "+2" },

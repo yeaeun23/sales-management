@@ -27,9 +27,11 @@ function TGPDetail(props) {
     }
 
     // 완료일자(select) 세팅
-    getHistory()
-      .then(res => setHistory(res))
-      .catch(err => console.log(err));
+    if (selectedMode === "1") {
+      getHistory()
+        .then(res => setHistory(res))
+        .catch(err => console.log(err));
+    }
 
     // 모드(radio) 세팅
     document.getElementsByName("mode")[selectedMode].checked = true;
@@ -93,7 +95,7 @@ function TGPDetail(props) {
 
   const handlePreview = () => {
     const url = `/${customer_id}/${tgp_id}/${selectedFormId}/preview`;
-    window.open(url, "_blank");
+    window.open(url, "_blank", "width=1365,height=800");
   }
 
   return (

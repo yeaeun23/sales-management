@@ -5,14 +5,15 @@ import styles from "./Preview.module.css";
 
 function Preview(props) {
   const { customer_id, tgp_id, form_id } = useParams();
-  const [inputs1, setInputs1] = useState([]);
-  const [inputs2, setInputs2] = useState([]);
+  const [inputs1, setInputs1] = useState({});
+  const [inputs2, setInputs2] = useState({});
   const [inputs3, setInputs3] = useState([]);
   const [inputs4, setInputs4] = useState([]);
   const [inputs5, setInputs5] = useState([]);
   const [inputs6, setInputs6] = useState([]);
   const [inputs7, setInputs7] = useState([]);
   const [inputs8, setInputs8] = useState([]);
+  const [inputs9, setInputs9] = useState({});
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
   const [loading3, setLoading3] = useState(true);
@@ -21,8 +22,9 @@ function Preview(props) {
   const [loading6, setLoading6] = useState(true);
   const [loading7, setLoading7] = useState(true);
   const [loading8, setLoading8] = useState(true);
+  const [loading9, setLoading9] = useState(true);
 
-  // Target Goal Plan, 경쟁
+  // 1. Target Goal Plan
   useEffect(() => {
     const setInputData1 = async () => {
       const response = await fetch('/tgp/' + tgp_id + '/' + form_id + '/step1');
@@ -35,7 +37,7 @@ function Preview(props) {
     }).catch(err => console.log(err));
   }, []);
 
-  // TGP 현재 위치
+  // 2. TGP 현재 위치
   useEffect(() => {
     const setInputData2 = async () => {
       const response = await fetch('/tgp/' + tgp_id + '/' + form_id + '/step2');
@@ -48,7 +50,7 @@ function Preview(props) {
     }).catch(err => console.log(err));
   }, []);
 
-  // 구매 영향력, 평가
+  // 3. 구매 영향력, 평가
   useEffect(() => {
     const setInputData3 = async () => {
       const response = await fetch('/tgp/' + form_id + '/tdm');
@@ -63,7 +65,7 @@ function Preview(props) {
     }).catch(err => console.log(err));
   }, []);
 
-  // 경쟁 - 강점/기회
+  // 4. 경쟁 - 강점/기회
   useEffect(() => {
     const setInputData4 = async () => {
       const response = await fetch('/tgp/' + form_id + '/strength');
@@ -78,7 +80,7 @@ function Preview(props) {
     }).catch(err => console.log(err));
   }, []);
 
-  // 경쟁 - 약점/위협
+  // 5. 경쟁 - 약점/위협
   useEffect(() => {
     const setInputData5 = async () => {
       const response = await fetch('/tgp/' + form_id + '/weakness');
@@ -93,7 +95,7 @@ function Preview(props) {
     }).catch(err => console.log(err));
   }, []);
 
-  // 전략 분석
+  // 6/7. 전략 분석 요인
   useEffect(() => {
     const setInputData6 = async () => {
       const response = await fetch('/tgp/' + tgp_id + '/' + form_id + '/strategy1/false');
@@ -120,7 +122,7 @@ function Preview(props) {
     }).catch(err => console.log(err));
   }, []);
 
-  // Action Plan
+  // 8. Action Plan
   useEffect(() => {
     const setInputData8 = async () => {
       const response = await fetch('/tgp/' + form_id + '/action');
@@ -132,6 +134,19 @@ function Preview(props) {
         setInputs8(res);
       }
       setLoading8(false);
+    }).catch(err => console.log(err));
+  }, []);
+
+  // 9. 전략 분석 방안
+  useEffect(() => {
+    const setInputData9 = async () => {
+      const response = await fetch('/tgp/' + tgp_id + '/' + form_id + '/step3');
+      const body = await response.json();
+      return body;
+    }
+    setInputData9().then(res => {
+      setInputs9(res[0]);
+      setLoading9(false);
     }).catch(err => console.log(err));
   }, []);
 
@@ -149,32 +164,34 @@ function Preview(props) {
 
   return (
     <div className={styles.prev}>
-      {(!loading1 && !loading2 && !loading3 && !loading4 && !loading5 && !loading6 && !loading7 && !loading8) ?
+      {(!loading1 && !loading2 && !loading3 && !loading4 && !loading5 && !loading6 && !loading7 && !loading8 && !loading9) ?
         <div>
-          <table style={{ width: '100%' }}>
-            <thead>
-              <tr>
-                <th colSpan="10">Target Goal Plan</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th width="90px">거래처</th>
-                <td width="175px">{inputs1.account}</td>
-                <th width="90px">부서</th>
-                <td width="175px">{inputs1.department}</td>
-                <th width="90px">솔루션</th>
-                <td width="175px">{inputs1.solution}</td>
-                <th width="90px">금액(원)</th>
-                <td width="175px">{inputs1.amount}</td>
-                <th width="90px">목표일</th>
-                <td width="175px">{inputs1.closingdate}</td>
-              </tr>
-            </tbody>
-          </table>
-          <br /><br />
+          <div className={styles.step_area}>
+            <table style={{ width: '100%' }}>
+              <thead>
+                <tr>
+                  <th colSpan="10">Target Goal Plan</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th width="80px">거래처</th>
+                  <td width="187px">{inputs1.account}</td>
+                  <th width="80x">부서</th>
+                  <td width="185px">{inputs1.department}</td>
+                  <th width="80px">솔루션</th>
+                  <td width="185px">{inputs1.solution}</td>
+                  <th width="80px">금액(원)</th>
+                  <td width="185px">{inputs1.amount}</td>
+                  <th width="80px">목표일</th>
+                  <td width="185px">{inputs1.closingdate}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-          <div>
+          <div className={styles.step_area}>
+            <div className={styles.step_title}>In The Funnel</div>
             <table>
               <thead>
                 <tr>
@@ -183,14 +200,14 @@ function Preview(props) {
               </thead>
               <tbody>
                 <tr>
-                  <th width="90px">고객관점<br />세일즈 퍼널</th>
-                  <td width="105px">
+                  <th width="80px">고객관점<br />세일즈 퍼널</th>
+                  <td width="107px">
                     <input type="checkbox" disabled checked={inputs2.position1 === "Lead" ? "checked" : ""} /> Lead<br />
                     <input type="checkbox" disabled checked={inputs2.position1 === "Filtering" ? "checked" : ""} /> Filtering<br />
                     <input type="checkbox" disabled checked={inputs2.position1 === "Opportunity" ? "checked" : ""} /> Opportunity<br />
                     <input type="checkbox" disabled checked={inputs2.position1 === "Closing" ? "checked" : ""} /> Closing
                   </td>
-                  <td className="sign">{SetSign(inputs2.position1_sign)}</td>
+                  <td className={styles.sign}>{SetSign(inputs2.position1_sign)}</td>
                 </tr>
                 <tr>
                   <th>고객관점<br />경쟁 위치</th>
@@ -200,16 +217,15 @@ function Preview(props) {
                     <input type="checkbox" disabled checked={inputs2.position2 === "Consider First" ? "checked" : ""} /> Consider First<br />
                     <input type="checkbox" disabled checked={inputs2.position2 === "Exclusive" ? "checked" : ""} /> Exclusive
                   </td>
-                  <td className="sign">{SetSign(inputs2.position2_sign)}</td>
+                  <td className={styles.sign}>{SetSign(inputs2.position2_sign)}</td>
                 </tr>
                 <tr>
                   <th>성공 가능성</th>
                   <td>{inputs2.position3}</td>
-                  <td className="sign">{SetSign(inputs2.position3_sign)}</td>
+                  <td className={styles.sign}>{SetSign(inputs2.position3_sign)}</td>
                 </tr>
               </tbody>
             </table>
-            &nbsp;&nbsp;
 
             <table>
               <thead>
@@ -236,28 +252,27 @@ function Preview(props) {
                     <tr key={i}>
                       <td width="95px">{item.title}</td>
                       <td width="55px">{item.role}</td>
-                      <td className="sign">{SetSign(item.role_sign)}</td>
-                      <td width="25px" align="center">{item.power}</td>
-                      <td className="sign">{SetSign(item.power_sign)}</td>
+                      <td className={styles.sign}>{SetSign(item.role_sign)}</td>
+                      <td width="24px" align="center">{item.power}</td>
+                      <td className={styles.sign}>{SetSign(item.power_sign)}</td>
                       <td width="95px">{item.barrier}</td>
-                      <td className="sign">{SetSign(item.barrier_sign)}</td>
+                      <td className={styles.sign}>{SetSign(item.barrier_sign)}</td>
                       <td width="95px">{item.dynamic}</td>
-                      <td className="sign">{SetSign(item.dynamic_sign)}</td>
-                      <td width="35px" align="center">{item.score_sales}</td>
-                      <td className="sign">{SetSign(item.score_sales_sign)}</td>
-                      <td width="35px" align="center">{item.score_product}</td>
-                      <td className="sign">{SetSign(item.score_product_sign)}</td>
-                      <td width="35px" align="center">{item.score_service}</td>
-                      <td className="sign">{SetSign(item.score_service_sign)}</td>
-                      <td width="35px" align="center">{item.score_company}</td>
-                      <td className="sign">{SetSign(item.score_company_sign)}</td>
+                      <td className={styles.sign}>{SetSign(item.dynamic_sign)}</td>
+                      <td width="36px" align="center">{item.score_sales}</td>
+                      <td className={styles.sign}>{SetSign(item.score_sales_sign)}</td>
+                      <td width="36px" align="center">{item.score_product}</td>
+                      <td className={styles.sign}>{SetSign(item.score_product_sign)}</td>
+                      <td width="36px" align="center">{item.score_service}</td>
+                      <td className={styles.sign}>{SetSign(item.score_service_sign)}</td>
+                      <td width="36px" align="center">{item.score_company}</td>
+                      <td className={styles.sign}>{SetSign(item.score_company_sign)}</td>
                       <td width="95px">{item.score_opinion}</td>
                     </tr>
                   )
                 })}
               </tbody>
             </table>
-            &nbsp;&nbsp;
 
             <table>
               <thead>
@@ -269,25 +284,25 @@ function Preview(props) {
                 <tr>
                   <th width="65px">선정고객</th>
                   <td width="95px">{inputs2.competition1_name}</td>
-                  <td className="sign">{SetSign(inputs2.competition1_name_sign)}</td>
+                  <td className={styles.sign}>{SetSign(inputs2.competition1_name_sign)}</td>
                   <td width="95px">{inputs2.competition2_name}</td>
-                  <td className="sign">{SetSign(inputs2.competition2_name_sign)}</td>
+                  <td className={styles.sign}>{SetSign(inputs2.competition2_name_sign)}</td>
                 </tr>
                 <tr>
                   <th>대체안</th>
                   <td>{inputs2.competition1_type}</td>
-                  <td className="sign">{SetSign(inputs2.competition1_type_sign)}</td>
+                  <td className={styles.sign}>{SetSign(inputs2.competition1_type_sign)}</td>
                   <td>{inputs2.competition2_type}</td>
-                  <td className="sign">{SetSign(inputs2.competition2_type_sign)}</td>
+                  <td className={styles.sign}>{SetSign(inputs2.competition2_type_sign)}</td>
                 </tr>
                 {inputs4.map((item, i) => {
                   return (
                     <tr key={i}>
                       <th>{i === 0 ? "강점/기회" : ""}</th>
                       <td>{item.strength1}</td>
-                      <td className="sign">{SetSign(item.strength1_sign)}</td>
+                      <td className={styles.sign}>{SetSign(item.strength1_sign)}</td>
                       <td>{item.strength2}</td>
-                      <td className="sign">{SetSign(item.strength2_sign)}</td>
+                      <td className={styles.sign}>{SetSign(item.strength2_sign)}</td>
                     </tr>
                   )
                 })}
@@ -296,18 +311,18 @@ function Preview(props) {
                     <tr key={i}>
                       <th>{i === 0 ? "약점/위협" : ""}</th>
                       <td>{item.weakness1}</td>
-                      <td className="sign">{SetSign(item.weakness1_sign)}</td>
+                      <td className={styles.sign}>{SetSign(item.weakness1_sign)}</td>
                       <td>{item.weakness2}</td>
-                      <td className="sign">{SetSign(item.weakness2_sign)}</td>
+                      <td className={styles.sign}>{SetSign(item.weakness2_sign)}</td>
                     </tr>
                   )
                 })}
               </tbody>
             </table>
           </div>
-          <br />
 
-          <div>
+          <div className={styles.step_area}>
+            <div className={styles.step_title}>Getting Action</div>
             <table>
               <thead>
                 <tr>
@@ -316,20 +331,35 @@ function Preview(props) {
               </thead>
               <tbody>
                 <tr>
-                  <th width="295px">강점/기회 요인</th>
-                  <th width="180px">강화/활용 방안</th>
+                  <th width="225px">강점/기회 요인</th>
+                  <th width="225px">강화/활용 방안</th>
                 </tr>
                 {inputs6.map((item, i) => {
                   return (
                     <tr key={i}>
-                      <td>{item.strength}</td>
-                      <td>{item.behavior1}</td>
+                      {item.auto_complete === 1 ?
+                        <td style={{ backgroundColor: "#E9ECEF" }}>{i + 1}. {item.strength}</td>
+                        :
+                        <td>{i + 1}. {item.strength}</td>
+                      }
+                      {i === 0 ?
+                        <td rowSpan={inputs6.length} style={{ verticalAlign: "top" }}>
+                          {inputs9.strategy1_behavior.split("\n").map((line, i) => {
+                            return (
+                              <span key={i}>
+                                {line}<br />
+                              </span>
+                            );
+                          })}
+                        </td>
+                        :
+                        ""
+                      }
                     </tr>
                   )
                 })}
               </tbody>
             </table>
-            &nbsp;&nbsp;
 
             <table>
               <thead>
@@ -347,16 +377,15 @@ function Preview(props) {
                 {inputs8.map((item, i) => {
                   return (
                     <tr key={i}>
-                      <td width="95px">{item.action}</td>
+                      <td width="200px">{item.action}</td>
                       <td width="74px" align="center">{item.date}</td>
-                      <td width="95px">{item.owner}</td>
-                      <td width="95px">{item.collaborator}</td>
+                      <td width="55px">{item.owner}</td>
+                      <td width="80px">{item.collaborator}</td>
                     </tr>
                   )
                 })}
               </tbody>
             </table>
-            &nbsp;&nbsp;
 
             <table>
               <thead>
@@ -366,14 +395,30 @@ function Preview(props) {
               </thead>
               <tbody>
                 <tr>
-                  <th width="295px">약점/위협 요인</th>
-                  <th width="180px">최소화/제거 방안</th>
+                  <th width="225px">약점/위협 요인</th>
+                  <th width="225px">최소화/제거 방안</th>
                 </tr>
                 {inputs7.map((item, i) => {
                   return (
                     <tr key={i}>
-                      <td>{item.weakness}</td>
-                      <td>{item.behavior2}</td>
+                      {item.auto_complete === 1 ?
+                        <td style={{ backgroundColor: "#E9ECEF" }}>{i + 1}. {item.weakness}</td>
+                        :
+                        <td>{i + 1}. {item.weakness}</td>
+                      }
+                      {i === 0 ?
+                        <td rowSpan={inputs7.length} style={{ verticalAlign: "top" }}>
+                          {inputs9.strategy2_behavior.split("\n").map((line, i) => {
+                            return (
+                              <span key={i}>
+                                {line}<br />
+                              </span>
+                            );
+                          })}
+                        </td>
+                        :
+                        ""
+                      }
                     </tr>
                   )
                 })}

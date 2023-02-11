@@ -243,11 +243,14 @@ form {
 }
 
 /* */
-.col_form3_2 col:nth-child(1),
+.col_form3_2 col:nth-child(1) {
+  width: 52%;
+}
+
 .col_form3_2 col:nth-child(2),
 .col_form3_2 col:nth-child(3),
 .col_form3_2 col:nth-child(4) {
-  width: 24%;
+  width: 15%;
 }
 
 .col_form3_2 col:nth-child(5) {
