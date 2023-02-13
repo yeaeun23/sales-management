@@ -103,7 +103,9 @@ function TGPAdd(props) {
 						type="text"
 						name="tgpName"
 						value={tgpName}
-						onChange={handleValueChange}>
+						onChange={handleValueChange}
+						inputProps={{ maxLength: 20 }}
+						placeholder="20자 이내">
 					</TextField>
 					<br /><br />
 					<TextField

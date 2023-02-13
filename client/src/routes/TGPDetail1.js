@@ -112,13 +112,13 @@ function TGPDetail1(props) {
                       <th><Form.Label column={props.inputSize}>거래처</Form.Label></th>
                       <td><Form.Control size={props.inputSize} type="text" name="account" value={inputs.account || customer_name} readOnly /></td>
                       <th><Form.Label column={props.inputSize}>부서</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="department" value={inputs.department || ''} onChange={handleValueChange} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="department" value={inputs.department || ''} onChange={handleValueChange} maxLength="20" /></td>
                     </tr>
                     <tr>
                       <th><Form.Label column={props.inputSize}>솔루션</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="solution" value={inputs.solution || ''} onChange={handleValueChange} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="solution" value={inputs.solution || ''} onChange={handleValueChange} maxLength="20" /></td>
                       <th><Form.Label column={props.inputSize}>금액 (원)</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="amount" value={inputs.amount || ''} onChange={handleValueChange} />
+                      <td><Form.Control size={props.inputSize} type="text" name="amount" value={inputs.amount || ''} onChange={handleValueChange} maxLength="20" />
                       </td>
                     </tr>
                     <tr>

@@ -103,7 +103,9 @@ function CustomerAdd(props) {
 						type="text"
 						name="customerName"
 						value={customerName}
-						onChange={handleValueChange}>
+						onChange={handleValueChange}
+						inputProps={{ maxLength: 20 }}
+						placeholder="20자 이내">
 					</TextField>
 					<br /><br />
 					<TextField

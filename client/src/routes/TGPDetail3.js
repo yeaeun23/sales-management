@@ -267,7 +267,7 @@ function TGPDetail3(props) {
                         <tr key={i}>
                           <td style={{ textAlign: "center" }}>{i + 1}.</td>
                           <td>
-                            <Form.Control size={props.inputSize} type="text" name="strength" value={item.strength || ''} onChange={handleValueChange1(i)} disabled={item.auto_complete === 1 ? "disabled" : ""} />
+                            <Form.Control size={props.inputSize} type="text" name="strength" value={item.strength || ''} onChange={handleValueChange1(i)} maxLength="100" placeholder="100자 이내" disabled={item.auto_complete === 1 ? "disabled" : ""} />
                           </td>
                           <td>
                             {i === 0 ?
@@ -278,7 +278,7 @@ function TGPDetail3(props) {
                           </td>
                           {i === 0 ?
                             <td rowSpan={inputs1.length} className="behavior">
-                              <textarea className="form-control" name="strategy1_behavior" value={inputs4.strategy1_behavior || ''} onChange={handleValueChange4} />
+                              <textarea className="form-control" name="strategy1_behavior" value={inputs4.strategy1_behavior || ''} onChange={handleValueChange4} maxLength="250" placeholder="250자 이내" />
                             </td>
                             : ""
                           }
@@ -309,7 +309,7 @@ function TGPDetail3(props) {
                         <tr key={i}>
                           <td style={{ textAlign: "center" }}>{i + 1}.</td>
                           <td>
-                            <Form.Control size={props.inputSize} type="text" name="weakness" value={item.weakness || ''} onChange={handleValueChange2(i)} disabled={item.auto_complete === 1 ? "disabled" : ""} />
+                            <Form.Control size={props.inputSize} type="text" name="weakness" value={item.weakness || ''} onChange={handleValueChange2(i)} maxLength="100" placeholder="100자 이내" disabled={item.auto_complete === 1 ? "disabled" : ""} />
                           </td>
                           <td>
                             {i === 0 ?
@@ -320,7 +320,7 @@ function TGPDetail3(props) {
                           </td>
                           {i === 0 ?
                             <td rowSpan={inputs2.length} className="behavior">
-                              <textarea className="form-control" name="strategy2_behavior" value={inputs4.strategy2_behavior || ''} onChange={handleValueChange4} />
+                              <textarea className="form-control" name="strategy2_behavior" value={inputs4.strategy2_behavior || ''} onChange={handleValueChange4} maxLength="250" placeholder="250자 이내" />
                             </td>
                             : ""
                           }
@@ -376,16 +376,16 @@ function TGPDetail3(props) {
                       return (
                         <tr key={i}>
                           <td>
-                            <Form.Control size={props.inputSize} type="text" name="action" value={item.action || ''} onChange={handleValueChange3(i)} placeholder="100자 이내" maxLength={10} />
+                            <Form.Control size={props.inputSize} type="text" name="action" value={item.action || ''} onChange={handleValueChange3(i)} maxLength="100" placeholder="100자 이내" />
                           </td>
                           <td>
                             <Form.Control size={props.inputSize} type="date" name="date" value={item.date || ''} onChange={handleValueChange3(i)} max="2999-12-31" />
                           </td>
                           <td>
-                            <Form.Control size={props.inputSize} type="text" name="owner" value={item.owner || ''} onChange={handleValueChange3(i)} />
+                            <Form.Control size={props.inputSize} type="text" name="owner" value={item.owner || ''} onChange={handleValueChange3(i)} maxLength="20" />
                           </td>
                           <td>
-                            <Form.Control size={props.inputSize} type="text" name="collaborator" value={item.collaborator || ''} onChange={handleValueChange3(i)} />
+                            <Form.Control size={props.inputSize} type="text" name="collaborator" value={item.collaborator || ''} onChange={handleValueChange3(i)} maxLength="20" />
                           </td>
                           <td>
                             {i === 0 ?

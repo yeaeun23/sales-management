@@ -361,14 +361,14 @@ function TGPDetail2(props) {
                     {inputs2.map((item, i) => {
                       return (
                         <tr key={i}>
-                          <td><Form.Control size={props.inputSize} type="text" name="title" value={item.title || ''} onChange={handleValueChange2(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="title" value={item.title || ''} onChange={handleValueChange2(i)} maxLength="20" /></td>
                           <td><SelectRole size={props.inputSize} name="role" value={item.role || ''} handleValueChange={handleValueChange2(i)} /></td>
                           <td><SelectSign size={props.inputSize} name="role_sign" value={item.role_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
                           <td><SelectPower size={props.inputSize} name="power" value={item.power || ''} handleValueChange={handleValueChange2(i)} /></td>
                           <td><SelectSign size={props.inputSize} name="power_sign" value={item.power_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                          <td><Form.Control size={props.inputSize} type="text" name="barrier" value={item.barrier || ''} onChange={handleValueChange2(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="barrier" value={item.barrier || ''} onChange={handleValueChange2(i)} maxLength="100" placeholder="100자 이내" /></td>
                           <td><SelectSign size={props.inputSize} name="barrier_sign" value={item.barrier_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                          <td><Form.Control size={props.inputSize} type="text" name="dynamic" value={item.dynamic || ''} onChange={handleValueChange2(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="dynamic" value={item.dynamic || ''} onChange={handleValueChange2(i)} maxLength="100" placeholder="100자 이내" /></td>
                           <td><SelectSign size={props.inputSize} name="dynamic_sign" value={item.dynamic_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
                           <td>
                             {i === 0 ?
@@ -441,7 +441,7 @@ function TGPDetail2(props) {
                           <td><SelectSign size={props.inputSize} name="score_service_sign" value={item.score_service_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
                           <td><SelectScore size={props.inputSize} name="score_company" value={item.score_company || "0"} handleValueChange={handleValueChange2(i)} /></td>
                           <td><SelectSign size={props.inputSize} name="score_company_sign" value={item.score_company_sign || ''} handleValueChange={handleValueChange2(i)} /></td>
-                          <td><Form.Control size={props.inputSize} type="text" name="score_opinion" value={item.score_opinion || ''} onChange={handleValueChange2(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="score_opinion" value={item.score_opinion || ''} onChange={handleValueChange2(i)} maxLength="100" placeholder="100자 이내" /></td>
                         </tr>
                       )
                     })}
@@ -472,17 +472,17 @@ function TGPDetail2(props) {
                   <tbody>
                     <tr>
                       <th><Form.Label column={props.inputSize}>선정 고객명</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="competition1_name" value={inputs1.competition1_name || ''} onChange={handleValueChange1} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="competition1_name" value={inputs1.competition1_name || ''} onChange={handleValueChange1} maxLength="20" /></td>
                       <td><SelectSign size={props.inputSize} name="competition1_name_sign" value={inputs1.competition1_name_sign || ''} handleValueChange={handleValueChange1} /></td>
-                      <td><Form.Control size={props.inputSize} type="text" name="competition2_name" value={inputs1.competition2_name || ''} onChange={handleValueChange1} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="competition2_name" value={inputs1.competition2_name || ''} onChange={handleValueChange1} maxLength="20" /></td>
                       <td><SelectSign size={props.inputSize} name="competition2_name_sign" value={inputs1.competition2_name_sign || ''} handleValueChange={handleValueChange1} /></td>
                       <td></td>
                     </tr>
                     <tr>
                       <th><Form.Label column={props.inputSize}>고객관점 대체안<br />(우리의 경쟁)</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="competition1_type" value={inputs1.competition1_type || ''} onChange={handleValueChange1} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="competition1_type" value={inputs1.competition1_type || ''} onChange={handleValueChange1} maxLength="20" /></td>
                       <td><SelectSign size={props.inputSize} name="competition1_type_sign" value={inputs1.competition1_type_sign || ''} handleValueChange={handleValueChange1} /></td>
-                      <td><Form.Control size={props.inputSize} type="text" name="competition2_type" value={inputs1.competition2_type || ''} onChange={handleValueChange1} /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="competition2_type" value={inputs1.competition2_type || ''} onChange={handleValueChange1} maxLength="20" /></td>
                       <td><SelectSign size={props.inputSize} name="competition2_type_sign" value={inputs1.competition2_type_sign || ''} handleValueChange={handleValueChange1} /></td>
                       <td></td>
                     </tr>
@@ -492,9 +492,9 @@ function TGPDetail2(props) {
                           <th><Form.Label column={props.inputSize}>
                             {i === 0 ? "강점과 기회" : ""}
                           </Form.Label></th>
-                          <td><Form.Control size={props.inputSize} type="text" name="strength1" value={item.strength1 || ''} onChange={handleValueChange3(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="strength1" value={item.strength1 || ''} onChange={handleValueChange3(i)} maxLength="100" placeholder="100자 이내" /></td>
                           <td><SelectSign size={props.inputSize} name="strength1_sign" value={item.strength1_sign || ''} handleValueChange={handleValueChange3(i)} /></td>
-                          <td><Form.Control size={props.inputSize} type="text" name="strength2" value={item.strength2 || ''} onChange={handleValueChange3(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="strength2" value={item.strength2 || ''} onChange={handleValueChange3(i)} maxLength="100" placeholder="100자 이내" /></td>
                           <td><SelectSign size={props.inputSize} name="strength2_sign" value={item.strength2_sign || ''} handleValueChange={handleValueChange3(i)} /></td>
                           <td>
                             {i === 0 ?
@@ -519,9 +519,9 @@ function TGPDetail2(props) {
                           <th><Form.Label column={props.inputSize}>
                             {i === 0 ? "약점과 위협" : ""}
                           </Form.Label></th>
-                          <td><Form.Control size={props.inputSize} type="text" name="weakness1" value={item.weakness1 || ''} onChange={handleValueChange4(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="weakness1" value={item.weakness1 || ''} onChange={handleValueChange4(i)} maxLength="100" placeholder="100자 이내" /></td>
                           <td><SelectSign size={props.inputSize} name="weakness1_sign" value={item.weakness1_sign || ''} handleValueChange={handleValueChange4(i)} /></td>
-                          <td><Form.Control size={props.inputSize} type="text" name="weakness2" value={item.weakness2 || ''} onChange={handleValueChange4(i)} /></td>
+                          <td><Form.Control size={props.inputSize} type="text" name="weakness2" value={item.weakness2 || ''} onChange={handleValueChange4(i)} maxLength="100" placeholder="100자 이내" /></td>
                           <td><SelectSign size={props.inputSize} name="weakness2_sign" value={item.weakness2_sign || ''} handleValueChange={handleValueChange4(i)} /></td>
                           <td>
                             {i === 0 ?
