@@ -127,11 +127,10 @@ form {
 
 .behavior>textarea {
   position: absolute;
-  top: 7px;
-  bottom: 7px;
-  left: 7px;
-  right: 7px;
-  width: auto;
+  top: 8px;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
   resize: none;
 }
 

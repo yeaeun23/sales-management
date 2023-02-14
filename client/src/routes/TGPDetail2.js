@@ -22,29 +22,10 @@ import SelectRole from '../components/SelectRole';
 function TGPDetail2(props) {
   const { customer_id, tgp_id, form_id } = useParams();
   const { customer_name, tgp_name } = useLocation().state;
-  const input2 = {
-    title: '', role: '', role_sign: '',
-    power: '', power_sign: '',
-    barrier: '', barrier_sign: '',
-    dynamic: '', dynamic_sign: '',
-    score_sales: '', score_sales_sign: '',
-    score_product: '', score_product_sign: '',
-    score_service: '', score_service_sign: '',
-    score_company: '', score_company_sign: '',
-    score_opinion: ''
-  }
-  const input3 = {
-    strength1: '', strength1_sign: '',
-    strength2: '', strength2_sign: ''
-  }
-  const input4 = {
-    weakness1: '', weakness1_sign: '',
-    weakness2: '', weakness2_sign: ''
-  }
   const [inputs1, setInputs1] = useState({});
-  const [inputs2, setInputs2] = useState([input2]);
-  const [inputs3, setInputs3] = useState([input3]);
-  const [inputs4, setInputs4] = useState([input4]);
+  const [inputs2, setInputs2] = useState([{}]);
+  const [inputs3, setInputs3] = useState([{}]);
+  const [inputs4, setInputs4] = useState([{}]);
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
   const [loading3, setLoading3] = useState(true);
@@ -144,15 +125,15 @@ function TGPDetail2(props) {
   };
 
   const handleAddRow2 = () => {
-    setInputs2([...inputs2, input2]);
+    setInputs2([...inputs2, {}]);
   }
 
   const handleAddRow3 = () => {
-    setInputs3([...inputs3, input3]);
+    setInputs3([...inputs3, {}]);
   }
 
   const handleAddRow4 = () => {
-    setInputs4([...inputs4, input4]);
+    setInputs4([...inputs4, {}]);
   }
 
   const handleDeleteRow2 = (index) => {

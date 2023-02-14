@@ -110,7 +110,7 @@ function TGPDetail1(props) {
                   <tbody>
                     <tr>
                       <th><Form.Label column={props.inputSize}>거래처</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="account" value={inputs.account || customer_name} readOnly /></td>
+                      <td><Form.Control size={props.inputSize} type="text" name="account" value={inputs.account} disabled /></td>
                       <th><Form.Label column={props.inputSize}>부서</Form.Label></th>
                       <td><Form.Control size={props.inputSize} type="text" name="department" value={inputs.department || ''} onChange={handleValueChange} maxLength="20" /></td>
                     </tr>

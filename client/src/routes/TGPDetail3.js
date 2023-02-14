@@ -18,28 +18,9 @@ import BtnDeleteRow from '../components/BtnDeleteRow';
 function TGPDetail3(props) {
   const { customer_id, tgp_id, form_id } = useParams();
   const { customer_name, tgp_name, initStrategy } = useLocation().state;
-  const input1 = {
-    strength1: '', strength1_sign: '',
-    strength2: '', strength2_sign: ''
-  }
-  const input2 = {
-    title: '', role: '', title_sign: '',
-    power: '', power_sign: '',
-    barrier: '', barrier_sign: '',
-    dynamic: '', dynamic_sign: '',
-    score_sales: '', score_sales_sign: '',
-    score_product: '', score_product_sign: '',
-    score_service: '', score_service_sign: '',
-    score_company: '', score_company_sign: '',
-    score_opinion: ''
-  }
-  const input3 = {
-    strength1: '', strength1_sign: '',
-    strength2: '', strength2_sign: ''
-  }
-  const [inputs1, setInputs1] = useState([input1]);
-  const [inputs2, setInputs2] = useState([input2]);
-  const [inputs3, setInputs3] = useState([input3]);
+  const [inputs1, setInputs1] = useState([{}]);
+  const [inputs2, setInputs2] = useState([{}]);
+  const [inputs3, setInputs3] = useState([{}]);
   const [inputs4, setInputs4] = useState({});
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
@@ -138,15 +119,15 @@ function TGPDetail3(props) {
   }
 
   const handleAddRow1 = () => {
-    setInputs1([...inputs1, input1]);
+    setInputs1([...inputs1, {}]);
   }
 
   const handleAddRow2 = () => {
-    setInputs2([...inputs2, input2]);
+    setInputs2([...inputs2, {}]);
   }
 
   const handleAddRow3 = () => {
-    setInputs3([...inputs3, input3]);
+    setInputs3([...inputs3, {}]);
   }
 
   const handleDeleteRow1 = (index) => {
@@ -278,7 +259,7 @@ function TGPDetail3(props) {
                           </td>
                           {i === 0 ?
                             <td rowSpan={inputs1.length} className="behavior">
-                              <textarea className="form-control" name="strategy1_behavior" value={inputs4.strategy1_behavior || ''} onChange={handleValueChange4} maxLength="250" placeholder="250자 이내" />
+                              <textarea className="form-control form-control-sm" name="strategy1_behavior" value={inputs4.strategy1_behavior || ''} onChange={handleValueChange4} maxLength="250" placeholder="250자 이내" />
                             </td>
                             : ""
                           }
@@ -320,7 +301,7 @@ function TGPDetail3(props) {
                           </td>
                           {i === 0 ?
                             <td rowSpan={inputs2.length} className="behavior">
-                              <textarea className="form-control" name="strategy2_behavior" value={inputs4.strategy2_behavior || ''} onChange={handleValueChange4} maxLength="250" placeholder="250자 이내" />
+                              <textarea className="form-control form-control-sm" name="strategy2_behavior" value={inputs4.strategy2_behavior || ''} onChange={handleValueChange4} maxLength="250" placeholder="250자 이내" />
                             </td>
                             : ""
                           }

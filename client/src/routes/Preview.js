@@ -7,12 +7,12 @@ function Preview(props) {
   const { customer_id, tgp_id, form_id } = useParams();
   const [inputs1, setInputs1] = useState({});
   const [inputs2, setInputs2] = useState({});
-  const [inputs3, setInputs3] = useState([]);
-  const [inputs4, setInputs4] = useState([]);
-  const [inputs5, setInputs5] = useState([]);
-  const [inputs6, setInputs6] = useState([]);
-  const [inputs7, setInputs7] = useState([]);
-  const [inputs8, setInputs8] = useState([]);
+  const [inputs3, setInputs3] = useState([{}]);
+  const [inputs4, setInputs4] = useState([{}]);
+  const [inputs5, setInputs5] = useState([{}]);
+  const [inputs6, setInputs6] = useState([{}]);
+  const [inputs7, setInputs7] = useState([{}]);
+  const [inputs8, setInputs8] = useState([{}]);
   const [inputs9, setInputs9] = useState({});
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
@@ -250,7 +250,7 @@ function Preview(props) {
                 {inputs3.map((item, i) => {
                   return (
                     <tr key={i}>
-                      <td width="95px">{item.title}</td>
+                      <td width="95px">{item.title || ''}</td>
                       <td width="55px">{item.role}</td>
                       <td className={styles.sign}>{SetSign(item.role_sign)}</td>
                       <td width="24px" align="center">{item.power}</td>
@@ -343,15 +343,19 @@ function Preview(props) {
                         <td>{i + 1}. {item.strength}</td>
                       }
                       {i === 0 ?
-                        <td rowSpan={inputs6.length} style={{ verticalAlign: "top" }}>
-                          {inputs9.strategy1_behavior.split("\n").map((line, i) => {
-                            return (
-                              <span key={i}>
-                                {line}<br />
-                              </span>
-                            );
-                          })}
-                        </td>
+                        inputs9.strategy1_behavior !== null ?
+                          <td rowSpan={inputs6.length} style={{ verticalAlign: "top" }}>
+                            {inputs9.strategy1_behavior.split("\n").map((line, i) => {
+                              return (
+                                <span key={i}>
+                                  {line}<br />
+                                </span>
+                              );
+                            })}
+                          </td>
+                          :
+                          <td rowSpan={inputs6.length} style={{ verticalAlign: "top" }}>
+                          </td>
                         :
                         ""
                       }
@@ -407,18 +411,22 @@ function Preview(props) {
                         <td>{i + 1}. {item.weakness}</td>
                       }
                       {i === 0 ?
-                        <td rowSpan={inputs7.length} style={{ verticalAlign: "top" }}>
-                          {inputs9.strategy2_behavior.split("\n").map((line, i) => {
-                            return (
-                              <span key={i}>
-                                {line}<br />
-                              </span>
-                            );
-                          })}
-                        </td>
+                        inputs9.strategy2_behavior !== null ?
+                          <td rowSpan={inputs7.length} style={{ verticalAlign: "top" }}>
+                            {inputs9.strategy2_behavior.split("\n").map((line, i) => {
+                              return (
+                                <span key={i}>
+                                  {line}<br />
+                                </span>
+                              );
+                            })}
+                          </td>
+                          :
+                          <td rowSpan={inputs7.length} style={{ verticalAlign: "top" }}>
+                          </td>
                         :
                         ""
-                      }
+                      }   
                     </tr>
                   )
                 })}

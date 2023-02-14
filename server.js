@@ -132,7 +132,7 @@ app.get('/tgp/:tgp_id/continue', (req, res) => {
   connection.query(sql, (err, rows, fields) => {
     if (rows.length === 0) {
       // 없으면 insert
-      let sql1 = "INSERT INTO FORM (`tgp_id`, `update_time`, `make_time`) VALUES(" + tgp_id + ", NOW(), NOW())";
+      let sql1 = "INSERT INTO FORM (`tgp_id`, `update_time`, `make_time`, `account`) VALUES(" + tgp_id + ", NOW(), NOW(), (SELECT name FROM CUSTOMER WHERE customer_id = (SELECT customer_id FROM TGP WHERE tgp_id = " + tgp_id + ")))";
 
       console.log("TGP 생성: " + sql1);
       connection.query(sql1);
@@ -227,8 +227,8 @@ app.post('/tgp/:tgp_id/:form_id/step1', (req, res) => {
   let form_id = req.params.form_id;
 
   // 업데이트 - FORM
-  sql = "UPDATE FORM SET account = ?, department = ?, solution = ?, amount = ?, closingdate = ?, update_time = NOW() WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND complete = 0 AND delete_time IS NULL";
-  params = [req.body.inputs.account, req.body.inputs.department, req.body.inputs.solution, req.body.inputs.amount, req.body.inputs.closingdate];
+  sql = "UPDATE FORM SET department = ?, solution = ?, amount = ?, closingdate = ?, update_time = NOW() WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND complete = 0 AND delete_time IS NULL";
+  params = [req.body.inputs.department, req.body.inputs.solution, req.body.inputs.amount, req.body.inputs.closingdate];
 
   console.log("STEP1 저장: " + sql);
   connection.query(sql, params);
@@ -571,7 +571,7 @@ app.post('/tgp/:tgp_id/:form_id/step3/:complete', (req, res) => {
   }
   else {
     sql = "DELETE FROM FORM_STRATEGY1 WHERE form_id = " + form_id + " AND auto_complete = 0";
-  }  
+  }
 
   console.log("STEP3 저장(삭제): " + sql);
   connection.query(sql);
@@ -598,7 +598,7 @@ app.post('/tgp/:tgp_id/:form_id/step3/:complete', (req, res) => {
   }
   else {
     sql = "DELETE FROM FORM_STRATEGY2 WHERE form_id = " + form_id + " AND auto_complete = 0";
-  }  
+  }
 
   console.log("STEP3 저장(삭제): " + sql);
   connection.query(sql);
