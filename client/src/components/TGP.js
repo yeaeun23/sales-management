@@ -7,6 +7,7 @@ function TGP(props) {
 	return (
 		<tr>
 			<td style={{ textAlign: 'center' }}>{props.tgp_id}</td>
+			<td style={{ textAlign: 'center' }}>{props.make_time}</td>
 			<td>
 				<Link
 					style={{ display: 'block' }}
@@ -14,9 +15,9 @@ function TGP(props) {
 					state={{ tgp_name: props.name, customer_name: props.customer_name }}>
 					{props.name}
 				</Link>
-			</td>
-			<td style={{ textAlign: 'center' }}>{props.status}</td>
-			<td style={{ textAlign: 'center' }}>{props.update_time}</td>
+			</td>		
+			<td style={{ textAlign: 'center' }}>{props.status}</td>			
+			<td style={{ textAlign: 'center' }}>{props.amount === null||props.amount === "" ? "-" : props.amount}</td>				
 			<td style={{ textAlign: 'right' }}>
 				<TGPAdd
 					stateRefresh={props.stateRefresh}

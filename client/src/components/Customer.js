@@ -7,6 +7,7 @@ function Customer(props) {
 	return (
 		<tr>
 			<td style={{ textAlign: 'center' }}>{props.customer_id}</td>
+			<td style={{ textAlign: 'center' }}>{props.make_time}</td>
 			<td>
 				<Link
 					style={{ display: 'block' }}
@@ -16,7 +17,7 @@ function Customer(props) {
 				</Link>
 			</td>
 			<td style={{ textAlign: 'center' }}>{props.status}</td>
-			<td style={{ textAlign: 'center' }}>{props.update_time}</td>
+			<td style={{ textAlign: 'center' }}>{props.amount === "null" ? "-" : props.amount}</td>
 			<td style={{ textAlign: 'right' }}>
 				<CustomerAdd
 					stateRefresh={props.stateRefresh}

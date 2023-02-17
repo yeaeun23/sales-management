@@ -32,12 +32,12 @@ function CustomerAdd(props) {
 	}
 
 	const handleClickOpen = () => {
+		setCustomerName(props.name);
+		setCustomerStatus(props.status_code);
 		setOpen(true);
 	}
 
 	const handleClose = () => {
-		setCustomerName("");
-		setCustomerStatus(0);
 		setOpen(false);
 	}
 
@@ -55,8 +55,6 @@ function CustomerAdd(props) {
 				props.stateRefresh(); // 목록 새로고침
 			});
 
-			setCustomerName("");
-			setCustomerStatus(0);
 			setOpen(false);
 		}
 	}

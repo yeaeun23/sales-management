@@ -15,6 +15,10 @@
   font-weight: bold;
 }
 
+.total_amount {
+  float: right;
+}
+
 .progress {
   margin: 16px;
   background-color: transparent !important;

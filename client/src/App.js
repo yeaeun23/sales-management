@@ -14,8 +14,8 @@ function App() {
 
 	return (
 		<Routes>
-			<Route path="/" element={<CustomerList />} />
-			<Route path="/:customer_id" element={<TGPList />} />
+			<Route path="/" element={<CustomerList inputSize={inputSize} />} />
+			<Route path="/:customer_id" element={<TGPList inputSize={inputSize} />} />
 
 			<Route path="/:customer_id/:tgp_id" element={<TGPDetail inputSize={inputSize} />} />
 			<Route path="/:customer_id/:tgp_id/:form_id/step1" element={<TGPDetail1 inputSize={inputSize} />} />

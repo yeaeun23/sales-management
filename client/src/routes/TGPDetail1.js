@@ -117,8 +117,8 @@ function TGPDetail1(props) {
                     <tr>
                       <th><Form.Label column={props.inputSize}>솔루션</Form.Label></th>
                       <td><Form.Control size={props.inputSize} type="text" name="solution" value={inputs.solution || ''} onChange={handleValueChange} maxLength="20" /></td>
-                      <th><Form.Label column={props.inputSize}>금액 (원)</Form.Label></th>
-                      <td><Form.Control size={props.inputSize} type="text" name="amount" value={inputs.amount || ''} onChange={handleValueChange} maxLength="20" />
+                      <th><Form.Label column={props.inputSize}>금액(원)</Form.Label></th>
+                      <td><Form.Control size={props.inputSize} type="text" name="amount" value={inputs.amount || ''} onChange={handleValueChange} maxLength="19" />
                       </td>
                     </tr>
                     <tr>

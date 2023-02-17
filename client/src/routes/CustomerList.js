@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Form from 'react-bootstrap/Form';
 import Customer from '../components/Customer';
 import CustomerAdd from '../components/CustomerAdd';
 import '../App.css';
@@ -7,9 +8,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from 'react-bootstrap/Table';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-function CustomerList() {
+function CustomerList(props) {
   const [customer, setCustomer] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [total_amount, setTotalAmount] = useState(0);
 
   const stateRefresh = () => {
     setCustomer("");
@@ -26,6 +28,24 @@ function CustomerList() {
       .catch(err => console.log(err));
   }, []);
 
+  useEffect(() => {
+    let tmp_amount = 0;
+    const uncomma = (str) => {
+      str = String(str);
+      return str.replace(/[^\d]+/g, "");
+    };
+
+    for (let i = 0; i < customer.length; i++) {
+      tmp_amount += Number(uncomma(customer[i].amount));
+    }
+    setTotalAmount(tmp_amount);
+  }, [customer]);
+
+  const comma = (str) => {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
+  };
+
   const callApi = async() => {
     const response = await fetch('/customer');
     const body = await response.json();
@@ -41,7 +61,7 @@ function CustomerList() {
       return c.name.indexOf(searchKeyword) > -1;
     });
     return data.map((c) => {
-      return <Customer stateRefresh={stateRefresh} key={c.customer_id} customer_id={c.customer_id} name={c.name} status={c.status} status_code={c.status_code} update_time={c.update_time} />
+      return <Customer stateRefresh={stateRefresh} key={c.customer_id} customer_id={c.customer_id} name={c.name} status={c.status} status_code={c.status_code} amount={comma(c.amount)} make_time={c.make_time} />
     });
   }
 
@@ -52,23 +72,44 @@ function CustomerList() {
       <div className="paper">
         <div className="paper_title">
           <PlayArrowIcon />&nbsp;거래처
+
+          <div className="total_amount">
+            총 성공금액: {comma(total_amount)}원
+            &nbsp;&nbsp;&nbsp;
+            <Form.Select
+              size={props.inputSize}
+              title="연도 선택"
+              style={{ width: "90px", display: "inline-block" }}>
+              {
+                ["2023년", "2022년"].map((option) => (
+                  <option
+                    key={option}
+                    value={option}>
+                    {option}
+                  </option>
+                ))
+              }
+            </Form.Select>
+          </div>
         </div>
         
         <Table striped hover>
           <colgroup>
+            <col width="6%" />
+            <col width="12%" />
+            <col width="40%" />
             <col width="10%" />
-            <col width="30%" />
-            <col width="15%" />
-            <col width="25%" />
-            <col width="10%" />
-            <col width="10%" />
+            <col width="18%" />
+            <col width="7%" />
+            <col width="7%" />
           </colgroup>
           <thead>
             <tr>
-              <th style={{ textAlign: 'center' }} >No</th>
+              <th style={{ textAlign: 'center' }}>No</th>
+              <th style={{ textAlign: 'center' }}>추가일</th>
               <th>거래처</th>
-              <th style={{ textAlign: 'center' }} >진행 상태</th>
-              <th style={{ textAlign: 'center' }} >수정한 시간</th>
+              <th style={{ textAlign: 'center' }}>진행상태</th>
+              <th style={{ textAlign: 'center' }}>성공금액(원)</th>
               <th style={{ textAlign: 'right' }} colSpan="2">
                 <CustomerAdd stateRefresh={stateRefresh} kind="add" />
               </th>
@@ -78,7 +119,7 @@ function CustomerList() {
             { customer ?
               (customer.length === 0 ?
                 <tr>
-                  <td colSpan="6" align="center" className="emptyRow">
+                  <td colSpan="7" align="center" className="emptyRow">
                     거래처가 없습니다.
                   </td>
                 </tr>
@@ -87,7 +128,7 @@ function CustomerList() {
               )
               :
               <tr>
-                <td colSpan="6" align="center">
+                <td colSpan="7" align="center">
                   <CircularProgress className="progress" variant="indeterminate" />
                 </td>
               </tr>

@@ -24,10 +24,9 @@ const user_id = 1;
 
 // 거래처 조회
 app.get('/customer', (req, res) => {
-  let sql = "SELECT customer_id, name, (SELECT status FROM STATUS WHERE code = customer.`status`) AS `status`, `status` AS status_code, date_format(update_time, '%Y-%m-%d %H:%i:%s') AS update_time FROM CUSTOMER customer WHERE user_id = ? and delete_time IS NULL ORDER BY customer_id DESC";
-  let params = [user_id];
+  let sql = "SELECT customer_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, (SELECT `status` FROM `STATUS` WHERE `code` = customer.`status`) AS `status`, `status` AS status_code, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1) AS amount FROM CUSTOMER customer WHERE user_id = " + user_id + " and delete_time IS NULL ORDER BY customer_id DESC";
 
-  connection.query(sql, params, (err, rows, fields) => {
+  connection.query(sql, (err, rows, fields) => {
     res.send(rows);
   });
 });
@@ -73,10 +72,9 @@ app.get('/status', (req, res) => {
 
 // TGP 조회
 app.get('/tgp/:customer_id', (req, res) => {
-  let sql = "SELECT tgp_id, name, (SELECT status FROM STATUS WHERE code = tgp.`status`) AS `status`, `status` AS status_code, date_format(update_time, '%Y-%m-%d %H:%i:%s') AS update_time FROM TGP tgp WHERE customer_id = ? and delete_time IS NULL ORDER BY tgp_id DESC";
-  let params = [req.params.customer_id];
+  let sql = "SELECT tgp_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, (SELECT `status` FROM `STATUS` WHERE `code` = tgp.`status`) AS `status`, `status` AS status_code, (SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1) AS amount FROM TGP tgp WHERE customer_id = " + req.params.customer_id + " and delete_time IS NULL ORDER BY tgp_id DESC";
 
-  connection.query(sql, params, (err, rows, fields) => {
+  connection.query(sql, (err, rows, fields) => {
     res.send(rows);
   });
 });
@@ -113,7 +111,7 @@ app.delete('/tgp/:tgp_id', (req, res) => {
 
 // TGP 내역 조회
 app.get('/tgp/:tgp_id/history', (req, res) => {
-  let sql = "SELECT form_id, date_format(update_time, '%Y년 %m월 %d일 (%H시 %i분)') AS update_time FROM FORM WHERE tgp_id = " + req.params.tgp_id + " AND complete = 1 AND delete_time IS NULL ORDER BY update_time DESC";
+  let sql = "SELECT form_id, DATE_FORMAT(update_time, '%Y년 %m월 %d일 (%H시 %i분)') AS update_time FROM FORM WHERE tgp_id = " + req.params.tgp_id + " AND complete = 1 AND delete_time IS NULL ORDER BY update_time DESC";
 
   console.log("TGP 내역 조회: " + sql);
   connection.query(sql, (err, rows, fields) => {
@@ -213,7 +211,7 @@ app.get('/tgp/:tgp_id/:form_id/copy', (req, res) => {
 app.get('/tgp/:tgp_id/:form_id/step1', (req, res) => {
   let tgp_id = req.params.tgp_id;
   let form_id = req.params.form_id;
-  let sql = "SELECT account, department, solution, amount, date_format(closingdate, '%Y-%m-%d') AS closingdate FROM FORM WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND delete_time IS NULL";
+  let sql = "SELECT account, department, solution, amount, DATE_FORMAT(closingdate, '%Y-%m-%d') AS closingdate FROM FORM WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND delete_time IS NULL";
 
   console.log("STEP1 조회: " + sql);
   connection.query(sql, (err, rows, fields) => {

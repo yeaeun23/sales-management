@@ -32,12 +32,12 @@ function TGPAdd(props) {
 	}
 
 	const handleClickOpen = () => {
+		setTgpName(props.name);
+		setTgpStatus(props.status_code);
 		setOpen(true);
 	}
 
 	const handleClose = (e) => {
-		setTgpName("");
-		setTgpStatus(0);
 		setOpen(false);
 	}
 
@@ -55,9 +55,7 @@ function TGPAdd(props) {
 				props.stateRefresh(); // 목록 새로고침
 			});
 
-			setTgpName("");
-			setTgpStatus(0);
-      setOpen(false);
+			setOpen(false);
 		}
 	}
 
