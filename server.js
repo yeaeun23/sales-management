@@ -31,7 +31,7 @@ app.get('/customer', (req, res) => {
   });
 });
 
-// 거래처 추가
+// 거래처 생성
 app.post('/customer', (req, res) => {
   let sql = 'INSERT INTO CUSTOMER VALUES (null, ?, ?, ?, NOW(), NOW(), null)';
   let params = [user_id, req.body.name, req.body.status];
@@ -70,16 +70,27 @@ app.get('/status', (req, res) => {
   });
 });
 
-// TGP 조회
-app.get('/tgp/:customer_id', (req, res) => {
-  let sql = "SELECT tgp_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, (SELECT `status` FROM `STATUS` WHERE `code` = tgp.`status`) AS `status`, `status` AS status_code, (SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1) AS amount FROM TGP tgp WHERE customer_id = " + req.params.customer_id + " and delete_time IS NULL ORDER BY tgp_id DESC";
+// TGP 연도조회
+app.get('/year/tgp/:customer_id', (req, res) => {
+  let sql = "SELECT DISTINCT(CONCAT(YEAR(make_time), '년')) AS year FROM TGP WHERE customer_id = " + req.params.customer_id + " AND delete_time IS NULL ORDER BY make_time DESC";
 
   connection.query(sql, (err, rows, fields) => {
     res.send(rows);
   });
 });
 
-// TGP 추가
+// TGP 조회
+app.get('/tgp/:customer_id/makeyear/:year', (req, res) => {
+  let year = req.params.year.replace("년", "");
+  let sql = "SELECT tgp_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, (SELECT `status` FROM `STATUS` WHERE `code` = tgp.`status`) AS `status`, `status` AS status_code, (SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1) AS amount FROM TGP tgp WHERE customer_id = " + req.params.customer_id + " AND delete_time IS NULL" + (year === "all" ? "" : " AND YEAR(make_time) = " + year) + " ORDER BY tgp_id DESC";
+
+  console.log("TGP 조회: " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// TGP 생성
 app.post('/tgp/:customer_id', (req, res) => {
   let sql = 'INSERT INTO TGP VALUES (null, ?, ?, ?, NOW(), NOW(), null);';
   let params = [req.params.customer_id, req.body.name, req.body.status];

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import Login from "./routes/Login";
 import CustomerList from "./routes/CustomerList";
 import TGPList from "./routes/TGPList";
 import TGPDetail from "./routes/TGPDetail";
@@ -14,6 +15,7 @@ function App() {
 
 	return (
 		<Routes>
+			<Route path="/login" element={<Login />} />
 			<Route path="/" element={<CustomerList inputSize={inputSize} />} />
 			<Route path="/:customer_id" element={<TGPList inputSize={inputSize} />} />
 

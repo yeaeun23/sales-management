@@ -28,7 +28,7 @@ function TGPDelete(props) {
 	}
 
 	return (
-		<div>
+		<div style={{ display: "inline-block" }}>
 			<Button variant="danger" size="sm" onClick={handleClickOpen}>
 				삭제
 			</Button>

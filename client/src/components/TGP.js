@@ -15,10 +15,10 @@ function TGP(props) {
 					state={{ tgp_name: props.name, customer_name: props.customer_name }}>
 					{props.name}
 				</Link>
-			</td>		
-			<td style={{ textAlign: 'center' }}>{props.status}</td>			
-			<td style={{ textAlign: 'center' }}>{props.amount === null||props.amount === "" ? "-" : props.amount}</td>				
-			<td style={{ textAlign: 'right' }}>
+			</td>
+			<td style={{ textAlign: 'center' }}>{props.status}</td>
+			<td style={{ textAlign: 'right' }}>{props.amount === null || props.amount === "" ? "-" : props.amount}</td>
+			<td colSpan="2" style={{ textAlign: 'right' }}>
 				<TGPAdd
 					stateRefresh={props.stateRefresh}
 					tgp_id={props.tgp_id}
@@ -26,8 +26,7 @@ function TGP(props) {
 					name={props.name}
 					status_code={props.status_code}
 					kind="edit" />
-			</td>
-			<td style={{ textAlign: 'right' }}>
+				&nbsp;&nbsp;
 				<TGPDelete
 					stateRefresh={props.stateRefresh}
 					tgp_id={props.tgp_id}

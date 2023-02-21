@@ -16,17 +16,16 @@ function Customer(props) {
 					{props.name}
 				</Link>
 			</td>
-			<td style={{ textAlign: 'center' }}>{props.status}</td>
-			<td style={{ textAlign: 'center' }}>{props.amount === "null" ? "-" : props.amount}</td>
-			<td style={{ textAlign: 'right' }}>
+			<td style={{ textAlign: 'right' }}>{props.amount === "null" ? "-" : props.amount}</td>
+			<td style={{ textAlign: 'right' }}>{props.amount === "null" ? "-" : props.amount}</td>
+			<td colSpan="2" style={{ textAlign: 'right' }}>
 				<CustomerAdd
 					stateRefresh={props.stateRefresh}
 					customer_id={props.customer_id}
 					name={props.name}
 					status_code={props.status_code}
 					kind="edit" />
-			</td>
-			<td style={{ textAlign: 'right' }}>
+				&nbsp;&nbsp;
 				<CustomerDelete
 					stateRefresh={props.stateRefresh}
 					customer_id={props.customer_id}

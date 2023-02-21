@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { post, put } from "axios";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,16 +14,24 @@ function TGPAdd(props) {
 	const [tgpName, setTgpName] = useState("");
 	const [tgpStatus, setTgpStatus] = useState(0);
 
-	useEffect(() => {
-		if (props.kind === "edit") {
-			setTgpName(props.name);
-			setTgpStatus(props.status_code);
-		}
-
+	const handleClickOpen = () => {
 		callApi()
 			.then(res => setStatus(res))
+			.then(() => {
+				if (props.kind === "edit") {
+					setTgpName(props.name);
+					setTgpStatus(props.status_code);
+				}
+				else {
+					setTgpName("");
+					setTgpStatus(0);
+				}
+			})
+			.then(() => {
+				setOpen(true);
+			})
 			.catch(err => console.log(err));
-	}, []);
+	}
 
 	const callApi = async () => {
 		const response = await fetch('/status');
@@ -31,13 +39,7 @@ function TGPAdd(props) {
 		return body;
 	}
 
-	const handleClickOpen = () => {
-		setTgpName(props.name);
-		setTgpStatus(props.status_code);
-		setOpen(true);
-	}
-
-	const handleClose = (e) => {
+	const handleClose = () => {
 		setOpen(false);
 	}
 
@@ -50,11 +52,16 @@ function TGPAdd(props) {
 	}
 
 	const handleFormSubmit = () => {
-		if (tgpName !== "") {
-			addTgp().then((res) => {
+		if (tgpName === "" || tgpName === undefined) {
+			alert("TGP 이름을 입력하세요.");
+		}
+		else if (tgpStatus === "" || tgpStatus === undefined) {
+			alert("진행 상태를 선택하세요.");
+		}
+		else {
+			addTgp().then(() => {
 				props.stateRefresh(); // 목록 새로고침
 			});
-
 			setOpen(false);
 		}
 	}
@@ -81,9 +88,9 @@ function TGPAdd(props) {
 	}
 
 	return (
-		<div>
+		<div style={{ display: "inline-block" }}>
 			<Button variant={(props.kind === "add") ? "primary" : "secondary"} size="sm" onClick={handleClickOpen}>
-				{(props.kind === "add") ? "TGP 추가" : "수정"}
+				{(props.kind === "add") ? "TGP 생성" : "수정"}
 			</Button>
 			<Dialog
 				open={open}
@@ -91,16 +98,17 @@ function TGPAdd(props) {
 				fullWidth={true}
 				maxWidth="xs">
 				<DialogTitle>
-					TGP {(props.kind === "add") ? "추가" : "수정"}
+					TGP {(props.kind === "add") ? "생성" : "수정"}
 				</DialogTitle>
 				<DialogContent>
 					<TextField
 						autoFocus
 						fullWidth
+						required
 						label="TGP 이름"
 						type="text"
 						name="tgpName"
-						value={tgpName}
+						value={tgpName || ''}
 						onChange={handleValueChange}
 						inputProps={{ maxLength: 20 }}
 						placeholder="20자 이내">
@@ -108,10 +116,11 @@ function TGPAdd(props) {
 					<br /><br />
 					<TextField
 						fullWidth
+						required
 						label="진행 상태"
 						select
 						name="tgpStatus"
-						value={tgpStatus}
+						value={tgpStatus || 0}
 						onChange={handleSelectChange}>
 						{
 							status.map((c) => {
@@ -122,7 +131,7 @@ function TGPAdd(props) {
 				</DialogContent>
 				<DialogActions>
 					<Button variant="primary" size="sm" onClick={handleFormSubmit}>
-						{(props.kind === "add") ? "추가" : "수정"}
+						{(props.kind === "add") ? "생성" : "수정"}
 					</Button>
 					<Button variant="secondary" size="sm" onClick={handleClose}>
 						취소

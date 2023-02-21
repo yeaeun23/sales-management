@@ -46,7 +46,7 @@ function CustomerList(props) {
     return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
   };
 
-  const callApi = async() => {
+  const callApi = async () => {
     const response = await fetch('/customer');
     const body = await response.json();
     return body;
@@ -68,58 +68,57 @@ function CustomerList(props) {
   return (
     <div className="root">
       <Navi searchKeyword={searchKeyword} handleValueChange={handleValueChange} />
-      
+
       <div className="paper">
         <div className="paper_title">
           <PlayArrowIcon />&nbsp;거래처
 
           <div className="total_amount">
-            총 성공금액: {comma(total_amount)}원
-            &nbsp;&nbsp;&nbsp;
-            <Form.Select
-              size={props.inputSize}
-              title="연도 선택"
-              style={{ width: "90px", display: "inline-block" }}>
-              {
-                ["2023년", "2022년"].map((option) => (
-                  <option
-                    key={option}
-                    value={option}>
-                    {option}
-                  </option>
-                ))
-              }
-            </Form.Select>
+            {/* 총 성공 수주 금액: {comma(total_amount)}원 */}
           </div>
         </div>
-        
+
         <Table striped hover>
           <colgroup>
-            <col width="6%" />
+            <col width="5%" />
             <col width="12%" />
-            <col width="40%" />
-            <col width="10%" />
+            <col width="34%" />
             <col width="18%" />
-            <col width="7%" />
-            <col width="7%" />
+            <col width="18%" />
+            <col width="13%" />
           </colgroup>
-          <thead>
+          <thead style={{ borderBottom: "3px solid #DFE2E5" }}>
             <tr>
               <th style={{ textAlign: 'center' }}>No</th>
-              <th style={{ textAlign: 'center' }}>추가일</th>
+              <th style={{ textAlign: 'center' }}>생성일</th>
               <th>거래처</th>
-              <th style={{ textAlign: 'center' }}>진행상태</th>
-              <th style={{ textAlign: 'center' }}>성공금액(원)</th>
+              <th style={{ textAlign: 'right' }}>
+                <Form.Select
+                  size={props.inputSize}
+                  title="연도 선택"
+                  style={{ width: "84px", display: "inline-block", padding: "0 0 0 6px" }}>
+                  {
+                    ["2023년", "2022년"].map((option) => (
+                      <option
+                        key={option}
+                        value={option}>
+                        {option}
+                      </option>
+                    ))
+                  }
+                </Form.Select>
+                &nbsp;TGP<br />총 성공금액(원)</th>
+              <th style={{ textAlign: 'right' }}>전체 TGP<br />총 성공금액(원)</th>
               <th style={{ textAlign: 'right' }} colSpan="2">
                 <CustomerAdd stateRefresh={stateRefresh} kind="add" />
               </th>
             </tr>
           </thead>
           <tbody>
-            { customer ?
+            {customer ?
               (customer.length === 0 ?
                 <tr>
-                  <td colSpan="7" align="center" className="emptyRow">
+                  <td colSpan="6" align="center" className="emptyRow">
                     거래처가 없습니다.
                   </td>
                 </tr>
@@ -128,12 +127,20 @@ function CustomerList(props) {
               )
               :
               <tr>
-                <td colSpan="7" align="center">
+                <td colSpan="6" align="center">
                   <CircularProgress className="progress" variant="indeterminate" />
                 </td>
               </tr>
             }
           </tbody>
+          <tfoot style={{ borderTop: "2px solid #DFE2E5" }}>
+            <tr>
+              <td colSpan="3" align="right" style={{ fontWeight: "bold" }}>총 성공금액(원)</td>
+              <td align="right" style={{ fontWeight: "bold" }}>{comma(total_amount)}</td>
+              <td align="right" style={{ fontWeight: "bold" }}>{comma(total_amount)}</td>
+              <td colSpan="2"></td>
+            </tr>
+          </tfoot>
         </Table>
       </div>
     </div>

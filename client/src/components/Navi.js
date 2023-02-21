@@ -56,7 +56,7 @@ function Navi(props) {
                 <SearchIcon />
               </div>
               <InputBase
-                placeholder="검색하기"
+                placeholder="이름 검색"
                 className="inputRoot"
                 name="searchKeyword"
                 value={props.searchKeyword}
