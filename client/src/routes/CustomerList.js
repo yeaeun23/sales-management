@@ -7,47 +7,87 @@ import Navi from "../components/Navi";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from 'react-bootstrap/Table';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import * as common from "../common.js";
 
 function CustomerList(props) {
+  const [year, setYear] = useState([]);
+  const [selectedYear, setSelectedYear] = useState("");
   const [customer, setCustomer] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [total_amount_year, setTotalAmountYear] = useState(0);
   const [total_amount, setTotalAmount] = useState(0);
 
-  const stateRefresh = () => {
-    setCustomer("");
-    setSearchKeyword("");
-
-    callApi()
-      .then(res => setCustomer(res))
-      .catch(err => console.log(err));
-  }
-
   useEffect(() => {
-    callApi()
-      .then(res => setCustomer(res))
+    const getYear = async () => {
+      const response = await fetch('/year/customer/1');
+      const body = await response.json();
+      return body;
+    }
+    getYear()
+      .then(res => setYear(res))
       .catch(err => console.log(err));
   }, []);
 
   useEffect(() => {
-    let tmp_amount = 0;
-    const uncomma = (str) => {
-      str = String(str);
-      return str.replace(/[^\d]+/g, "");
-    };
-
-    for (let i = 0; i < customer.length; i++) {
-      tmp_amount += Number(uncomma(customer[i].amount));
+    if (year.length !== 0) {
+      setSelectedYear(year[0].year.replace("년", ""));
     }
-    setTotalAmount(tmp_amount);
+  }, [year]);
+
+  useEffect(() => {
+    setCustomer("");
+
+    if (selectedYear !== "") {  
+      getCustomer()
+        .then(res => setCustomer(res))
+        .catch(err => console.log(err));
+    }
+    else {
+      getCustomer2()
+        .then(res => setCustomer(res))
+        .catch(err => console.log(err));
+    }
+  }, [selectedYear]);
+
+  useEffect(() => {
+    if (customer !== "") {
+      let tmp_amount_year = 0;
+      let tmp_amount = 0;
+
+      for (let i = 0; i < customer.length; i++) {
+        tmp_amount_year += Number(common.uncomma(customer[i].amount_year));
+        tmp_amount += Number(common.uncomma(customer[i].amount));
+      }
+
+      setTotalAmountYear(tmp_amount_year);
+      setTotalAmount(tmp_amount);
+    }
   }, [customer]);
 
-  const comma = (str) => {
-    str = String(str);
-    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
-  };
+  const stateRefresh = () => {
+    setCustomer("");
+      setSearchKeyword("");
 
-  const callApi = async () => {
-    const response = await fetch('/customer');
+    if (selectedYear !== "") {
+      getCustomer()
+      .then(res => setCustomer(res))
+      .catch(err => console.log(err));
+    }  
+    else {
+      getCustomer2()
+      .then(res => setCustomer(res))
+      .catch(err => console.log(err));
+    }  
+  }
+
+  const getCustomer = async () => {
+    const response = await fetch('/customer/1/makeyear/' + selectedYear);
+    const body = await response.json();
+    return body;
+  }
+
+  const getCustomer2 = async () => {
+    const response = await fetch('/customer/1/makeyear');
     const body = await response.json();
     return body;
   }
@@ -56,12 +96,16 @@ function CustomerList(props) {
     setSearchKeyword(e.target.value);
   }
 
+  const handleChangeYear = (e) => {
+    setSelectedYear(e.target.value);
+  }
+
   const filteredComponents = (data) => {
     data = data.filter((c) => {
       return c.name.indexOf(searchKeyword) > -1;
     });
     return data.map((c) => {
-      return <Customer stateRefresh={stateRefresh} key={c.customer_id} customer_id={c.customer_id} name={c.name} status={c.status} status_code={c.status_code} amount={comma(c.amount)} make_time={c.make_time} />
+      return <Customer stateRefresh={stateRefresh} key={c.customer_id} customer_id={c.customer_id} name={c.name} amount_year={common.comma(c.amount_year)} amount={common.comma(c.amount)} make_time={c.make_time} />
     });
   }
 
@@ -73,8 +117,9 @@ function CustomerList(props) {
         <div className="paper_title">
           <PlayArrowIcon />&nbsp;거래처
 
-          <div className="total_amount">
-            {/* 총 성공 수주 금액: {comma(total_amount)}원 */}
+          <div className="total_amount" style={{ textAlign: "right" }}>
+            {selectedYear} 총 성공 수주금액: {common.comma(total_amount_year)}원<br />
+            전체년도 총 성공 수주금액: {common.comma(total_amount)}원
           </div>
         </div>
 
@@ -95,20 +140,17 @@ function CustomerList(props) {
               <th style={{ textAlign: 'right' }}>
                 <Form.Select
                   size={props.inputSize}
-                  title="연도 선택"
+                  name="year"
+                  onChange={handleChangeYear}
                   style={{ width: "84px", display: "inline-block", padding: "0 0 0 6px" }}>
                   {
-                    ["2023년", "2022년"].map((option) => (
-                      <option
-                        key={option}
-                        value={option}>
-                        {option}
-                      </option>
-                    ))
+                    year.map((item) => {
+                      return <option key={item.year} value={item.year}>{item.year}</option>
+                    })
                   }
                 </Form.Select>
-                &nbsp;TGP<br />총 성공금액(원)</th>
-              <th style={{ textAlign: 'right' }}>전체 TGP<br />총 성공금액(원)</th>
+                &nbsp;TGP<br />성공금액(원)</th>
+              <th style={{ textAlign: 'right' }}>전체 TGP<br />성공금액(원)</th>
               <th style={{ textAlign: 'right' }} colSpan="2">
                 <CustomerAdd stateRefresh={stateRefresh} kind="add" />
               </th>
@@ -136,8 +178,8 @@ function CustomerList(props) {
           <tfoot style={{ borderTop: "2px solid #DFE2E5" }}>
             <tr>
               <td colSpan="3" align="right" style={{ fontWeight: "bold" }}>총 성공금액(원)</td>
-              <td align="right" style={{ fontWeight: "bold" }}>{comma(total_amount)}</td>
-              <td align="right" style={{ fontWeight: "bold" }}>{comma(total_amount)}</td>
+              <td align="right" style={{ fontWeight: "bold" }}>{common.comma(total_amount_year)}</td>
+              <td align="right" style={{ fontWeight: "bold" }}>{common.comma(total_amount)}</td>
               <td colSpan="2"></td>
             </tr>
           </tfoot>

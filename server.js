@@ -22,17 +22,40 @@ connection.connect();
 
 const user_id = 1;
 
-// 거래처 조회
-app.get('/customer', (req, res) => {
-  let sql = "SELECT customer_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, (SELECT `status` FROM `STATUS` WHERE `code` = customer.`status`) AS `status`, `status` AS status_code, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1) AS amount FROM CUSTOMER customer WHERE user_id = " + user_id + " and delete_time IS NULL ORDER BY customer_id DESC";
+// 거래처 연도조회
+app.get('/year/customer/:user_id', (req, res) => {
+  let sql = "SELECT DISTINCT(CONCAT(YEAR(make_time), '년')) AS year FROM TGP WHERE delete_time IS NULL AND customer_id IN (SELECT customer_id FROM CUSTOMER WHERE user_id = " + req.params.user_id + " AND delete_time IS NULL) ORDER BY YEAR DESC";
 
+  console.log("거래처 연도조회: " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 거래처 조회 1
+app.get('/customer/:user_id/makeyear/:year', (req, res) => {
+  console.log(req.params.year)
+  let year = req.params.year.replace("년", "");
+  let sql = "SELECT customer_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1 AND YEAR(make_time) = " + year + ") AS amount_year, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1) AS amount FROM CUSTOMER customer WHERE user_id = " + req.params.user_id + " AND delete_time IS NULL ORDER BY customer_id DESC";
+
+  console.log("거래처 조회: " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 거래처 조회 2
+app.get('/customer/:user_id/makeyear', (req, res) => {
+  let sql = "SELECT customer_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, '-' AS amount_year, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1) AS amount FROM CUSTOMER customer WHERE user_id = " + req.params.user_id + " AND delete_time IS NULL ORDER BY customer_id DESC";
+
+  console.log("거래처 조회: " + sql);
   connection.query(sql, (err, rows, fields) => {
     res.send(rows);
   });
 });
 
 // 거래처 생성
-app.post('/customer', (req, res) => {
+app.post('/customer/:user_id', (req, res) => {
   let sql = 'INSERT INTO CUSTOMER VALUES (null, ?, ?, ?, NOW(), NOW(), null)';
   let params = [user_id, req.body.name, req.body.status];
 

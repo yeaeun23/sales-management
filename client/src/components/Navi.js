@@ -27,7 +27,7 @@ function Navi(props) {
     { text: "홈", link: "/", icon: <HomeIcon /> },
     { text: "거래처", link: "/", icon: <FormatListBulletedIcon /> },
     { text: "설정", link: "/", icon: <SettingsIcon /> },
-    { text: "로그아웃", link: "/", icon: <LogoutIcon /> },
+    { text: "로그아웃", link: "/login", icon: <LogoutIcon /> },
   ]
 
   const toggleMenu = (open) => (e) => {

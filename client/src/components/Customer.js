@@ -16,7 +16,7 @@ function Customer(props) {
 					{props.name}
 				</Link>
 			</td>
-			<td style={{ textAlign: 'right' }}>{props.amount === "null" ? "-" : props.amount}</td>
+			<td style={{ textAlign: 'right' }}>{props.amount_year === "null" ? "-" : props.amount_year}</td>
 			<td style={{ textAlign: 'right' }}>{props.amount === "null" ? "-" : props.amount}</td>
 			<td colSpan="2" style={{ textAlign: 'right' }}>
 				<CustomerAdd

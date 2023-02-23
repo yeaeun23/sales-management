@@ -42,7 +42,7 @@ function CustomerAdd(props) {
 	}
 
 	const addCustomer = () => {
-		let url = '/customer';
+		let url = '/customer/1';
 		url += (props.kind === "add") ? '' : '/' + props.customer_id;
 
 		const data = {

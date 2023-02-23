@@ -9,6 +9,7 @@ import Table from 'react-bootstrap/Table';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useParams, useLocation, Link } from 'react-router-dom';
+import * as common from "../common.js";
 
 function TGPList(props) {
   const [year, setYear] = useState([]);
@@ -31,29 +32,25 @@ function TGPList(props) {
   }, []);
 
   useEffect(() => {
-    setTGP("");
-    getTGP()
-      .then(res => setTGP(res))
-      .catch(err => console.log(err));
+    if (selectedYear !== "") {
+      setTGP("");
+      getTGP()
+        .then(res => setTGP(res))
+        .catch(err => console.log(err));
+    }
   }, [selectedYear]);
 
   useEffect(() => {
-    let tmp_amount = 0;
-    for (let i = 0; i < tgp.length; i++) {
-      tmp_amount += Number(uncomma(tgp[i].amount));
+    if (tgp !== "") {
+      let tmp_amount = 0;
+
+      for (let i = 0; i < tgp.length; i++) {
+        tmp_amount += Number(common.uncomma(tgp[i].amount));
+      }
+
+      setTotalAmount(tmp_amount);
     }
-    setTotalAmount(tmp_amount);
   }, [tgp]);
-
-  const uncomma = (str) => {
-    str = String(str);
-    return str.replace(/[^\d]+/g, "");
-  };
-
-  const comma = (str) => {
-    str = String(str);
-    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
-  };
 
   const stateRefresh = () => {
     setTGP("");
@@ -99,7 +96,7 @@ function TGPList(props) {
           {customer_name}
 
           <div className="total_amount">
-            총 금액 : {comma(total_amount)}원
+            총 수주금액 : {common.comma(total_amount)}원
           </div>
         </div>
 
@@ -159,7 +156,7 @@ function TGPList(props) {
             <tr>
               <td colSpan="3"></td>
               <td align="center" style={{ fontWeight: "bold" }}>총 금액(원)</td>
-              <td align="right">{comma(total_amount)}</td>
+              <td align="right">{common.comma(total_amount)}</td>
               <td colSpan="2"></td>
             </tr>
           </tfoot>

@@ -1,10 +1,39 @@
+.login_top,
+.login_contents {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* top */
+.login_top {
+  padding: 15px 25px;
+  height: 85px;
+}
+
+.top_logo {
+  float: left;
+  height: 100%;
+}
+
+.top_logo img {
+  height: 100%;
+}
+
+.top_notice {
+  float: right;
+  width: 50%;
+  font-size: 9pt;
+  font-weight: bold;
+}
+
+/* bg */
 .login_bg {
   position: fixed;
-  top: 0;
+  top: 85px;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("../../public/img/login_bg.jpg");
+  background-image: url("../../public/img/login_bg10.png");
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-attachment: fixed;
@@ -15,19 +44,17 @@
 }
 
 .login_contents {
-  margin: 250px auto;
-  padding: 0 100px;
-  min-width: 800px;
-  max-width: 1200px;
-  overflow: hidden;
+  padding: 220px 100px;
+  height: 100%;
 }
 
 .login_logo {
-  float: left;
+  display: inline-block;
+  width: 450px;
 }
 
 .login_logo img {
-  width: 350px;
+  width: 100%;
 }
 
 .login_inputs {
@@ -35,27 +62,22 @@
   width: 250px;
 }
 
-.login_id {
-  margin-top: 10px;
-}
-
-.login_id, .login_pw {
+.login_id,
+.login_pw {
   margin-bottom: 10px;
-  width: 100%;
-  height: 40px;
 }
 
 .login_btn {
   width: 100%;
-  height: 45px;
+  height: 40px;
   text-align: center;
   display: inline-block;
   position: relative;
   text-decoration: none;
-  text-transform: capitalize;  
+  text-transform: capitalize;
   border-radius: 6px;
   overflow: hidden;
-  transition: all 0.2s linear 0s; 
+  transition: all 0.2s linear 0s;
 }
 
 .login_btn::before {
@@ -74,7 +96,7 @@
 }
 
 .login_btn:hover {
-  text-indent: -20px;    
+  text-indent: -20px;
 }
 
 .login_btn:hover::before {
