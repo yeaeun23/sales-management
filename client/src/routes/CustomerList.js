@@ -18,11 +18,6 @@ function CustomerList(props) {
   const [total_amount, setTotalAmount] = useState(0);
 
   useEffect(() => {
-    const getYear = async () => {
-      const response = await fetch('/year/customer/1');
-      const body = await response.json();
-      return body;
-    }
     getYear()
       .then(res => setYear(res))
       .catch(err => console.log(err));
@@ -37,7 +32,7 @@ function CustomerList(props) {
   useEffect(() => {
     setCustomer("");
 
-    if (selectedYear !== "") {  
+    if (selectedYear !== "") {
       getCustomer()
         .then(res => setCustomer(res))
         .catch(err => console.log(err));
@@ -66,18 +61,27 @@ function CustomerList(props) {
 
   const stateRefresh = () => {
     setCustomer("");
-      setSearchKeyword("");
+
+    getYear()
+      .then(res => setYear(res))
+      .catch(err => console.log(err));
 
     if (selectedYear !== "") {
       getCustomer()
-      .then(res => setCustomer(res))
-      .catch(err => console.log(err));
-    }  
+        .then(res => setCustomer(res))
+        .catch(err => console.log(err));
+    }
     else {
       getCustomer2()
-      .then(res => setCustomer(res))
-      .catch(err => console.log(err));
-    }  
+        .then(res => setCustomer(res))
+        .catch(err => console.log(err));
+    }
+  }
+
+  const getYear = async () => {
+    const response = await fetch('/year/customer/1');
+    const body = await response.json();
+    return body;
   }
 
   const getCustomer = async () => {
@@ -118,7 +122,8 @@ function CustomerList(props) {
           <PlayArrowIcon />&nbsp;거래처
 
           <div className="total_amount" style={{ textAlign: "right" }}>
-            {selectedYear} 총 성공 수주금액: {common.comma(total_amount_year)}원<br />
+            {year.length === 0 ? "----" : selectedYear}
+            년 총 성공 수주금액: {common.comma(total_amount_year)}원<br />
             전체년도 총 성공 수주금액: {common.comma(total_amount)}원
           </div>
         </div>

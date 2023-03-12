@@ -1,14 +1,14 @@
-const fs = require('fs');
 const express = require('express');
-const bodyParser = require('body-parser');
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
+const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const data = fs.readFileSync('./database.json');
-const conf = JSON.parse(data);
+const fs = require('fs');
+const dbConfig = fs.readFileSync('./database.json');
+const conf = JSON.parse(dbConfig);
 const mysql = require('mysql');
 
 const connection = mysql.createConnection({
@@ -18,8 +18,13 @@ const connection = mysql.createConnection({
   port: conf.port,
   database: conf.database
 });
-connection.connect();
 
+connection.connect(function (err) {
+  if (err) throw err;
+  console.log('DB Connected!');
+});
+
+// todo: 임시 사용자
 const user_id = 1;
 
 // 거래처 연도조회
@@ -665,6 +670,5 @@ app.post('/tgp/:tgp_id/:form_id/step3/:complete', (req, res) => {
     connection.query(sql, params);
   });
 });
-
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

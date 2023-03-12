@@ -24,9 +24,9 @@ import Drawer from '@mui/material/Drawer';
 function Navi(props) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menus = [
-    { text: "홈", link: "/", icon: <HomeIcon /> },
-    { text: "거래처", link: "/", icon: <FormatListBulletedIcon /> },
-    { text: "설정", link: "/", icon: <SettingsIcon /> },
+    // { text: "홈", link: "/", icon: <HomeIcon /> },
+    { text: "홈 (거래처)", link: "/", icon: <FormatListBulletedIcon /> },
+    // { text: "설정", link: "/", icon: <SettingsIcon /> },
     { text: "로그아웃", link: "/login", icon: <LogoutIcon /> },
   ]
 

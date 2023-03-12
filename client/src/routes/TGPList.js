@@ -21,11 +21,6 @@ function TGPList(props) {
   const customer_name = useLocation().state.customer_name;
 
   useEffect(() => {
-    const getYear = async () => {
-      const response = await fetch('/year/tgp/' + customer_id);
-      const body = await response.json();
-      return body;
-    }
     getYear()
       .then(res => setYear(res))
       .catch(err => console.log(err));
@@ -54,11 +49,20 @@ function TGPList(props) {
 
   const stateRefresh = () => {
     setTGP("");
-    setSearchKeyword("");
+
+    getYear()
+      .then(res => setYear(res))
+      .catch(err => console.log(err));
 
     getTGP()
       .then(res => setTGP(res))
       .catch(err => console.log(err));
+  }
+
+  const getYear = async () => {
+    const response = await fetch('/year/tgp/' + customer_id);
+    const body = await response.json();
+    return body;
   }
 
   const getTGP = async () => {

@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 function SelectSign(props) {
   const options = [
     { value: "", color: "black", text: "● Default", title: "" },
-    { value: "G", color: "darkgray", text: "● Gray Sign", title: "불확실" },
+    { value: "G", color: "darkgray", text: "● Gray Sign", title: "불명확" },
     { value: "R", color: "red", text: "● Red Sign", title: "약점/위협 요인" },
     { value: "B", color: "blue", text: "● Blue Sign", title: "강점/기회 요인" },
   ];

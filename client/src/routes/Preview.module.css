@@ -40,8 +40,11 @@
 .prev .loading {
   font-weight: bold;
   font-size: 18px;
-  margin: 200px 0;
-  text-align: center;
+  /* 중앙정렬 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 .prev .step_area+.step_area {
@@ -50,10 +53,54 @@
 
 .prev .step_title {
   font-weight: bold;
-  padding: 0 5px;
-  font-size: 11px;
+  padding: 3px 5px;
+  position: relative;
+}
+
+.prev .step_subtitle {
+  position: absolute;
+  top: 0;
+  right: 5px;
 }
 
 .prev .step_area table+table {
   margin-left: 8px;
+}
+
+/* 아래 버튼 */
+.prev .button_area {
+  text-align: center;
+}
+
+.prev .button_area>button {
+  height: 30px;
+  font-weight: bold;
+  border: none;
+  display: inline-block;
+  color: #fff;
+}
+
+.prev .print {
+  width: 100px;
+  background-color: green;
+}
+
+.prev .print:hover {
+  background-color: darkgreen;
+}
+
+.prev .close {
+  width: 80px;
+  background-color: darkgray;
+  margin-left: 10px;
+}
+
+.prev .close:hover {
+  background-color: gray;
+}
+
+@media print {
+  .prev .button_area {
+    display: none;
+  }
 }

@@ -3,8 +3,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { useParams } from 'react-router-dom';
 import styles from "./Preview.module.css";
 
-function Preview(props) {
-  const { customer_id, tgp_id, form_id } = useParams();
+function Preview() {
+  const { tgp_id, form_id } = useParams();
   const [inputs1, setInputs1] = useState({});
   const [inputs2, setInputs2] = useState({});
   const [inputs3, setInputs3] = useState([{}]);
@@ -155,11 +155,19 @@ function Preview(props) {
       return <span style={{ color: "darkgray" }}>●</span>;
     }
     else if (sign === "R") {
-      return <span style={{ color: "red" }}>●</span>;
+      return <span style={{ color: "red" }}>▼</span>;
     }
     else if (sign === "B") {
-      return <span style={{ color: "blue" }}>●</span>;
+      return <span style={{ color: "blue" }}>▲</span>;
     }
+  }
+
+  const onPrint = () => {
+    window.print();
+  }
+
+  const onClose = () => {
+    window.close();
   }
 
   return (
@@ -191,7 +199,16 @@ function Preview(props) {
           </div>
 
           <div className={styles.step_area}>
-            <div className={styles.step_title}>In The Funnel</div>
+            <div className={styles.step_title}>
+              In The Funnel
+              <div className={styles.step_subtitle}>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Sign :&nbsp;
+                <span style={{ color: "blue" }}>▲</span> 강점/기회,&nbsp;
+                <span style={{ color: "red" }}>▼</span> 약점/위협,&nbsp;
+                <span style={{ color: "darkgray" }}>●</span> 불명확
+              </div>
+            </div>
             <table>
               <thead>
                 <tr>
@@ -426,18 +443,22 @@ function Preview(props) {
                           </td>
                         :
                         ""
-                      }   
+                      }
                     </tr>
                   )
                 })}
               </tbody>
             </table>
           </div>
+
+          <div className={`${styles.step_area} ${styles.button_area}`}>
+            <button type="button" className={styles.print} onClick={onPrint}>인쇄하기</button>
+            <button type="button" className={styles.close} onClick={onClose}>닫기</button>
+          </div>
         </div>
         :
         <div className={styles.loading}>
           <CircularProgress className="progress" variant="indeterminate" />
-          <br />
           Loading..
         </div>
       }
