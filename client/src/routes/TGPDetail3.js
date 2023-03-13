@@ -30,12 +30,12 @@ function TGPDetail3(props) {
 
   useEffect(() => {
     const setInputData1 = async () => {
-      const response = await fetch('/tgp/' + tgp_id + '/' + form_id + '/strategy1/' + initStrategy);
+      const response = await fetch('/api/tgp/' + tgp_id + '/' + form_id + '/strategy1/' + initStrategy);
       const body = await response.json();
       return body;
     }
     const setInputData2 = async () => {
-      const response = await fetch('/tgp/' + form_id + '/strategy2');
+      const response = await fetch('/api/tgp/' + form_id + '/strategy2');
       const body = await response.json();
       return body;
     }
@@ -56,7 +56,7 @@ function TGPDetail3(props) {
 
   useEffect(() => {
     const setInputData3 = async () => {
-      const response = await fetch('/tgp/' + form_id + '/action');
+      const response = await fetch('/api/tgp/' + form_id + '/action');
       const body = await response.json();
       return body;
     }
@@ -70,7 +70,7 @@ function TGPDetail3(props) {
 
   useEffect(() => {
     const setInputData4 = async () => {
-      const response = await fetch('/tgp/' + tgp_id + '/' + form_id + '/step3');
+      const response = await fetch('/api/tgp/' + tgp_id + '/' + form_id + '/step3');
       const body = await response.json();
       return body;
     }
@@ -154,7 +154,7 @@ function TGPDetail3(props) {
         saveInputData("1");
 
         // 이동
-        const url = `/${customer_id}`;
+        const url = `/api/${customer_id}`;
         const state = {
           tgp_name: tgp_name,
           customer_name: customer_name
@@ -189,7 +189,7 @@ function TGPDetail3(props) {
   }
 
   const handlePreview = () => {
-    const url = `/${customer_id}/${tgp_id}/${form_id}/preview`;
+    const url = `/api/${customer_id}/${tgp_id}/${form_id}/preview`;
     window.open(url, "_blank", "width=1365,height=800");
   }
 

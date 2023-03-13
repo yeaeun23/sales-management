@@ -34,7 +34,7 @@ function TGPAdd(props) {
 	}
 
 	const callApi = async () => {
-		const response = await fetch('/status');
+		const response = await fetch('/api/status');
 		const body = await response.json();
 		return body;
 	}

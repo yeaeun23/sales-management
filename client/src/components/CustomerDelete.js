@@ -23,7 +23,7 @@ function CustomerDelete(props) {
 	}
 
 	const deleteCustomer = () => {
-		const url = '/customer/' + props.customer_id;
+		const url = '/api/customer/' + props.customer_id;
 		fetch(url, { method: 'DELETE' });
 	}
 

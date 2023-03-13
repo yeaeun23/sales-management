@@ -79,19 +79,19 @@ function CustomerList(props) {
   }
 
   const getYear = async () => {
-    const response = await fetch('/year/customer/1');
+    const response = await fetch('/api/year/customer/1');
     const body = await response.json();
     return body;
   }
 
   const getCustomer = async () => {
-    const response = await fetch('/customer/1/makeyear/' + selectedYear);
+    const response = await fetch('/api/customer/1/makeyear/' + selectedYear);
     const body = await response.json();
     return body;
   }
 
   const getCustomer2 = async () => {
-    const response = await fetch('/customer/1/makeyear');
+    const response = await fetch('/api/customer/1/makeyear');
     const body = await response.json();
     return body;
   }

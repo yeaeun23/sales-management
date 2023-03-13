@@ -23,7 +23,7 @@ function TGPDelete(props) {
 	}
 
 	const deleteTgp = () => {
-		const url = '/tgp/' + props.tgp_id;
+		const url = '/api/tgp/' + props.tgp_id;
 		fetch(url, { method: 'DELETE' });
 	}
 

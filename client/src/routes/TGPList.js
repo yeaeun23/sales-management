@@ -60,13 +60,13 @@ function TGPList(props) {
   }
 
   const getYear = async () => {
-    const response = await fetch('/year/tgp/' + customer_id);
+    const response = await fetch('/api/year/tgp/' + customer_id);
     const body = await response.json();
     return body;
   }
 
   const getTGP = async () => {
-    const response = await fetch('/tgp/' + customer_id + '/makeyear/' + selectedYear);
+    const response = await fetch('/api/tgp/' + customer_id + '/makeyear/' + selectedYear);
     const body = await response.json();
     return body;
   }

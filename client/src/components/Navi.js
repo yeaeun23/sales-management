@@ -45,7 +45,7 @@ function Navi(props) {
             <MenuIcon />
           </IconButton>
           <Typography className="title" variant="h6" noWrap>
-            Sales Master
+            <img src="img/logo_gauge_eng_white.png" width="150px" alt="THE GAUGE" />
           </Typography>
           <div className="grow" />
           {(props.searchKeyword === undefined) ?

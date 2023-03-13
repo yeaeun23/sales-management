@@ -22,7 +22,7 @@ function TGPDetail1(props) {
 
   useEffect(() => {
     const setInputData = async () => {
-      const response = await fetch('/tgp/' + tgp_id + '/' + form_id + '/step1');
+      const response = await fetch('/api/tgp/' + tgp_id + '/' + form_id + '/step1');
       const body = await response.json();
       return body;
     }

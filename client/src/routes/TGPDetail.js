@@ -21,7 +21,7 @@ function TGPDetail(props) {
 
   useEffect(() => {
     const getHistory = async () => {
-      const response = await fetch('/tgp/' + tgp_id + '/history');
+      const response = await fetch('/api/tgp/' + tgp_id + '/history');
       const body = await response.json();
       return body;
     }
@@ -84,7 +84,7 @@ function TGPDetail(props) {
 
     getFormId(api).then(res => {
       const returnedFormId = res[0].form_id;
-      const url = `/${customer_id}/${tgp_id}/${returnedFormId}/step1`;
+      const url = `/api/${customer_id}/${tgp_id}/${returnedFormId}/step1`;
       const state = {
         tgp_name: tgp_name,
         customer_name: customer_name
@@ -94,7 +94,7 @@ function TGPDetail(props) {
   }
 
   const handlePreview = () => {
-    const url = `/${customer_id}/${tgp_id}/${selectedFormId}/preview`;
+    const url = `/api/${customer_id}/${tgp_id}/${selectedFormId}/preview`;
     window.open(url, "_blank", "width=1365,height=800");
   }
 
