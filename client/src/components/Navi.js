@@ -24,9 +24,9 @@ import Drawer from '@mui/material/Drawer';
 function Navi(props) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menus = [
-    // { text: "홈", link: "/", icon: <HomeIcon /> },
-    { text: "홈 (거래처)", link: "/", icon: <FormatListBulletedIcon /> },
-    // { text: "설정", link: "/", icon: <SettingsIcon /> },
+    { text: "공지사항", link: "/", icon: <HomeIcon /> },
+    { text: "거래처", link: "/", icon: <FormatListBulletedIcon /> },
+    { text: "관리자", link: "/", icon: <SettingsIcon /> },
     { text: "로그아웃", link: "/login", icon: <LogoutIcon /> },
   ]
 
@@ -41,11 +41,11 @@ function Navi(props) {
     <div>
       <AppBar position="fixed">
         <Toolbar>
-          <IconButton className="menuButton" color="inherit" onClick={toggleMenu(true)}>
+          <IconButton className="menuButton" color="inherit" onClick={toggleMenu(true)} title="메뉴">
             <MenuIcon />
           </IconButton>
           <Typography className="title" variant="h6" noWrap>
-            <img src="img/logo_gauge_eng_white.png" width="150px" alt="THE GAUGE" />
+            <img src={process.env.PUBLIC_URL + '/img/logo_gauge_eng_white.png'} width="150px" alt="THE GAUGE" />
           </Typography>
           <div className="grow" />
           {(props.searchKeyword === undefined) ?
@@ -77,7 +77,7 @@ function Navi(props) {
           onKeyDown={toggleMenu(false)}>
           <List style={{ paddingTop: 0 }}>
             <ListItem style={{ backgroundColor: "#3f51b5", color: "#fff", height: "64px" }}>
-              <ListItemText primary="메뉴" />
+              <ListItemText primary="THE GAUGE" />
             </ListItem>
             {menus.map((menu) => (
               <ListItem key={menu.text} to={menu.link} component={Link} button disablePadding>

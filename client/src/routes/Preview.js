@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useParams } from 'react-router-dom';
 import styles from "./Preview.module.css";
+import { apiPrefix } from "../common";
 
 function Preview() {
   const { tgp_id, form_id } = useParams();
@@ -27,7 +28,7 @@ function Preview() {
   // 1. Target Goal Plan
   useEffect(() => {
     const setInputData1 = async () => {
-      const response = await fetch('/api/tgp/' + tgp_id + '/' + form_id + '/step1');
+      const response = await fetch(apiPrefix+'/tgp/' + tgp_id + '/' + form_id + '/step1');
       const body = await response.json();
       return body;
     }
@@ -40,7 +41,7 @@ function Preview() {
   // 2. TGP 현재 위치
   useEffect(() => {
     const setInputData2 = async () => {
-      const response = await fetch('/api/tgp/' + tgp_id + '/' + form_id + '/step2');
+      const response = await fetch(apiPrefix+'/tgp/' + tgp_id + '/' + form_id + '/step2');
       const body = await response.json();
       return body;
     }
@@ -53,7 +54,7 @@ function Preview() {
   // 3. 구매 영향력, 평가
   useEffect(() => {
     const setInputData3 = async () => {
-      const response = await fetch('/api/tgp/' + form_id + '/tdm');
+      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/tdm');
       const body = await response.json();
       return body;
     }
@@ -68,7 +69,7 @@ function Preview() {
   // 4. 경쟁 - 강점/기회
   useEffect(() => {
     const setInputData4 = async () => {
-      const response = await fetch('/api/tgp/' + form_id + '/strength');
+      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/strength');
       const body = await response.json();
       return body;
     }
@@ -83,7 +84,7 @@ function Preview() {
   // 5. 경쟁 - 약점/위협
   useEffect(() => {
     const setInputData5 = async () => {
-      const response = await fetch('/api/tgp/' + form_id + '/weakness');
+      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/weakness');
       const body = await response.json();
       return body;
     }
@@ -98,12 +99,12 @@ function Preview() {
   // 6/7. 전략 분석 요인
   useEffect(() => {
     const setInputData6 = async () => {
-      const response = await fetch('/api/tgp/' + tgp_id + '/' + form_id + '/strategy1/false');
+      const response = await fetch(apiPrefix+'/tgp/' + tgp_id + '/' + form_id + '/strategy1/false');
       const body = await response.json();
       return body;
     }
     const setInputData7 = async () => {
-      const response = await fetch('/api/tgp/' + form_id + '/strategy2');
+      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/strategy2');
       const body = await response.json();
       return body;
     }
@@ -125,7 +126,7 @@ function Preview() {
   // 8. Action Plan
   useEffect(() => {
     const setInputData8 = async () => {
-      const response = await fetch('/api/tgp/' + form_id + '/action');
+      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/action');
       const body = await response.json();
       return body;
     }
@@ -140,7 +141,7 @@ function Preview() {
   // 9. 전략 분석 방안
   useEffect(() => {
     const setInputData9 = async () => {
-      const response = await fetch('/api/tgp/' + tgp_id + '/' + form_id + '/step3');
+      const response = await fetch(apiPrefix+'/tgp/' + tgp_id + '/' + form_id + '/step3');
       const body = await response.json();
       return body;
     }
@@ -155,10 +156,10 @@ function Preview() {
       return <span style={{ color: "darkgray" }}>●</span>;
     }
     else if (sign === "R") {
-      return <span style={{ color: "red" }}>▼</span>;
+      return <span style={{ color: "red" }}>▲</span>;
     }
     else if (sign === "B") {
-      return <span style={{ color: "blue" }}>▲</span>;
+      return <span style={{ color: "blue" }}>■</span>;
     }
   }
 
@@ -204,8 +205,8 @@ function Preview() {
               <div className={styles.step_subtitle}>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 Sign :&nbsp;
-                <span style={{ color: "blue" }}>▲</span> 강점/기회,&nbsp;
-                <span style={{ color: "red" }}>▼</span> 약점/위협,&nbsp;
+                <span style={{ color: "blue" }}>■</span> 강점/기회,&nbsp;
+                <span style={{ color: "red" }}>▲</span> 약점/위협,&nbsp;
                 <span style={{ color: "darkgray" }}>●</span> 불명확
               </div>
             </div>

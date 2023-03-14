@@ -9,7 +9,7 @@ import Table from 'react-bootstrap/Table';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useParams, useLocation, Link } from 'react-router-dom';
-import * as common from "../common.js";
+import * as common from "../common";
 
 function TGPList(props) {
   const [year, setYear] = useState([]);
@@ -60,13 +60,13 @@ function TGPList(props) {
   }
 
   const getYear = async () => {
-    const response = await fetch('/api/year/tgp/' + customer_id);
+    const response = await fetch(common.apiPrefix+'/year/tgp/' + customer_id);
     const body = await response.json();
     return body;
   }
 
   const getTGP = async () => {
-    const response = await fetch('/api/tgp/' + customer_id + '/makeyear/' + selectedYear);
+    const response = await fetch(common.apiPrefix+'/tgp/' + customer_id + '/makeyear/' + selectedYear);
     const body = await response.json();
     return body;
   }

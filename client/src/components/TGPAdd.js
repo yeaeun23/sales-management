@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Button from 'react-bootstrap/Button';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
+import { apiPrefix } from '../common';
 
 function TGPAdd(props) {
 	const [open, setOpen] = useState(false);
@@ -34,7 +35,7 @@ function TGPAdd(props) {
 	}
 
 	const callApi = async () => {
-		const response = await fetch('/api/status');
+		const response = await fetch(apiPrefix+'/status');
 		const body = await response.json();
 		return body;
 	}
@@ -67,8 +68,8 @@ function TGPAdd(props) {
 	}
 
 	const addTgp = () => {
-		let url = '/tgp/';
-		url += (props.kind === "add") ? props.customer_id : props.tgp_id;
+		let api = apiPrefix+'/tgp/';
+		api += (props.kind === "add") ? props.customer_id : props.tgp_id;
 
 		const data = {
 			name: tgpName,
@@ -80,10 +81,10 @@ function TGPAdd(props) {
 		};
 
 		if (props.kind === "add") {
-			return post(url, data, config);
+			return post(api, data, config);
 		}
 		else {
-			return put(url, data, config);
+			return put(api, data, config);
 		}
 	}
 

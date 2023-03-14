@@ -12,7 +12,7 @@ import { post } from "axios";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useParams, useLocation, Link } from "react-router-dom";
-import * as common from "../common.js";
+import * as common from "../common";
 
 function TGPDetail1(props) {
   const { customer_id, tgp_id, form_id } = useParams();
@@ -22,7 +22,7 @@ function TGPDetail1(props) {
 
   useEffect(() => {
     const setInputData = async () => {
-      const response = await fetch('/api/tgp/' + tgp_id + '/' + form_id + '/step1');
+      const response = await fetch(common.apiPrefix+'/tgp/' + tgp_id + '/' + form_id + '/step1');
       const body = await response.json();
       return body;
     }
@@ -55,7 +55,7 @@ function TGPDetail1(props) {
   }
 
   const saveInputData = () => {
-    const api = '/tgp/' + tgp_id + '/' + form_id + '/step1';
+    const api = common.apiPrefix+'/tgp/' + tgp_id + '/' + form_id + '/step1';
     const data = { inputs };
     const config = {
       headers: { 'content-type': 'application/json' }

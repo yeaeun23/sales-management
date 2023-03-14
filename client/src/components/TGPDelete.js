@@ -5,6 +5,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from 'react-bootstrap/Button';
 import Typography from "@material-ui/core/Typography";
+import { apiPrefix } from "../common";
 
 function TGPDelete(props) {
 	const [open, setOpen] = useState(false);
@@ -23,8 +24,8 @@ function TGPDelete(props) {
 	}
 
 	const deleteTgp = () => {
-		const url = '/api/tgp/' + props.tgp_id;
-		fetch(url, { method: 'DELETE' });
+		const api = apiPrefix+'/tgp/' + props.tgp_id;
+		fetch(api, { method: 'DELETE' });
 	}
 
 	return (

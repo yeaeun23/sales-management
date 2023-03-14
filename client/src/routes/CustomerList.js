@@ -7,7 +7,7 @@ import Navi from "../components/Navi";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from 'react-bootstrap/Table';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import * as common from "../common.js";
+import * as common from "../common";
 
 function CustomerList(props) {
   const [year, setYear] = useState([]);
@@ -79,19 +79,19 @@ function CustomerList(props) {
   }
 
   const getYear = async () => {
-    const response = await fetch('/api/year/customer/1');
+    const response = await fetch(common.apiPrefix+'/year/customer/1');
     const body = await response.json();
     return body;
   }
 
   const getCustomer = async () => {
-    const response = await fetch('/api/customer/1/makeyear/' + selectedYear);
+    const response = await fetch(common.apiPrefix+'/customer/1/makeyear/' + selectedYear);
     const body = await response.json();
     return body;
   }
 
   const getCustomer2 = async () => {
-    const response = await fetch('/api/customer/1/makeyear');
+    const response = await fetch(common.apiPrefix+'/customer/1/makeyear');
     const body = await response.json();
     return body;
   }

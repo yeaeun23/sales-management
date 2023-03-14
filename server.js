@@ -24,11 +24,12 @@ connection.connect(function (err) {
   console.log('DB Connected!');
 });
 
+const apiPrefix = '/api';
 // todo: 임시 사용자
 const user_id = 1;
 
 // 거래처 연도조회
-app.get('/api/year/customer/:user_id', (req, res) => {
+app.get(apiPrefix + '/year/customer/:user_id', (req, res) => {
   let sql = "SELECT DISTINCT(CONCAT(YEAR(make_time), '년')) AS year FROM TGP WHERE delete_time IS NULL AND customer_id IN (SELECT customer_id FROM CUSTOMER WHERE user_id = " + req.params.user_id + " AND delete_time IS NULL) ORDER BY YEAR DESC";
 
   console.log("거래처 연도조회: " + sql);
@@ -38,7 +39,7 @@ app.get('/api/year/customer/:user_id', (req, res) => {
 });
 
 // 거래처 조회 1
-app.get('/api/customer/:user_id/makeyear/:year', (req, res) => {
+app.get(apiPrefix + '/customer/:user_id/makeyear/:year', (req, res) => {
   console.log(req.params.year)
   let year = req.params.year.replace("년", "");
   let sql = "SELECT customer_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1 AND YEAR(make_time) = " + year + ") AS amount_year, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1) AS amount FROM CUSTOMER customer WHERE user_id = " + req.params.user_id + " AND delete_time IS NULL ORDER BY customer_id DESC";
@@ -50,7 +51,7 @@ app.get('/api/customer/:user_id/makeyear/:year', (req, res) => {
 });
 
 // 거래처 조회 2
-app.get('/api/customer/:user_id/makeyear', (req, res) => {
+app.get(apiPrefix + '/customer/:user_id/makeyear', (req, res) => {
   let sql = "SELECT customer_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, '-' AS amount_year, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1) AS amount FROM CUSTOMER customer WHERE user_id = " + req.params.user_id + " AND delete_time IS NULL ORDER BY customer_id DESC";
 
   console.log("거래처 조회: " + sql);
@@ -60,7 +61,7 @@ app.get('/api/customer/:user_id/makeyear', (req, res) => {
 });
 
 // 거래처 생성
-app.post('/api/customer/:user_id', (req, res) => {
+app.post(apiPrefix + '/customer/:user_id', (req, res) => {
   let sql = 'INSERT INTO CUSTOMER VALUES (null, ?, ?, ?, NOW(), NOW(), null)';
   let params = [user_id, req.body.name, req.body.status];
 
@@ -70,7 +71,7 @@ app.post('/api/customer/:user_id', (req, res) => {
 });
 
 // 거래처 수정
-app.put('/api/customer/:customer_id', (req, res) => {
+app.put(apiPrefix + '/customer/:customer_id', (req, res) => {
   let sql = 'UPDATE CUSTOMER SET name = ?, status = ?, update_time = NOW() WHERE customer_id = ?';
   let params = [req.body.name, req.body.status, req.params.customer_id];
 
@@ -80,7 +81,7 @@ app.put('/api/customer/:customer_id', (req, res) => {
 });
 
 // 거래처 삭제
-app.delete('/api/customer/:customer_id', (req, res) => {
+app.delete(apiPrefix + '/customer/:customer_id', (req, res) => {
   let sql = 'UPDATE CUSTOMER SET delete_time = NOW() WHERE customer_id = ?';
   let params = [req.params.customer_id];
 
@@ -90,7 +91,7 @@ app.delete('/api/customer/:customer_id', (req, res) => {
 });
 
 // 상태 목록 조회
-app.get('/api/status', (req, res) => {
+app.get(apiPrefix + '/status', (req, res) => {
   let sql = "SELECT * FROM STATUS ORDER BY code ASC";
 
   connection.query(sql, (err, rows, fields) => {
@@ -99,7 +100,7 @@ app.get('/api/status', (req, res) => {
 });
 
 // TGP 연도조회
-app.get('/api/year/tgp/:customer_id', (req, res) => {
+app.get(apiPrefix + '/year/tgp/:customer_id', (req, res) => {
   let sql = "SELECT DISTINCT(CONCAT(YEAR(make_time), '년')) AS year FROM TGP WHERE customer_id = " + req.params.customer_id + " AND delete_time IS NULL ORDER BY make_time DESC";
 
   connection.query(sql, (err, rows, fields) => {
@@ -108,7 +109,7 @@ app.get('/api/year/tgp/:customer_id', (req, res) => {
 });
 
 // TGP 조회
-app.get('/api/tgp/:customer_id/makeyear/:year', (req, res) => {
+app.get(apiPrefix + '/tgp/:customer_id/makeyear/:year', (req, res) => {
   let year = req.params.year.replace("년", "");
   let sql = "SELECT tgp_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, (SELECT `status` FROM `STATUS` WHERE `code` = tgp.`status`) AS `status`, `status` AS status_code, (SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1) AS amount FROM TGP tgp WHERE customer_id = " + req.params.customer_id + " AND delete_time IS NULL" + (year === "all" ? "" : " AND YEAR(make_time) = " + year) + " ORDER BY tgp_id DESC";
 
@@ -119,7 +120,7 @@ app.get('/api/tgp/:customer_id/makeyear/:year', (req, res) => {
 });
 
 // TGP 생성
-app.post('/api/tgp/:customer_id', (req, res) => {
+app.post(apiPrefix + '/tgp/:customer_id', (req, res) => {
   let sql = 'INSERT INTO TGP VALUES (null, ?, ?, ?, NOW(), NOW(), null);';
   let params = [req.params.customer_id, req.body.name, req.body.status];
 
@@ -129,7 +130,7 @@ app.post('/api/tgp/:customer_id', (req, res) => {
 });
 
 // TGP 수정
-app.put('/api/tgp/:tgp_id', (req, res) => {
+app.put(apiPrefix + '/tgp/:tgp_id', (req, res) => {
   let sql = 'UPDATE TGP SET name = ?, status = ?, update_time = NOW() WHERE tgp_id = ?';
   let params = [req.body.name, req.body.status, req.params.tgp_id];
 
@@ -139,7 +140,7 @@ app.put('/api/tgp/:tgp_id', (req, res) => {
 });
 
 // TGP 삭제
-app.delete('/api/tgp/:tgp_id', (req, res) => {
+app.delete(apiPrefix + '/tgp/:tgp_id', (req, res) => {
   let sql = 'UPDATE TGP SET delete_time = NOW() WHERE tgp_id = ?';
   let params = [req.params.tgp_id];
 
@@ -149,7 +150,7 @@ app.delete('/api/tgp/:tgp_id', (req, res) => {
 });
 
 // TGP 내역 조회
-app.get('/api/tgp/:tgp_id/history', (req, res) => {
+app.get(apiPrefix + '/tgp/:tgp_id/history', (req, res) => {
   let sql = "SELECT form_id, DATE_FORMAT(update_time, '%Y년 %m월 %d일 (%H시 %i분)') AS update_time FROM FORM WHERE tgp_id = " + req.params.tgp_id + " AND complete = 1 AND delete_time IS NULL ORDER BY update_time DESC";
 
   console.log("TGP 내역 조회: " + sql);
@@ -159,7 +160,7 @@ app.get('/api/tgp/:tgp_id/history', (req, res) => {
 });
 
 // TGP 이어서 작성
-app.get('/api/tgp/:tgp_id/continue', (req, res) => {
+app.get(apiPrefix + '/tgp/:tgp_id/continue', (req, res) => {
   let tgp_id = req.params.tgp_id;
 
   // 미완료된 form_id 조회
@@ -188,7 +189,7 @@ app.get('/api/tgp/:tgp_id/continue', (req, res) => {
 });
 
 // TGP 복사 
-app.get('/api/tgp/:tgp_id/:form_id/copy', (req, res) => {
+app.get(apiPrefix + '/tgp/:tgp_id/:form_id/copy', (req, res) => {
   let tgp_id = req.params.tgp_id;
   let form_id = req.params.form_id;
   let new_form_id = '';
@@ -247,7 +248,7 @@ app.get('/api/tgp/:tgp_id/:form_id/copy', (req, res) => {
 });
 
 // TGP STEP1 조회
-app.get('/api/tgp/:tgp_id/:form_id/step1', (req, res) => {
+app.get(apiPrefix + '/tgp/:tgp_id/:form_id/step1', (req, res) => {
   let tgp_id = req.params.tgp_id;
   let form_id = req.params.form_id;
   let sql = "SELECT account, department, solution, amount, DATE_FORMAT(closingdate, '%Y-%m-%d') AS closingdate FROM FORM WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND delete_time IS NULL";
@@ -259,7 +260,7 @@ app.get('/api/tgp/:tgp_id/:form_id/step1', (req, res) => {
 });
 
 // TGP STEP1 저장
-app.post('/api/tgp/:tgp_id/:form_id/step1', (req, res) => {
+app.post(apiPrefix + '/tgp/:tgp_id/:form_id/step1', (req, res) => {
   let tgp_id = req.params.tgp_id;
   let form_id = req.params.form_id;
 
@@ -272,7 +273,7 @@ app.post('/api/tgp/:tgp_id/:form_id/step1', (req, res) => {
 });
 
 // TGP STEP2 조회
-app.get('/api/tgp/:tgp_id/:form_id/step2', (req, res) => {
+app.get(apiPrefix + '/tgp/:tgp_id/:form_id/step2', (req, res) => {
   let sql = "SELECT * FROM FORM WHERE tgp_id = " + req.params.tgp_id + " AND form_id = " + req.params.form_id + " AND delete_time IS NULL";
 
   console.log("STEP2 조회: " + sql);
@@ -282,7 +283,7 @@ app.get('/api/tgp/:tgp_id/:form_id/step2', (req, res) => {
 });
 
 // TGP STEP2/3 조회
-app.get('/api/tgp/:form_id/:table', (req, res) => {
+app.get(apiPrefix + '/tgp/:form_id/:table', (req, res) => {
   let form_id = req.params.form_id;
   let table = req.params.table.toUpperCase();
   let sql = "";
@@ -308,7 +309,7 @@ app.get('/api/tgp/:form_id/:table', (req, res) => {
 });
 
 // TGP STEP2 저장
-app.post('/api/tgp/:tgp_id/:form_id/step2', (req, res) => {
+app.post(apiPrefix + '/tgp/:tgp_id/:form_id/step2', (req, res) => {
   let tgp_id = req.params.tgp_id;
   let form_id = req.params.form_id;
 
@@ -387,7 +388,7 @@ app.post('/api/tgp/:tgp_id/:form_id/step2', (req, res) => {
 });
 
 // TGP STEP3 조회
-app.get('/api/tgp/:tgp_id/:form_id/step3', (req, res) => {
+app.get(apiPrefix + '/tgp/:tgp_id/:form_id/step3', (req, res) => {
   let tgp_id = req.params.tgp_id;
   let form_id = req.params.form_id;
   let sql = "SELECT strategy1_behavior, strategy2_behavior FROM FORM WHERE tgp_id = " + tgp_id + " AND form_id = " + form_id + " AND delete_time IS NULL";
@@ -398,7 +399,7 @@ app.get('/api/tgp/:tgp_id/:form_id/step3', (req, res) => {
   });
 });
 
-app.get('/api/tgp/:tgp_id/:form_id/strategy1/:init', (req, res) => {
+app.get(apiPrefix + '/tgp/:tgp_id/:form_id/strategy1/:init', (req, res) => {
   let tgp_id = req.params.tgp_id;
   let form_id = req.params.form_id;
   let sql = "";
@@ -590,7 +591,7 @@ function InsertStrategy2(form_id, sentence) {
 }
 
 // TGP STEP3 저장
-app.post('/api/tgp/:tgp_id/:form_id/step3/:complete', (req, res) => {
+app.post(apiPrefix + '/tgp/:tgp_id/:form_id/step3/:complete', (req, res) => {
   let tgp_id = req.params.tgp_id;
   let form_id = req.params.form_id;
   let complete = req.params.complete;

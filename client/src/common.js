@@ -1,3 +1,5 @@
+export const apiPrefix = '/api';
+
 export function uncomma(str) {
   str = String(str);
   return str.replace(/[^\d]+/g, "");

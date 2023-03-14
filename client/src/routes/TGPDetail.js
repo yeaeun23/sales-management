@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useParams, useLocation, Link, useNavigate } from "react-router-dom";
+import { apiPrefix } from "../common";
 
 function TGPDetail(props) {
   const { customer_id, tgp_id } = useParams();
@@ -21,7 +22,7 @@ function TGPDetail(props) {
 
   useEffect(() => {
     const getHistory = async () => {
-      const response = await fetch('/api/tgp/' + tgp_id + '/history');
+      const response = await fetch(apiPrefix+'/tgp/' + tgp_id + '/history');
       const body = await response.json();
       return body;
     }
@@ -61,7 +62,7 @@ function TGPDetail(props) {
   };
 
   const handleNext = () => {
-    let api = '/tgp/' + tgp_id;
+    let api = apiPrefix+'/tgp/' + tgp_id;
 
     if (selectedMode === "0") {
       api += '/continue';
@@ -84,7 +85,7 @@ function TGPDetail(props) {
 
     getFormId(api).then(res => {
       const returnedFormId = res[0].form_id;
-      const url = `/api/${customer_id}/${tgp_id}/${returnedFormId}/step1`;
+      const url = `/${customer_id}/${tgp_id}/${returnedFormId}/step1`;
       const state = {
         tgp_name: tgp_name,
         customer_name: customer_name
@@ -94,7 +95,7 @@ function TGPDetail(props) {
   }
 
   const handlePreview = () => {
-    const url = `/api/${customer_id}/${tgp_id}/${selectedFormId}/preview`;
+    const url = `/${customer_id}/${tgp_id}/${selectedFormId}/preview`;
     window.open(url, "_blank", "width=1365,height=800");
   }
 

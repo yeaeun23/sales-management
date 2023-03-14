@@ -18,6 +18,7 @@ import SelectScore from '../components/SelectScore';
 import SelectPower from "../components/SelectPower";
 import SelectSign from '../components/SelectSign';
 import SelectRole from '../components/SelectRole';
+import { apiPrefix } from "../common";
 
 function TGPDetail2(props) {
   const { customer_id, tgp_id, form_id } = useParams();
@@ -34,7 +35,7 @@ function TGPDetail2(props) {
 
   useEffect(() => {
     const setInputData1 = async () => {
-      const response = await fetch('/api/tgp/' + tgp_id + '/' + form_id + '/step2');
+      const response = await fetch(apiPrefix+'/tgp/' + tgp_id + '/' + form_id + '/step2');
       const body = await response.json();
       return body;
     }
@@ -46,7 +47,7 @@ function TGPDetail2(props) {
 
   useEffect(() => {
     const setInputData2 = async () => {
-      const response = await fetch('/api/tgp/' + form_id + '/tdm');
+      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/tdm');
       const body = await response.json();
       return body;
     }
@@ -60,7 +61,7 @@ function TGPDetail2(props) {
 
   useEffect(() => {
     const setInputData3 = async () => {
-      const response = await fetch('/api/tgp/' + form_id + '/strength');
+      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/strength');
       const body = await response.json();
       return body;
     }
@@ -74,7 +75,7 @@ function TGPDetail2(props) {
 
   useEffect(() => {
     const setInputData4 = async () => {
-      const response = await fetch('/api/tgp/' + form_id + '/weakness');
+      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/weakness');
       const body = await response.json();
       return body;
     }
@@ -159,7 +160,7 @@ function TGPDetail2(props) {
       saveInputData();
 
       if (e.target.innerHTML.indexOf("다음") !== -1) {
-        const url = `/api/${customer_id}/${tgp_id}/${form_id}/step3`;
+        const url = `/${customer_id}/${tgp_id}/${form_id}/step3`;
         const state = {
           tgp_name: tgp_name,
           customer_name: customer_name,
@@ -170,7 +171,7 @@ function TGPDetail2(props) {
     }
     else {
       if (e.target.innerHTML.indexOf("다음") !== -1) {
-        const url = `/api/${customer_id}/${tgp_id}/${form_id}/step3`;
+        const url = `/${customer_id}/${tgp_id}/${form_id}/step3`;
         const state = {
           tgp_name: tgp_name,
           customer_name: customer_name,
@@ -187,7 +188,7 @@ function TGPDetail2(props) {
   }
 
   const saveInputData = () => {
-    const api = '/tgp/' + tgp_id + '/' + form_id + '/step2';
+    const api = apiPrefix+'/tgp/' + tgp_id + '/' + form_id + '/step2';
     const data = {
       inputs1, inputs2, inputs3, inputs4
     };

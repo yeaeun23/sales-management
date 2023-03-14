@@ -6,6 +6,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from '@material-ui/core/DialogContent';
 import Button from 'react-bootstrap/Button';
 import TextField from '@material-ui/core/TextField';
+import { apiPrefix } from "../common";
 
 function CustomerAdd(props) {
 	const [open, setOpen] = useState(false);
@@ -42,8 +43,8 @@ function CustomerAdd(props) {
 	}
 
 	const addCustomer = () => {
-		let url = '/customer/1';
-		url += (props.kind === "add") ? '' : '/' + props.customer_id;
+		let api = apiPrefix+'/customer/1';
+		api += (props.kind === "add") ? '' : '/' + props.customer_id;
 
 		const data = {
 			name: customerName,
@@ -55,10 +56,10 @@ function CustomerAdd(props) {
 		};
 
 		if (props.kind === "add") {
-			return post(url, data, config);
+			return post(api, data, config);
 		}
 		else {
-			return put(url, data, config);
+			return put(api, data, config);
 		}
 	}
 
