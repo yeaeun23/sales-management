@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const apiPrefix = '/api';
 const fs = require('fs');
 const dbConfig = fs.readFileSync('./database.json');
 const conf = JSON.parse(dbConfig);
@@ -24,13 +25,49 @@ connection.connect(function (err) {
   console.log('DB Connected!');
 });
 
-const apiPrefix = '/api';
-// todo: 임시 사용자
-const user_id = 1;
+
+// 로그인 체크
+app.post(apiPrefix + '/login', (req, res) => {
+  const id = req.body.inputs.id;
+  const pw = req.body.inputs.pw;
+  const sql1 = "SELECT * FROM USER WHERE `name` = '" + id + "'";
+  const sql2 = "SELECT * FROM USER WHERE `name` = '" + id + "' AND passwd = '" + pw + "'";
+
+  console.log("로그인 ID 조회: " + sql1);
+  connection.query(sql1, (err, rows, fields) => {
+    if (rows.length === 0) {
+      res.send({ 'code': 0, 'msg': '존재하지 않는 아이디입니다.' });
+      console.log("로그인 실패(0): " + id);
+    }
+    else {
+      if (rows[0].active === 0) {
+        res.send({ 'code': 1, 'msg': '사용이 중지된 아이디입니다.' });
+        console.log("로그인 실패(1): " + id);
+      }
+      else if (rows[0].delete_time !== null) {
+        res.send({ 'code': 2, 'msg': '존재하지 않는 아이디입니다.' });
+        console.log("로그인 실패(2): " + id);
+      }
+      else {
+        console.log("로그인 PW 조회: " + sql2);
+        connection.query(sql2, (err, rows, fields) => {
+          if (rows.length === 0) {
+            res.send({ 'code': 3, 'msg': '비밀번호가 일치하지 않습니다.' });
+            console.log("로그인 실패(3): " + id);
+          }
+          else {
+            res.send({ 'code': 9, 'msg': '로그인 성공!' });
+            console.log("로그인 성공(9): " + id);
+          }
+        });
+      }
+    }
+  });
+});
 
 // 거래처 연도조회
-app.get(apiPrefix + '/year/customer/:user_id', (req, res) => {
-  let sql = "SELECT DISTINCT(CONCAT(YEAR(make_time), '년')) AS year FROM TGP WHERE delete_time IS NULL AND customer_id IN (SELECT customer_id FROM CUSTOMER WHERE user_id = " + req.params.user_id + " AND delete_time IS NULL) ORDER BY YEAR DESC";
+app.get(apiPrefix + '/year/customer/:user_name', (req, res) => {
+  let sql = "SELECT DISTINCT(CONCAT(YEAR(make_time), '년')) AS year FROM TGP WHERE delete_time IS NULL AND customer_id IN (SELECT customer_id FROM CUSTOMER WHERE user_id = (SELECT user_id FROM USER WHERE `name` = '" + req.params.user_name + "') AND delete_time IS NULL) ORDER BY YEAR DESC";
 
   console.log("거래처 연도조회: " + sql);
   connection.query(sql, (err, rows, fields) => {
@@ -39,10 +76,10 @@ app.get(apiPrefix + '/year/customer/:user_id', (req, res) => {
 });
 
 // 거래처 조회 1
-app.get(apiPrefix + '/customer/:user_id/makeyear/:year', (req, res) => {
+app.get(apiPrefix + '/customer/:user_name/makeyear/:year', (req, res) => {
   console.log(req.params.year)
   let year = req.params.year.replace("년", "");
-  let sql = "SELECT customer_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1 AND YEAR(make_time) = " + year + ") AS amount_year, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1) AS amount FROM CUSTOMER customer WHERE user_id = " + req.params.user_id + " AND delete_time IS NULL ORDER BY customer_id DESC";
+  let sql = "SELECT customer_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1 AND YEAR(make_time) = " + year + ") AS amount_year, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1) AS amount FROM CUSTOMER customer WHERE user_id = (SELECT user_id FROM USER WHERE `name` = '" + req.params.user_name + "') AND delete_time IS NULL ORDER BY customer_id DESC";
 
   console.log("거래처 조회: " + sql);
   connection.query(sql, (err, rows, fields) => {
@@ -51,8 +88,8 @@ app.get(apiPrefix + '/customer/:user_id/makeyear/:year', (req, res) => {
 });
 
 // 거래처 조회 2
-app.get(apiPrefix + '/customer/:user_id/makeyear', (req, res) => {
-  let sql = "SELECT customer_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, '-' AS amount_year, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1) AS amount FROM CUSTOMER customer WHERE user_id = " + req.params.user_id + " AND delete_time IS NULL ORDER BY customer_id DESC";
+app.get(apiPrefix + '/customer/:user_name/makeyear', (req, res) => {
+  let sql = "SELECT customer_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, '-' AS amount_year, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1) AS amount FROM CUSTOMER customer WHERE user_id = (SELECT user_id FROM USER WHERE `name` = '" + req.params.user_name + "') AND delete_time IS NULL ORDER BY customer_id DESC";
 
   console.log("거래처 조회: " + sql);
   connection.query(sql, (err, rows, fields) => {
@@ -61,9 +98,9 @@ app.get(apiPrefix + '/customer/:user_id/makeyear', (req, res) => {
 });
 
 // 거래처 생성
-app.post(apiPrefix + '/customer/:user_id', (req, res) => {
-  let sql = 'INSERT INTO CUSTOMER VALUES (null, ?, ?, ?, NOW(), NOW(), null)';
-  let params = [user_id, req.body.name, req.body.status];
+app.post(apiPrefix + '/customer/:user_name', (req, res) => {
+  let sql = "INSERT INTO CUSTOMER VALUES (null, (SELECT user_id FROM USER WHERE `name` = '" + req.params.user_name + "'), ?, ?, NOW(), NOW(), null)";
+  let params = [req.body.name, req.body.status];
 
   connection.query(sql, params, (err, rows, fields) => {
     res.send(rows);
@@ -72,7 +109,7 @@ app.post(apiPrefix + '/customer/:user_id', (req, res) => {
 
 // 거래처 수정
 app.put(apiPrefix + '/customer/:customer_id', (req, res) => {
-  let sql = 'UPDATE CUSTOMER SET name = ?, status = ?, update_time = NOW() WHERE customer_id = ?';
+  let sql = "UPDATE CUSTOMER SET name = ?, status = ?, update_time = NOW() WHERE customer_id = ?";
   let params = [req.body.name, req.body.status, req.params.customer_id];
 
   connection.query(sql, params, (err, rows, fields) => {
@@ -82,7 +119,7 @@ app.put(apiPrefix + '/customer/:customer_id', (req, res) => {
 
 // 거래처 삭제
 app.delete(apiPrefix + '/customer/:customer_id', (req, res) => {
-  let sql = 'UPDATE CUSTOMER SET delete_time = NOW() WHERE customer_id = ?';
+  let sql = "UPDATE CUSTOMER SET delete_time = NOW() WHERE customer_id = ?";
   let params = [req.params.customer_id];
 
   connection.query(sql, params, (err, rows, fields) => {

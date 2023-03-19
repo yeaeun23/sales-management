@@ -7,21 +7,30 @@ import Navi from "../components/Navi";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from 'react-bootstrap/Table';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { useNavigate } from "react-router-dom";
 import * as common from "../common";
 
 function CustomerList(props) {
+  const userName = sessionStorage.getItem('user_name');
   const [year, setYear] = useState([]);
   const [selectedYear, setSelectedYear] = useState("");
   const [customer, setCustomer] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [total_amount_year, setTotalAmountYear] = useState(0);
   const [total_amount, setTotalAmount] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    getYear()
-      .then(res => setYear(res))
-      .catch(err => console.log(err));
-  }, []);
+    if (userName) {
+      getYear()
+        .then(res => setYear(res))
+        .catch(err => console.log(err));
+    }
+    else {
+      navigate('/login');
+      alert("로그인 정보가 없습니다.");
+    }
+  }, [userName]);
 
   useEffect(() => {
     if (year.length !== 0) {
@@ -79,19 +88,19 @@ function CustomerList(props) {
   }
 
   const getYear = async () => {
-    const response = await fetch(common.apiPrefix+'/year/customer/1');
+    const response = await fetch(common.apiPrefix + '/year/customer/' + userName);
     const body = await response.json();
     return body;
   }
 
   const getCustomer = async () => {
-    const response = await fetch(common.apiPrefix+'/customer/1/makeyear/' + selectedYear);
+    const response = await fetch(common.apiPrefix + '/customer/' + userName + '/makeyear/' + selectedYear);
     const body = await response.json();
     return body;
   }
 
   const getCustomer2 = async () => {
-    const response = await fetch(common.apiPrefix+'/customer/1/makeyear');
+    const response = await fetch(common.apiPrefix + '/customer/' + userName + '/makeyear');
     const body = await response.json();
     return body;
   }

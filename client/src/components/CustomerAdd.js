@@ -43,7 +43,7 @@ function CustomerAdd(props) {
 	}
 
 	const addCustomer = () => {
-		let api = apiPrefix+'/customer/1';
+		let api = apiPrefix + '/customer/' + sessionStorage.getItem("user_name");
 		api += (props.kind === "add") ? '' : '/' + props.customer_id;
 
 		const data = {

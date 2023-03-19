@@ -77,7 +77,7 @@ function Navi(props) {
           onKeyDown={toggleMenu(false)}>
           <List style={{ paddingTop: 0 }}>
             <ListItem style={{ backgroundColor: "#3f51b5", color: "#fff", height: "64px" }}>
-              <ListItemText primary="THE GAUGE" />
+              <ListItemText primary={sessionStorage.getItem("user_name") + " 님의 게이지"} />
             </ListItem>
             {menus.map((menu) => (
               <ListItem key={menu.text} to={menu.link} component={Link} button disablePadding>
