@@ -6,9 +6,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
-import HomeIcon from '@mui/icons-material/Home';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import SettingsIcon from '@mui/icons-material/Settings';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@material-ui/core/InputBase';
@@ -24,10 +23,9 @@ import Drawer from '@mui/material/Drawer';
 function Navi(props) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menus = [
-    { text: "공지사항", link: "/", icon: <HomeIcon /> },
-    { text: "거래처", link: "/", icon: <FormatListBulletedIcon /> },
-    { text: "관리자", link: "/", icon: <SettingsIcon /> },
-    { text: "로그아웃", link: "/login", icon: <LogoutIcon /> },
+    { text: "공지사항", link: "/board", icon: <NotificationsNoneOutlinedIcon /> },
+    { text: "거래처", link: "/account", icon: <FormatListBulletedIcon /> },
+    { text: "로그아웃", link: "/", icon: <LogoutIcon /> },
   ]
 
   const toggleMenu = (open) => (e) => {
@@ -82,9 +80,7 @@ function Navi(props) {
             {menus.map((menu) => (
               <ListItem key={menu.text} to={menu.link} component={Link} button disablePadding>
                 <ListItemButton>
-                  <ListItemIcon>
-                    {menu.icon}
-                  </ListItemIcon>
+                  <ListItemIcon>{menu.icon}</ListItemIcon>
                   <ListItemText primary={menu.text} />
                 </ListItemButton>
               </ListItem>
@@ -92,6 +88,11 @@ function Navi(props) {
             }
           </List>
           <Divider />
+          <div className="nav_footer">
+            <img src="img/logo_sales.png" alt="Sales Master" />
+            <p>ⓒ 2023. 세일즈마스터컨설팅 Inc.</p>
+            <p>All rights reserved.</p>
+          </div>
         </Box>
       </Drawer>
     </div>

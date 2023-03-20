@@ -22,7 +22,7 @@ function TGPDetail(props) {
 
   useEffect(() => {
     const getHistory = async () => {
-      const response = await fetch(apiPrefix+'/tgp/' + tgp_id + '/history');
+      const response = await fetch(apiPrefix + '/tgp/' + tgp_id + '/history');
       const body = await response.json();
       return body;
     }
@@ -62,7 +62,7 @@ function TGPDetail(props) {
   };
 
   const handleNext = () => {
-    let api = apiPrefix+'/tgp/' + tgp_id;
+    let api = apiPrefix + '/tgp/' + tgp_id;
 
     if (selectedMode === "0") {
       api += '/continue';
@@ -85,7 +85,7 @@ function TGPDetail(props) {
 
     getFormId(api).then(res => {
       const returnedFormId = res[0].form_id;
-      const url = `/${customer_id}/${tgp_id}/${returnedFormId}/step1`;
+      const url = `/account/${customer_id}/${tgp_id}/${returnedFormId}/step1`;
       const state = {
         tgp_name: tgp_name,
         customer_name: customer_name
@@ -95,21 +95,21 @@ function TGPDetail(props) {
   }
 
   const handlePreview = () => {
-    const url = `/${customer_id}/${tgp_id}/${selectedFormId}/preview`;
+    const url = `/account/${customer_id}/${tgp_id}/${selectedFormId}/preview`;
     window.open(url, "_blank", "width=1365,height=800");
   }
 
   return (
     <div className="root">
-      <Navi search="" />
+      <Navi />
 
       <div className="paper">
         <div className="paper_title">
           <PlayArrowIcon />&nbsp;
-          <Link className="title_link" to={"/"}>거래처</Link>&nbsp;
+          <Link className="title_link" to={"/account"}>거래처</Link>&nbsp;
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
-            to={"/" + customer_id}
+            to={"/account/" + customer_id}
             state={{ customer_name: customer_name }}>
             {customer_name}
           </Link>&nbsp;
@@ -167,7 +167,7 @@ function TGPDetail(props) {
                       >
                         <option value="">완료일자 선택</option>
                         {history.map((item) => {
-                          return <option key={item.form_id} value={item.form_id}>{item.form_id}: {item.update_time}</option>
+                          return <option key={item.form_id} value={item.form_id}>{item.update_time}</option>
                         })}
                       </Form.Select>
                     </td>

@@ -65,19 +65,19 @@ function TGPDetail1(props) {
 
   return (
     <div className="root">
-      <Navi search="" />
+      <Navi />
 
       <div className="paper">
         <div className="paper_title">
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
-            to={"/"}
+            to={"/account"}
             onClick={handleMove}>
             거래처
           </Link>&nbsp;
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
-            to={"/" + customer_id}
+            to={"/account/" + customer_id}
             state={{ customer_name: customer_name }}
             onClick={handleMove}>
             {customer_name}
@@ -141,13 +141,13 @@ function TGPDetail1(props) {
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
           <Link
-            to={`/${customer_id}/${tgp_id}`}
+            to={`/account/${customer_id}/${tgp_id}`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
             <Button variant="secondary" onClick={handleMove}>&lt; 이전 단계</Button>
           </Link>
           <Box sx={{ flex: '1 1 auto' }} />
           <Link
-            to={`/${customer_id}/${tgp_id}/${form_id}/step2`}
+            to={`/account/${customer_id}/${tgp_id}/${form_id}/step2`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
             <Button variant="primary" onClick={handleMove}>다음 단계 &gt;</Button>
           </Link>

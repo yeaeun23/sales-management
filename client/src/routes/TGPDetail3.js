@@ -155,7 +155,7 @@ function TGPDetail3(props) {
         saveInputData("1");
 
         // 이동
-        const url = `/${customer_id}`;
+        const url = `/account/${customer_id}`;
         const state = {
           tgp_name: tgp_name,
           customer_name: customer_name
@@ -190,7 +190,7 @@ function TGPDetail3(props) {
   }
 
   const handlePreview = () => {
-    const url = `/${customer_id}/${tgp_id}/${form_id}/preview`;
+    const url = `/account/${customer_id}/${tgp_id}/${form_id}/preview`;
     window.open(url, "_blank", "width=1365,height=800");
   }
 
@@ -202,13 +202,13 @@ function TGPDetail3(props) {
         <div className="paper_title">
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
-            to={"/"}
+            to={"/account"}
             onClick={handleMove}>
             거래처
           </Link>&nbsp;
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
-            to={"/" + customer_id}
+            to={"/account/" + customer_id}
             state={{ customer_name: customer_name }}
             onClick={handleMove}>
             {customer_name}
@@ -396,7 +396,7 @@ function TGPDetail3(props) {
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
           <Link
-            to={`/${customer_id}/${tgp_id}/${form_id}/step2`}
+            to={`/account/${customer_id}/${tgp_id}/${form_id}/step2`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
             <Button variant="secondary" onClick={handleMove}>&lt; 이전 단계</Button>
           </Link>

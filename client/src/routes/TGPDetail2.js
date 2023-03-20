@@ -160,7 +160,7 @@ function TGPDetail2(props) {
       saveInputData();
 
       if (e.target.innerHTML.indexOf("다음") !== -1) {
-        const url = `/${customer_id}/${tgp_id}/${form_id}/step3`;
+        const url = `/account/${customer_id}/${tgp_id}/${form_id}/step3`;
         const state = {
           tgp_name: tgp_name,
           customer_name: customer_name,
@@ -171,7 +171,7 @@ function TGPDetail2(props) {
     }
     else {
       if (e.target.innerHTML.indexOf("다음") !== -1) {
-        const url = `/${customer_id}/${tgp_id}/${form_id}/step3`;
+        const url = `/account/${customer_id}/${tgp_id}/${form_id}/step3`;
         const state = {
           tgp_name: tgp_name,
           customer_name: customer_name,
@@ -206,13 +206,13 @@ function TGPDetail2(props) {
         <div className="paper_title">
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
-            to={"/"}
+            to={"/account"}
             onClick={handleMove}>
             거래처
           </Link>&nbsp;
           <PlayArrowIcon />&nbsp;
           <Link className="title_link"
-            to={"/" + customer_id}
+            to={"/account/" + customer_id}
             state={{ customer_name: customer_name }}
             onClick={handleMove}>
             {customer_name}
@@ -536,7 +536,7 @@ function TGPDetail2(props) {
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
           <Link
-            to={`/${customer_id}/${tgp_id}/${form_id}/step1`}
+            to={`/account/${customer_id}/${tgp_id}/${form_id}/step1`}
             state={{ tgp_name: tgp_name, customer_name: customer_name }}>
             <Button variant="secondary" onClick={handleMove}>&lt; 이전 단계</Button>
           </Link>

@@ -95,7 +95,7 @@ function TGPList(props) {
       <div className="paper">
         <div className="paper_title">
           <PlayArrowIcon />&nbsp;
-          <Link className="title_link" to={"/"}>거래처</Link>&nbsp;
+          <Link className="title_link" to={"/account"}>거래처</Link>&nbsp;
           <PlayArrowOutlinedIcon />&nbsp;
           {customer_name}
 

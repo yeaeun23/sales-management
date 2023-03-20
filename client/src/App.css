@@ -107,6 +107,26 @@ input[name="searchKeyword"] {
   }
 }
 
+/* Navi */
+.nav_footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 15px;
+  text-align: center;
+}
+
+.nav_footer>img {
+  width: 40%;
+  margin-bottom: 15px;
+}
+
+.nav_footer>p {
+  font-size: 12px;
+  color: #aaa;
+  margin: 0;
+}
+
 /* TGPDetail */
 form {
   width: 100%;

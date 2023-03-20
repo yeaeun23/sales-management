@@ -47,7 +47,7 @@ function Login() {
           sessionStorage.setItem('user_name', inputs.id);
 
           if (sessionStorage.getItem('user_name')) {
-            navigate('/');
+            navigate('/account');
           }
           else {
             alert("로그인 에러!");
@@ -66,31 +66,24 @@ function Login() {
   }
 
   return (
-    <div>
-      <div className={styles.login_top}>
-        <div className={styles.top_logo}>
-          <img className="top_logo" src="img/logo_sales.png" alt="Sales Master" title="Sales Master" />
-        </div>
-        {/* <div className={styles.top_notice}>
-          <br />▷ 공지사항입니다. 공지사항입니다. 공지사항입니다. 공지사항입니다. 공지사항입니다.
-        </div> */}
-      </div>
-
-      <div className={styles.login_bg}>
-        <div className={styles.login_contents}>
-          <div className={styles.login_logo}>
-            {/* <img className="top_logo" src="img/logo_gauge_kor.png" alt="더 게이지" /> */}
-          </div>
-
+    <div className={styles.login_container}>
+      <div className={styles.login_right}>
+        <div className={styles.login_right_contents}>
           <div className={styles.login_inputs}>
-            <Form.Control className={styles.login_id} type="text" name="id" value={inputs.id || ''} onChange={handleValueChange} onKeyUp={handleKeyUp} maxLength="20" placeholder="아이디" required />
-            <Form.Control className={styles.login_pw} type="password" name="pw" value={inputs.pw || ''} onChange={handleValueChange} onKeyUp={handleKeyUp} maxLength="20" placeholder="비밀번호" required />
+            <img src="img/logo_sales.png" alt="Sales Master" />
+
+            <Form.Control className={styles.login_id} type="text" name="id" value={inputs.id || ''} onChange={handleValueChange} onKeyUp={handleKeyUp} maxLength="20" placeholder="아이디를 입력해 주세요." required />
+
+            <Form.Control className={styles.login_pw} type="password" name="pw" value={inputs.pw || ''} onChange={handleValueChange} onKeyUp={handleKeyUp} maxLength="20" placeholder="비밀번호를 입력해 주세요." required />
+
             <Button className={styles.login_btn} type="button" variant="primary" onClick={handleSubmit}>
               로그인
             </Button>
           </div>
         </div>
       </div>
+
+      <div className={styles.login_left}></div>
     </div>
   );
 }
