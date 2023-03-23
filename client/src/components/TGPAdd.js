@@ -93,6 +93,7 @@ function TGPAdd(props) {
 			<Button variant={(props.kind === "add") ? "primary" : "secondary"} size="sm" onClick={handleClickOpen}>
 				{(props.kind === "add") ? "TGP 생성" : "수정"}
 			</Button>
+			
 			<Dialog
 				open={open}
 				onClose={handleClose}

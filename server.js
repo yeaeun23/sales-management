@@ -65,6 +65,36 @@ app.post(apiPrefix + '/login', (req, res) => {
   });
 });
 
+// 공지 조회
+app.get(apiPrefix + '/board', (req, res) => {
+  let sql = "SELECT board_id, title, writer, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time FROM BOARD WHERE delete_time IS NULL ORDER BY board_id DESC";
+
+  console.log("공지 조회: " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 공지 상세
+app.get(apiPrefix + '/board/:board_id', (req, res) => {
+  let sql = "SELECT contents, DATE_FORMAT(update_time, '%Y-%m-%d %H:%i') AS update_time, DATE_FORMAT(make_time, '%Y-%m-%d %H:%i') AS make_time FROM BOARD WHERE board_id = "+req.params.board_id;
+
+  console.log("공지 상세: " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 공지 삭제
+app.delete(apiPrefix + '/board/:board_id', (req, res) => {
+  let sql = "UPDATE BOARD SET delete_time = NOW() WHERE board_id = "+req.params.board_id;
+
+  console.log("공지 삭제: " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
 // 거래처 연도조회
 app.get(apiPrefix + '/year/customer/:user_name', (req, res) => {
   let sql = "SELECT DISTINCT(CONCAT(YEAR(make_time), '년')) AS year FROM TGP WHERE delete_time IS NULL AND customer_id IN (SELECT customer_id FROM CUSTOMER WHERE user_id = (SELECT user_id FROM USER WHERE `name` = '" + req.params.user_name + "') AND delete_time IS NULL) ORDER BY YEAR DESC";

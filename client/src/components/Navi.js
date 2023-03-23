@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import SettingsIcon from '@mui/icons-material/Settings';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
@@ -25,6 +26,7 @@ function Navi(props) {
   const menus = [
     { text: "공지사항", link: "/board", icon: <NotificationsNoneOutlinedIcon /> },
     { text: "거래처", link: "/account", icon: <FormatListBulletedIcon /> },
+    { text: "계정관리", link: "/user", icon: <SettingsIcon /> },
     { text: "로그아웃", link: "/", icon: <LogoutIcon /> },
   ]
 
