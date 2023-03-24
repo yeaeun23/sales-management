@@ -43,17 +43,17 @@ function BoardList() {
         <Table striped hover>
           <colgroup>
             <col width="5%" />
-            <col width="46%" />
-            <col width="18%" />
-            <col width="18%" />
+            <col width="12%" />
+            <col width="63%" />
+            <col width="7%" />
             <col width="13%" />
           </colgroup>
           <thead style={{ borderBottom: "3px solid #DFE2E5" }}>
             <tr>
               <th style={{ textAlign: 'center' }}>No</th>
+              <th style={{ textAlign: 'center' }}>등록일</th>
               <th>제목</th>
               <th style={{ textAlign: 'center' }}>등록자</th>
-              <th style={{ textAlign: 'center' }}>등록일</th>
               <th style={{ textAlign: 'right' }} colSpan="2">
                 <BoardAdd stateRefresh={stateRefresh} kind="add" />
               </th>
@@ -72,18 +72,20 @@ function BoardList() {
                   return (
                     <tr key={i}>
                       <td style={{ textAlign: 'center' }}>{item.board_id}</td>
+                      <td style={{ textAlign: 'center' }}>{item.make_time}</td>
                       <td>
-                        {item.title}
+                        <BoardAdd
+                          stateRefresh={stateRefresh}
+                          kind="view"
+                          board_id={item.board_id}
+                          title={item.title} />
                       </td>
                       <td style={{ textAlign: 'center' }}>{item.writer}</td>
-                      <td style={{ textAlign: 'center' }}>{item.make_time}</td>
                       <td colSpan="2" style={{ textAlign: 'right' }}>
                         <BoardAdd
                           stateRefresh={stateRefresh}
-                          board_id={item.board_id}
-                          writer={item.writer}
-                          title={item.title}
-                          kind="edit" />
+                          kind="edit"
+                          board_id={item.board_id} />
                         &nbsp;&nbsp;
                         <BoardDelete
                           stateRefresh={stateRefresh}

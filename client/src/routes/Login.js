@@ -28,11 +28,11 @@ function Login() {
 
   const handleSubmit = () => {
     if (!inputs.id) {
-      alert("아이디를 입력해 주세요.");
+      alert("아이디를 입력하세요.");
       document.querySelector("input[name='id']").focus();
     }
     else if (!inputs.pw) {
-      alert("비밀번호를 입력해 주세요.");
+      alert("비밀번호를 입력하세요.");
       document.querySelector("input[name='pw']").focus();
     }
     else {
@@ -72,9 +72,9 @@ function Login() {
           <div className={styles.login_inputs}>
             <img src="img/logo_sales.png" alt="Sales Master" />
 
-            <Form.Control className={styles.login_id} type="text" name="id" value={inputs.id || ''} onChange={handleValueChange} onKeyUp={handleKeyUp} maxLength="20" placeholder="아이디를 입력해 주세요." required />
+            <Form.Control className={styles.login_id} type="text" name="id" value={inputs.id || ''} onChange={handleValueChange} onKeyUp={handleKeyUp} maxLength="20" placeholder="아이디를 입력하세요." required />
 
-            <Form.Control className={styles.login_pw} type="password" name="pw" value={inputs.pw || ''} onChange={handleValueChange} onKeyUp={handleKeyUp} maxLength="20" placeholder="비밀번호를 입력해 주세요." required />
+            <Form.Control className={styles.login_pw} type="password" name="pw" value={inputs.pw || ''} onChange={handleValueChange} onKeyUp={handleKeyUp} maxLength="20" placeholder="비밀번호를 입력하세요." required />
 
             <Button className={styles.login_btn} type="button" variant="primary" onClick={handleSubmit}>
               로그인

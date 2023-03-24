@@ -20,11 +20,11 @@ function TGPDelete(props) {
 
 	const handleFormSubmit = () => {
 		deleteTgp();
-		props.stateRefresh(); // 목록 새로고침
+		props.stateRefresh();
 	}
 
 	const deleteTgp = () => {
-		const api = apiPrefix+'/tgp/' + props.tgp_id;
+		const api = apiPrefix + '/tgp/' + props.tgp_id;
 		fetch(api, { method: 'DELETE' });
 	}
 

@@ -33,6 +33,7 @@ function CustomerAdd(props) {
 	const handleFormSubmit = () => {
 		if (customerName === "" || customerName === undefined) {
 			alert("거래처 이름을 입력하세요.");
+			document.querySelector("input[name='customerName']").focus();
 		}
 		else {
 			addCustomer().then(() => {
@@ -68,6 +69,7 @@ function CustomerAdd(props) {
 			<Button variant={(props.kind === "add") ? "primary" : "secondary"} size="sm" onClick={handleClickOpen}>
 				{(props.kind === "add") ? "거래처 생성" : "수정"}
 			</Button>
+
 			<Dialog
 				open={open}
 				onClose={handleClose}

@@ -35,7 +35,7 @@ function TGPAdd(props) {
 	}
 
 	const callApi = async () => {
-		const response = await fetch(apiPrefix+'/status');
+		const response = await fetch(apiPrefix + '/status');
 		const body = await response.json();
 		return body;
 	}
@@ -55,6 +55,7 @@ function TGPAdd(props) {
 	const handleFormSubmit = () => {
 		if (tgpName === "" || tgpName === undefined) {
 			alert("TGP 이름을 입력하세요.");
+			document.querySelector("input[name='tgpName']").focus();
 		}
 		else if (tgpStatus === "" || tgpStatus === undefined) {
 			alert("진행 상태를 선택하세요.");
@@ -68,7 +69,7 @@ function TGPAdd(props) {
 	}
 
 	const addTgp = () => {
-		let api = apiPrefix+'/tgp/';
+		let api = apiPrefix + '/tgp/';
 		api += (props.kind === "add") ? props.customer_id : props.tgp_id;
 
 		const data = {
@@ -93,7 +94,7 @@ function TGPAdd(props) {
 			<Button variant={(props.kind === "add") ? "primary" : "secondary"} size="sm" onClick={handleClickOpen}>
 				{(props.kind === "add") ? "TGP 생성" : "수정"}
 			</Button>
-			
+
 			<Dialog
 				open={open}
 				onClose={handleClose}

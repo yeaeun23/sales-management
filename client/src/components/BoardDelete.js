@@ -20,11 +20,11 @@ function BoardDelete(props) {
 
 	const handleFormSubmit = () => {
 		deleteBoard();
-		props.stateRefresh(); // 목록 새로고침
+		props.stateRefresh();
 	}
 
 	const deleteBoard = () => {
-		const api = apiPrefix+'/board/' + props.board_id;
+		const api = apiPrefix + '/board/' + props.board_id;
 		fetch(api, { method: 'DELETE' });
 	}
 
@@ -38,7 +38,7 @@ function BoardDelete(props) {
 				onClose={handleClose}
 				fullWidth={true}
 				maxWidth="xs">
-				<DialogTitle>공지사항 삭제</DialogTitle>
+				<DialogTitle>공지 삭제</DialogTitle>
 				<DialogContent>
 					<Typography gutterBottom>
 						'{props.title}'을(를) 삭제하시겠습니까?

@@ -28,7 +28,7 @@ function Preview() {
   // 1. Target Goal Plan
   useEffect(() => {
     const setInputData1 = async () => {
-      const response = await fetch(apiPrefix+'/tgp/' + tgp_id + '/' + form_id + '/step1');
+      const response = await fetch(apiPrefix + '/tgp/' + tgp_id + '/' + form_id + '/step1');
       const body = await response.json();
       return body;
     }
@@ -41,7 +41,7 @@ function Preview() {
   // 2. TGP 현재 위치
   useEffect(() => {
     const setInputData2 = async () => {
-      const response = await fetch(apiPrefix+'/tgp/' + tgp_id + '/' + form_id + '/step2');
+      const response = await fetch(apiPrefix + '/tgp/' + tgp_id + '/' + form_id + '/step2');
       const body = await response.json();
       return body;
     }
@@ -54,7 +54,7 @@ function Preview() {
   // 3. 구매 영향력, 평가
   useEffect(() => {
     const setInputData3 = async () => {
-      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/tdm');
+      const response = await fetch(apiPrefix + '/tgp/' + form_id + '/tdm');
       const body = await response.json();
       return body;
     }
@@ -69,7 +69,7 @@ function Preview() {
   // 4. 경쟁 - 강점/기회
   useEffect(() => {
     const setInputData4 = async () => {
-      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/strength');
+      const response = await fetch(apiPrefix + '/tgp/' + form_id + '/strength');
       const body = await response.json();
       return body;
     }
@@ -84,7 +84,7 @@ function Preview() {
   // 5. 경쟁 - 약점/위협
   useEffect(() => {
     const setInputData5 = async () => {
-      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/weakness');
+      const response = await fetch(apiPrefix + '/tgp/' + form_id + '/weakness');
       const body = await response.json();
       return body;
     }
@@ -99,12 +99,12 @@ function Preview() {
   // 6/7. 전략 분석 요인
   useEffect(() => {
     const setInputData6 = async () => {
-      const response = await fetch(apiPrefix+'/tgp/' + tgp_id + '/' + form_id + '/strategy1/false');
+      const response = await fetch(apiPrefix + '/tgp/' + tgp_id + '/' + form_id + '/strategy1/false');
       const body = await response.json();
       return body;
     }
     const setInputData7 = async () => {
-      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/strategy2');
+      const response = await fetch(apiPrefix + '/tgp/' + form_id + '/strategy2');
       const body = await response.json();
       return body;
     }
@@ -126,7 +126,7 @@ function Preview() {
   // 8. Action Plan
   useEffect(() => {
     const setInputData8 = async () => {
-      const response = await fetch(apiPrefix+'/tgp/' + form_id + '/action');
+      const response = await fetch(apiPrefix + '/tgp/' + form_id + '/action');
       const body = await response.json();
       return body;
     }
@@ -141,7 +141,7 @@ function Preview() {
   // 9. 전략 분석 방안
   useEffect(() => {
     const setInputData9 = async () => {
-      const response = await fetch(apiPrefix+'/tgp/' + tgp_id + '/' + form_id + '/step3');
+      const response = await fetch(apiPrefix + '/tgp/' + tgp_id + '/' + form_id + '/step3');
       const body = await response.json();
       return body;
     }
@@ -175,6 +175,20 @@ function Preview() {
     <div className={styles.prev}>
       {(!loading1 && !loading2 && !loading3 && !loading4 && !loading5 && !loading6 && !loading7 && !loading8 && !loading9) ?
         <div>
+          <div className={`${styles.step_area} ${styles.logo_area}`}>
+            <div className={styles.top_logo1}>
+              <img src={process.env.PUBLIC_URL + "/img/logo_gauge_eng.png"} />
+            </div>
+
+            <div className={styles.top_logo2}>
+              <img src={process.env.PUBLIC_URL + "/img/logo_sales.png"} />
+            </div>
+
+            <div className={styles.top_title}>
+              {inputs1.account} / {inputs1.department}
+            </div>
+          </div>
+
           <div className={styles.step_area}>
             <table style={{ width: '100%' }}>
               <thead>
@@ -203,11 +217,10 @@ function Preview() {
             <div className={styles.step_title}>
               In The Funnel
               <div className={styles.step_subtitle}>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                Sign :&nbsp;
-                <span style={{ color: "blue" }}>■</span> 강점/기회,&nbsp;
-                <span style={{ color: "red" }}>▲</span> 약점/위협,&nbsp;
-                <span style={{ color: "darkgray" }}>●</span> 불명확
+                Sign :&nbsp;&nbsp;
+                <span style={{ color: "darkgray" }}>●</span> 불명확&nbsp;&nbsp;
+                <span style={{ color: "blue" }}>■</span> 강점/기회&nbsp;&nbsp;
+                <span style={{ color: "red" }}>▲</span> 약점/위협
               </div>
             </div>
             <table>
@@ -340,7 +353,15 @@ function Preview() {
           </div>
 
           <div className={styles.step_area}>
-            <div className={styles.step_title}>Getting Action</div>
+            <div className={styles.step_title}>
+              Getting Action
+              <div className={styles.step_subtitle}>
+                자동 분석 :&nbsp;&nbsp;
+                <span style={{ color: "darkgray" }}>●</span> 전체&nbsp;&nbsp;
+                <span style={{ color: "blue" }}>■</span>
+                <span style={{ color: "red" }}>▲</span> 파워(HELPER)/평가 점수
+              </div>
+            </div>
             <table>
               <thead>
                 <tr>

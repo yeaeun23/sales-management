@@ -1,54 +1,49 @@
 .prev {
   margin: 0 auto;
   padding: 10px;
-  width: 1350px;
+  width: 1348px;
   font-size: 12px;
 }
 
-.prev table {
-  border-collapse: collapse;
-  table-layout: fixed;
-  display: inline-block;
-  vertical-align: top;
+.prev .logo_area>div {
+  line-height: 60px;
 }
 
-.prev th,
-.prev td {
-  border: 1px solid #aaa;
-  padding: 3px 5px;
-  word-break: break-all;
+.prev .top_logo1,
+.prev .top_logo2 {
+  width: 150px;
 }
 
-.prev tbody th {
-  background-color: #ddd;
+.prev .top_logo1 {
+  float: left;
 }
 
-.prev thead th {
-  background-color: rgba(75, 82, 174, 1);
-  color: #fff;
+.prev .top_logo1>img {
+  width: 100%;
 }
 
-.prev td {
-  height: 25px;
+.prev .top_logo2 {
+  float: right;
+  text-align: right;
 }
 
-.prev td.sign {
-  width: 24px;
+.prev .top_logo2>img {
+  width: 110px;
+}
+
+.prev .top_title {
   text-align: center;
-}
-
-.prev .loading {
   font-weight: bold;
-  font-size: 18px;
-  /* 중앙정렬 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  font-size: 16px;
 }
 
+/* 테이블 제목 */
 .prev .step_area+.step_area {
   margin-top: 10px;
+}
+
+.prev .step_area table+table {
+  margin-left: 8px;
 }
 
 .prev .step_title {
@@ -63,8 +58,37 @@
   right: 5px;
 }
 
-.prev .step_area table+table {
-  margin-left: 8px;
+/* 테이블 */
+.prev table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.prev th,
+.prev td {
+  border: 1px solid #aaa;
+  padding: 3px 5px;
+  word-break: break-all;
+}
+
+.prev thead th {
+  background-color: rgba(75, 82, 174, 1);
+  color: #fff;
+}
+
+.prev tbody th {
+  background-color: antiquewhite;
+}
+
+.prev td {
+  height: 25px;
+}
+
+.prev td.sign {
+  width: 24px;
+  text-align: center;
 }
 
 /* 아래 버튼 */
@@ -74,14 +98,13 @@
 
 .prev .button_area>button {
   height: 30px;
-  font-weight: bold;
   border: none;
-  display: inline-block;
   color: #fff;
+  font-size: 13px;
 }
 
 .prev .print {
-  width: 100px;
+  width: 120px;
   background-color: green;
 }
 
@@ -92,7 +115,7 @@
 .prev .close {
   width: 80px;
   background-color: darkgray;
-  margin-left: 10px;
+  margin-left: 15px;
 }
 
 .prev .close:hover {
@@ -103,4 +126,15 @@
   .prev .button_area {
     display: none;
   }
+}
+
+/* 로딩중 */
+.prev .loading {
+  font-weight: bold;
+  font-size: 18px;
+  /* 중앙정렬 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }

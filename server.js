@@ -77,7 +77,7 @@ app.get(apiPrefix + '/board', (req, res) => {
 
 // 공지 상세
 app.get(apiPrefix + '/board/:board_id', (req, res) => {
-  let sql = "SELECT contents, DATE_FORMAT(update_time, '%Y-%m-%d %H:%i') AS update_time, DATE_FORMAT(make_time, '%Y-%m-%d %H:%i') AS make_time FROM BOARD WHERE board_id = "+req.params.board_id;
+  let sql = "SELECT title, contents, writer, DATE_FORMAT(update_time, '%Y-%m-%d %H:%i') AS update_time, DATE_FORMAT(make_time, '%Y-%m-%d %H:%i') AS make_time FROM BOARD WHERE board_id = " + req.params.board_id;
 
   console.log("공지 상세: " + sql);
   connection.query(sql, (err, rows, fields) => {
@@ -85,9 +85,30 @@ app.get(apiPrefix + '/board/:board_id', (req, res) => {
   });
 });
 
+// 공지 등록
+app.post(apiPrefix + '/board', (req, res) => {
+  let sql = "INSERT INTO BOARD VALUES (NULL, ?, ?, '관리자', NOW(), NOW(), null)";
+  let params = [req.body.board.title, req.body.board.contents];
+
+  console.log("공지 등록: " + sql);
+  connection.query(sql, params, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 공지 수정
+app.put(apiPrefix + '/board/:board_id', (req, res) => {
+  let sql = "UPDATE BOARD SET title = ?, contents = ?, update_time = NOW() WHERE board_id = ?";
+  let params = [req.body.board.title, req.body.board.contents, req.params.board_id];
+
+  connection.query(sql, params, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
 // 공지 삭제
 app.delete(apiPrefix + '/board/:board_id', (req, res) => {
-  let sql = "UPDATE BOARD SET delete_time = NOW() WHERE board_id = "+req.params.board_id;
+  let sql = "UPDATE BOARD SET delete_time = NOW() WHERE board_id = " + req.params.board_id;
 
   console.log("공지 삭제: " + sql);
   connection.query(sql, (err, rows, fields) => {
