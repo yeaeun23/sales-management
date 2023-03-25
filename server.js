@@ -56,8 +56,7 @@ app.post(apiPrefix + '/login', (req, res) => {
             console.log("로그인 실패(3): " + id);
           }
           else {
-            let status=rows[0].status;
-            res.send({ 'code': 9, 'status': status });
+            res.send({ 'code': 9, 'status': rows[0].status });
             console.log("로그인 성공(9): " + id);
           }
         });
