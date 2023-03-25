@@ -13,6 +13,7 @@ function Login() {
 
   useEffect(() => {
     sessionStorage.removeItem('user_name');
+    sessionStorage.removeItem('user_status');
   }, []);
 
   const handleValueChange = (e) => {
