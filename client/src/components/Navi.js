@@ -26,7 +26,7 @@ function Navi(props) {
   const menus = [
     { text: "공지사항", link: "/board", icon: <NotificationsNoneOutlinedIcon /> },
     { text: "거래처", link: "/account", icon: <FormatListBulletedIcon /> },
-    { text: "계정관리", link: "/user", icon: <SettingsIcon /> },
+    { text: "계정관리", link: "/user", icon: <SettingsIcon />, admin: true },
     { text: "로그아웃", link: "/", icon: <LogoutIcon /> },
   ]
 
@@ -48,9 +48,7 @@ function Navi(props) {
             <img src={process.env.PUBLIC_URL + '/img/logo_gauge_eng_white.png'} width="150px" alt="THE GAUGE" />
           </Typography>
           <div className="grow" />
-          {(props.searchKeyword === undefined) ?
-            ""
-            :
+          {(props.searchKeyword !== undefined) ?
             <div className="search">
               <div className="searchIcon">
                 <SearchIcon />
@@ -62,6 +60,7 @@ function Navi(props) {
                 value={props.searchKeyword}
                 onChange={props.handleValueChange} />
             </div>
+            : ""
           }
         </Toolbar>
       </AppBar>
@@ -80,19 +79,28 @@ function Navi(props) {
               <ListItemText primary={sessionStorage.getItem("user_name") + " 님의 게이지"} />
             </ListItem>
             {menus.map((menu) => (
-              <ListItem key={menu.text} to={menu.link} component={Link} button disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>{menu.icon}</ListItemIcon>
-                  <ListItemText primary={menu.text} />
-                </ListItemButton>
-              </ListItem>
-            ))
-            }
+              menu.admin ?
+                (sessionStorage.getItem('user_status') === '9' ?
+                  <ListItem key={menu.text} to={menu.link} component={Link} button disablePadding>
+                    <ListItemButton>
+                      <ListItemIcon>{menu.icon}</ListItemIcon>
+                      <ListItemText primary={menu.text} />
+                    </ListItemButton>
+                  </ListItem>
+                  : "")
+                :
+                <ListItem key={menu.text} to={menu.link} component={Link} button disablePadding>
+                  <ListItemButton>
+                    <ListItemIcon>{menu.icon}</ListItemIcon>
+                    <ListItemText primary={menu.text} />
+                  </ListItemButton>
+                </ListItem>
+            ))}
           </List>
           <Divider />
           <div className="nav_footer">
-            <img src="img/logo_sales.png" alt="Sales Master" />
-            <p>ⓒ 2023. 세일즈마스터컨설팅 Inc.</p>
+            <img src={process.env.PUBLIC_URL + '/img/logo_sales.png'} alt="Sales Master" />
+            <p>ⓒ 2023. 세일즈마스터코리아 Inc.</p>
             <p>All rights reserved.</p>
           </div>
         </Box>

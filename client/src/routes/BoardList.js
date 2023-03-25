@@ -7,6 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from 'react-bootstrap/Table';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import * as common from "../common";
+import { useSlotProps } from "@mui/base";
 
 function BoardList() {
   const [board, setBoard] = useState("");
@@ -44,8 +45,8 @@ function BoardList() {
           <colgroup>
             <col width="5%" />
             <col width="12%" />
-            <col width="63%" />
-            <col width="7%" />
+            <col width="61%" />
+            <col width="9%" />
             <col width="13%" />
           </colgroup>
           <thead style={{ borderBottom: "3px solid #DFE2E5" }}>
@@ -55,7 +56,10 @@ function BoardList() {
               <th>제목</th>
               <th style={{ textAlign: 'center' }}>등록자</th>
               <th style={{ textAlign: 'right' }} colSpan="2">
-                <BoardAdd stateRefresh={stateRefresh} kind="add" />
+                {sessionStorage.getItem('user_status') === '9' ?
+                  <BoardAdd stateRefresh={stateRefresh} kind="add" />
+                  : ""
+                }
               </th>
             </tr>
           </thead>
@@ -82,15 +86,20 @@ function BoardList() {
                       </td>
                       <td style={{ textAlign: 'center' }}>{item.writer}</td>
                       <td colSpan="2" style={{ textAlign: 'right' }}>
-                        <BoardAdd
-                          stateRefresh={stateRefresh}
-                          kind="edit"
-                          board_id={item.board_id} />
-                        &nbsp;&nbsp;
-                        <BoardDelete
-                          stateRefresh={stateRefresh}
-                          board_id={item.board_id}
-                          title={item.title} />
+                        {sessionStorage.getItem('user_status') === '9' ?
+                          <span>
+                            <BoardAdd
+                              stateRefresh={stateRefresh}
+                              kind="edit"
+                              board_id={item.board_id} />
+                            &nbsp;&nbsp;
+                            <BoardDelete
+                              stateRefresh={stateRefresh}
+                              board_id={item.board_id}
+                              title={item.title} />
+                          </span>
+                          : ""
+                        }
                       </td>
                     </tr>
                   )

@@ -16,7 +16,7 @@ function TGPAdd(props) {
 	const [tgpStatus, setTgpStatus] = useState(0);
 
 	const handleClickOpen = () => {
-		callApi()
+		getStatus()
 			.then(res => setStatus(res))
 			.then(() => {
 				if (props.kind === "edit") {
@@ -28,13 +28,11 @@ function TGPAdd(props) {
 					setTgpStatus(0);
 				}
 			})
-			.then(() => {
-				setOpen(true);
-			})
+			.then(() => setOpen(true))
 			.catch(err => console.log(err));
 	}
 
-	const callApi = async () => {
+	const getStatus = async () => {
 		const response = await fetch(apiPrefix + '/status');
 		const body = await response.json();
 		return body;
@@ -61,9 +59,7 @@ function TGPAdd(props) {
 			alert("진행 상태를 선택하세요.");
 		}
 		else {
-			addTgp().then(() => {
-				props.stateRefresh(); // 목록 새로고침
-			});
+			addTgp().then(() => props.stateRefresh());
 			setOpen(false);
 		}
 	}

@@ -119,7 +119,7 @@ function BoardAdd(props) {
           {props.kind === "view" ?
             <Typography gutterBottom>
               {board.contents ?
-                <span dangerouslySetInnerHTML={{ __html: board.contents.replace(/\n/g, '<br/>') }}></span>
+                <span dangerouslySetInnerHTML={{ __html: board.contents.replace(/\n/g, '<br />') }}></span>
                 : ""
               }
             </Typography>

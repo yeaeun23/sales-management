@@ -40,7 +40,7 @@ app.post(apiPrefix + '/login', (req, res) => {
       console.log("로그인 실패(0): " + id);
     }
     else {
-      if (rows[0].active === 0) {
+      if (rows[0].status === 0) {
         res.send({ 'code': 1, 'msg': '사용이 중지된 아이디입니다.' });
         console.log("로그인 실패(1): " + id);
       }
@@ -56,7 +56,7 @@ app.post(apiPrefix + '/login', (req, res) => {
             console.log("로그인 실패(3): " + id);
           }
           else {
-            res.send({ 'code': 9, 'msg': '로그인 성공!' });
+            res.send({ 'code': 9, 'status': rows[0].status });
             console.log("로그인 성공(9): " + id);
           }
         });
@@ -85,12 +85,12 @@ app.get(apiPrefix + '/board/:board_id', (req, res) => {
   });
 });
 
-// 공지 등록
+// 공지 생성
 app.post(apiPrefix + '/board', (req, res) => {
-  let sql = "INSERT INTO BOARD VALUES (NULL, ?, ?, '관리자', NOW(), NOW(), null)";
+  let sql = "INSERT INTO BOARD VALUES (NULL, ?, ?, '관리자', NOW(), NOW(), NULL)";
   let params = [req.body.board.title, req.body.board.contents];
 
-  console.log("공지 등록: " + sql);
+  console.log("공지 생성: " + sql);
   connection.query(sql, params, (err, rows, fields) => {
     res.send(rows);
   });
@@ -101,6 +101,7 @@ app.put(apiPrefix + '/board/:board_id', (req, res) => {
   let sql = "UPDATE BOARD SET title = ?, contents = ?, update_time = NOW() WHERE board_id = ?";
   let params = [req.body.board.title, req.body.board.contents, req.params.board_id];
 
+  console.log("공지 수정: " + sql);
   connection.query(sql, params, (err, rows, fields) => {
     res.send(rows);
   });
@@ -111,6 +112,80 @@ app.delete(apiPrefix + '/board/:board_id', (req, res) => {
   let sql = "UPDATE BOARD SET delete_time = NOW() WHERE board_id = " + req.params.board_id;
 
   console.log("공지 삭제: " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 활성상태 목록 조회
+app.get(apiPrefix + '/user-status', (req, res) => {
+  let sql = "SELECT * FROM USER_STATUS ORDER BY code ASC";
+
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 아이디 중복 조회
+app.get(apiPrefix + '/user-check/:user_name', (req, res) => {
+  let sql = "SELECT name FROM USER WHERE name = '" + req.params.user_name + "'";
+
+  console.log("아이디 중복 조회: " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 계정 조회
+app.get(apiPrefix + '/user', (req, res) => {
+  let sql = "SELECT user_id, `name`, (SELECT `status` FROM `USER_STATUS` WHERE `code` = user.`status`) AS `status`, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time FROM USER user WHERE delete_time IS NULL ORDER BY user_id DESC";
+
+  console.log("계정 조회: " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 계정 상세
+app.get(apiPrefix + '/user/:user_id', (req, res) => {
+  let sql = "SELECT `name`, passwd, (SELECT `status` FROM `USER_STATUS` WHERE `code` = user.`status`) AS `status`, `status` AS status_code, memo, DATE_FORMAT(update_time, '%Y-%m-%d %H:%i') AS update_time, DATE_FORMAT(make_time, '%Y-%m-%d %H:%i') AS make_time FROM USER user WHERE user_id = " + req.params.user_id;
+
+  console.log("계정 상세: " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 계정 생성
+app.post(apiPrefix + '/user', (req, res) => {
+  let sql = "INSERT INTO USER VALUES (NULL, '" + req.body.user.name + "', '" + req.body.user.passwd + "', ?, ?, NOW(), NOW(), NULL)";
+  let params = [
+    req.body.user.status_code ? req.body.user.status_code : 0,
+    req.body.user.memo ? req.body.user.memo : ''
+  ];
+
+  console.log("계정 생성: " + sql);
+  connection.query(sql, params, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 계정 수정
+app.put(apiPrefix + '/user/:user_id', (req, res) => {
+  let sql = "UPDATE USER SET name = ?, passwd = ?, `status` = ?, memo = ?, update_time = NOW() WHERE user_id = ?";
+  let params = [req.body.user.name, req.body.user.passwd, req.body.user.status_code, req.body.user.memo, req.params.user_id];
+
+  console.log("계정 수정: " + sql);
+  connection.query(sql, params, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 계정 삭제
+app.delete(apiPrefix + '/user/:user_id', (req, res) => {
+  let sql = "UPDATE USER SET delete_time = NOW() WHERE user_id = " + req.params.user_id;
+
+  console.log("계정 삭제: " + sql);
   connection.query(sql, (err, rows, fields) => {
     res.send(rows);
   });
@@ -150,7 +225,7 @@ app.get(apiPrefix + '/customer/:user_name/makeyear', (req, res) => {
 
 // 거래처 생성
 app.post(apiPrefix + '/customer/:user_name', (req, res) => {
-  let sql = "INSERT INTO CUSTOMER VALUES (null, (SELECT user_id FROM USER WHERE `name` = '" + req.params.user_name + "'), ?, ?, NOW(), NOW(), null)";
+  let sql = "INSERT INTO CUSTOMER VALUES (NULL, (SELECT user_id FROM USER WHERE `name` = '" + req.params.user_name + "'), ?, ?, NOW(), NOW(), NULL)";
   let params = [req.body.name, req.body.status];
 
   connection.query(sql, params, (err, rows, fields) => {
@@ -178,7 +253,7 @@ app.delete(apiPrefix + '/customer/:customer_id', (req, res) => {
   });
 });
 
-// 상태 목록 조회
+// 진행상태 목록 조회
 app.get(apiPrefix + '/status', (req, res) => {
   let sql = "SELECT * FROM STATUS ORDER BY code ASC";
 
@@ -209,7 +284,7 @@ app.get(apiPrefix + '/tgp/:customer_id/makeyear/:year', (req, res) => {
 
 // TGP 생성
 app.post(apiPrefix + '/tgp/:customer_id', (req, res) => {
-  let sql = 'INSERT INTO TGP VALUES (null, ?, ?, ?, NOW(), NOW(), null);';
+  let sql = 'INSERT INTO TGP VALUES (NULL, ?, ?, ?, NOW(), NOW(), NULL);';
   let params = [req.params.customer_id, req.body.name, req.body.status];
 
   connection.query(sql, params, (err, rows, fields) => {

@@ -44,9 +44,12 @@ function Login() {
 
       post(api, data, config).then(res => {
         if (res.data.code === 9) {
+          // 아이디 저장
           sessionStorage.setItem('user_name', inputs.id);
+          // 상태 저장
+          sessionStorage.setItem('user_status', res.data.status);
 
-          if (sessionStorage.getItem('user_name')) {
+          if (sessionStorage.getItem('user_name')&&sessionStorage.getItem('user_status')) {
             navigate('/account');
           }
           else {
@@ -70,7 +73,7 @@ function Login() {
       <div className={styles.login_right}>
         <div className={styles.login_right_contents}>
           <div className={styles.login_inputs}>
-            <img src="img/logo_sales.png" alt="Sales Master" />
+            <img src={process.env.PUBLIC_URL + "/img/logo_sales.png"} alt="Sales Master" />
 
             <Form.Control className={styles.login_id} type="text" name="id" value={inputs.id || ''} onChange={handleValueChange} onKeyUp={handleKeyUp} maxLength="20" placeholder="아이디를 입력하세요." required />
 

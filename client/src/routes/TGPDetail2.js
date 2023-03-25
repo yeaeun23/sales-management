@@ -313,6 +313,7 @@ function TGPDetail2(props) {
           <Card>
             <Card.Header>
               구매 영향력 (Personal과 Business를 모두 고려)
+              <small>&nbsp;- 역할이 HELPER일 때 파워가 자동 분석됩니다.</small>
               <Button size="sm" variant="success" style={{ float: "right" }} onClick={handleSave}>중간 저장</Button>
             </Card.Header>
             <Card.Body>
@@ -378,6 +379,7 @@ function TGPDetail2(props) {
           <Card>
             <Card.Header>
               구매 영향력 평가
+              <small>&nbsp;- 모든 평가 점수가 자동 분석됩니다.</small>
               <Button size="sm" variant="success" style={{ float: "right" }} onClick={handleSave}>중간 저장</Button>
             </Card.Header>
             <Card.Body>
