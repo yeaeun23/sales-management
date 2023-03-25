@@ -45,10 +45,8 @@ function Login() {
 
       post(api, data, config).then(res => {
         if (res.data.code === 9) {
-          // 아이디 저장
           sessionStorage.setItem('user_name', inputs.id);
-          // 상태 저장
-          sessionStorage.setItem('user_status', res.data.status);
+          sessionStorage.setItem('user_status', res.data.code);
 
           if (sessionStorage.getItem('user_name')&&sessionStorage.getItem('user_status')) {
             navigate('/account');
