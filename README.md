@@ -11,8 +11,8 @@
 ### 3. 특징
 - 영업 관리 시스템 '더 게이지(The Gauge)'의 실사용자는 영업 컨설턴트 및 영업 사원입니다.
 - 기존에 MS Excel로 작성하던 시트를 React+Node.js+AWS 기반의 웹으로 구현한 시스템입니다.
-- 사용자가 시트를 작성하며 어떤 항목에 강점/약점/불명확 사인(Sign)을 붙이면, 전략 분석 항목에 자동으로 입력됩니다.
-- 연도별/거래처별 성공 수주 금액을 한눈에 볼 수 있습니다.
+- 사용자가 시트를 작성하며 어떤 항목에 강점/약점/불명확 사인(Sign)을 체크하면, 전략 분석 항목에 자동으로 입력됩니다.
+- 연도별/거래처별/TGP별 수주 금액을 한눈에 볼 수 있습니다.
 
 ### 4. 웹서비스 구조
 
@@ -59,15 +59,15 @@
 
 ![thegauge co kr_account (5)](https://user-images.githubusercontent.com/14077108/227889655-dc89223c-3136-4288-a200-8c7290f23393.png)
 
-- 총 3단계로 나누어 작성하며, 중간 저장이 가능합니다.
+- 시트는 총 3단계로 나누어 작성하며, 중간 저장이 가능합니다.
 
 ![thegauge co kr_account (6)](https://user-images.githubusercontent.com/14077108/227889709-7aeb9ee0-ffe4-4223-a9ce-5f16a5d122c4.png)
 
-- 행 추가/삭제를 할 수 있습니다.
+- 필요한 항목마다 행 추가/삭제를 할 수 있습니다.
 
 ![thegauge co kr_account (7)](https://user-images.githubusercontent.com/14077108/227889746-acad8d5a-0e78-4276-9764-820059290cef.png)
 
-- 2단계에서 붙인 강점/약점/불명확 사인(Sign)이 3단계에서 전략 분석 항목으로 자동 입력됩니다.
+- 2단계에서 체크한 강점/약점/불명확 사인(Sign)이 3단계에서 전략 분석 항목으로 자동 입력됩니다.
 
 ![thegauge co kr_account (8)](https://user-images.githubusercontent.com/14077108/227889768-bd458e6e-c7aa-4ed7-ba28-07977c8cbb1c.png)
 
