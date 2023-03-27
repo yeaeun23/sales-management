@@ -47,7 +47,7 @@
 
 ### 4. 거래처 > TGP 목록
 - TGP를 생성하고, 이름과 진행 상태를 수정할 수 있습니다.
-- TGP별로 수주 금액과 진행 상태를 한눈에 볼 수 있습니다.
+- 연도별/TGP별로 진행 상태와 수주 금액을 한눈에 볼 수 있습니다.
 
   ![thegauge co kr_account (2)](https://user-images.githubusercontent.com/14077108/227887164-54100d46-19fb-4de4-ae6b-5f2aa6aee935.png)
 
