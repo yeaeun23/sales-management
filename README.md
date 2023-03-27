@@ -26,14 +26,14 @@
 - 아이디와 비밀번호를 체크합니다.
 - 로그인 시 활성/비활성/관리자 계정을 구분합니다.
 
-  ![로그인](https://user-images.githubusercontent.com/14077108/227864499-1dd47244-a138-4307-b51e-7fcdd0189807.png)
+![로그인](https://user-images.githubusercontent.com/14077108/227864499-1dd47244-a138-4307-b51e-7fcdd0189807.png)
 
 <br>
 
 ### 2. 메뉴
 - 공지사항, 거래처, 계정관리, 로그아웃
 
-  ![thegauge co kr_account](https://user-images.githubusercontent.com/14077108/227885388-23d7d25d-6cb6-46e3-827e-1f0111c6c771.png)
+![thegauge co kr_account](https://user-images.githubusercontent.com/14077108/227885388-23d7d25d-6cb6-46e3-827e-1f0111c6c771.png)
 
 <br>
 
@@ -41,7 +41,7 @@
 - 거래처를 생성하고, 이름을 수정할 수 있습니다.
 - 연도별/거래처별 성공 수주 금액을 한눈에 볼 수 있습니다.
 
-  ![thegauge co kr_account (1)](https://user-images.githubusercontent.com/14077108/227886204-c7c92257-cef2-44a8-91f6-375d76896a36.png)
+![thegauge co kr_account (1)](https://user-images.githubusercontent.com/14077108/227886204-c7c92257-cef2-44a8-91f6-375d76896a36.png)
 
 <br>
 
@@ -49,7 +49,7 @@
 - TGP를 생성하고, 이름과 진행 상태를 수정할 수 있습니다.
 - 연도별/TGP별로 진행 상태와 수주 금액을 한눈에 볼 수 있습니다.
 
-  ![thegauge co kr_account (2)](https://user-images.githubusercontent.com/14077108/227887164-54100d46-19fb-4de4-ae6b-5f2aa6aee935.png)
+![thegauge co kr_account (2)](https://user-images.githubusercontent.com/14077108/227887164-54100d46-19fb-4de4-ae6b-5f2aa6aee935.png)
 
 <br>
 
