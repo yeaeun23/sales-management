@@ -12,6 +12,10 @@
 - 사용자가 시트를 작성하며 어떤 항목에 강점/약점/불명확 사인(Sign)을 붙이면, 전략 분석 항목에 자동으로 입력됩니다.
 - 연도별/거래처별 성공 수주 금액을 한눈에 볼 수 있습니다.
 
+### 4. 웹서비스 구조
+
+![11](https://user-images.githubusercontent.com/14077108/227976514-ced8ab15-f169-43fd-85d0-ceda15fe45c7.png)
+
 <br>
 
 ## 기능 및 화면
@@ -48,14 +52,16 @@
 <br>
 
 ### 5. 거래처 > TGP > 시트
-- 시트를 이어서 작성하거나, 이어서 작성할게 없으면(완료되었으면) 새로 작성할 수 있습니다.
+- 중간 저장한 시트를 이어서 작성하거나, 이어서 작성할게 없으면(완료되었으면) 새로 작성할 수 있습니다.
 - 완료된 시트를 복사 후 불러올 수 있습니다.
 
 ![thegauge co kr_account (5)](https://user-images.githubusercontent.com/14077108/227889655-dc89223c-3136-4288-a200-8c7290f23393.png)
 
-- 총 3단계로 나누어 작성합니다.
+- 총 3단계로 나누어 작성하며, 중간 저장이 가능합니다.
 
 ![thegauge co kr_account (6)](https://user-images.githubusercontent.com/14077108/227889709-7aeb9ee0-ffe4-4223-a9ce-5f16a5d122c4.png)
+
+- 행 추가/삭제를 할 수 있습니다.
 
 ![thegauge co kr_account (7)](https://user-images.githubusercontent.com/14077108/227889746-acad8d5a-0e78-4276-9764-820059290cef.png)
 
