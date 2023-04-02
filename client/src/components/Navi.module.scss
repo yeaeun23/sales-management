@@ -1,0 +1,73 @@
+@import '../common/_mixins';
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+header {
+  .menuButton {
+    margin-left: -12px;
+    margin-right: 20px;
+  }
+
+  .grow {
+    flex-grow: 1;
+  }
+
+  .search {
+    width: 50%;
+    position: relative;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.15);
+
+    @media (min-width: $min-width) {
+      width: auto;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .searchIcon {
+      width: 72px;
+      display: flex;
+      position: absolute;
+      justify-content: center;
+    }
+
+    .inputRoot {
+      color: #fff !important;
+
+      &>input[name="searchKeyword"] {
+        @include vender-prefix(transition, width 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms);
+        padding: 0 0 0 80px;
+
+        @media (min-width: $min-width) {
+          width: 300px;
+
+          &:focus {
+            width: 350px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.nav_footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 15px;
+  text-align: center;
+
+  &> {
+    img {
+      width: 40%;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 12px;
+      color: #aaa;
+      margin: 0;
+    }
+  }
+}

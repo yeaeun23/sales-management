@@ -1,0 +1,21 @@
+$min-width: 1000px;
+
+@mixin vender-prefix($name, $value) {
+  $vendors: webkit,
+  moz,
+  ms,
+  o;
+
+  #{$name}: $value;
+
+  @each $vendor in $vendors {
+    -#{$vendor}-#{$name}: $value;
+  }
+}
+
+@mixin align-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}

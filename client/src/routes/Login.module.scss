@@ -1,0 +1,85 @@
+@import '../common/_mixins';
+
+.login_container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-width: $min-width;
+
+  .login_left {
+    overflow: hidden;
+    height: 100%;
+    background-image: url("../../public/img/login_bg10.png");
+    @include vender-prefix(background-size, cover);
+    @include vender-prefix(background-position, center);
+  }
+
+  .login_right {
+    float: right;
+    width: 550px;
+
+    .login_right_contents {
+      @include align-center();
+
+      .login_inputs {
+        width: 100%;
+        padding: 0 100px;
+        text-align: center;
+
+        &> {
+          img {
+            width: 260px;
+            margin-bottom: 120px;
+          }
+
+          input {
+            border: 0;
+            border-bottom: 1px solid #aaa;
+            border-radius: 0;
+            margin-bottom: 30px;
+            font-size: 18px;
+
+            &:focus {
+              box-shadow: none;
+              border-bottom: 1px solid #000;
+            }
+          }
+
+          .login_btn {
+            width: 100%;
+            height: 50px;
+            position: relative;
+            margin-top: 25px;
+            font-size: 18px !important;
+            @include vender-prefix(transition, all 0.2s linear 0s !important);
+
+            &::before {
+              content: ">";
+              position: absolute;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              right: 0;
+              top: 0;
+              opacity: 0;
+              height: 100%;
+              width: 50px;
+              @include vender-prefix(transition, all 0.2s linear 0s !important);
+              font-weight: bold;
+            }
+
+            &:hover {
+              text-indent: -20px;
+
+              &::before {
+                opacity: 1;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

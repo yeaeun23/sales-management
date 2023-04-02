@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useParams } from 'react-router-dom';
-import styles from "./Preview.module.css";
-import { apiPrefix } from "../common";
+import styles from "./Preview.module.scss";
+import { apiPrefix } from "../common/common";
 
 function Preview() {
   const { tgp_id, form_id } = useParams();

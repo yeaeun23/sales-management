@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Button from 'react-bootstrap/Button';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import { apiPrefix } from '../common';
+import { apiPrefix } from '../common/common';
 
 function TGPAdd(props) {
 	const [open, setOpen] = useState(false);

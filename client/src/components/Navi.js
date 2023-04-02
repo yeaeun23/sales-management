@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import '../App.css';
+import styles from "./Navi.module.scss";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -41,21 +41,21 @@ function Navi(props) {
     <div>
       <AppBar position="fixed">
         <Toolbar>
-          <IconButton className="menuButton" color="inherit" onClick={toggleMenu(true)} title="메뉴">
+          <IconButton className={styles.menuButton} color="inherit" onClick={toggleMenu(true)} title="메뉴">
             <MenuIcon />
           </IconButton>
-          <Typography className="title" variant="h6" noWrap>
+          <Typography variant="h6" noWrap>
             <img src={process.env.PUBLIC_URL + '/img/logo_gauge_eng_white.png'} width="150px" alt="THE GAUGE" />
           </Typography>
-          <div className="grow" />
+          <div className={styles.grow} />
           {(props.searchKeyword !== undefined) ?
-            <div className="search">
-              <div className="searchIcon">
+            <div className={styles.search}>
+              <div className={styles.searchIcon}>
                 <SearchIcon />
               </div>
               <InputBase
                 placeholder="이름 검색"
-                className="inputRoot"
+                className={styles.inputRoot}
                 name="searchKeyword"
                 value={props.searchKeyword}
                 onChange={props.handleValueChange} />
@@ -98,7 +98,7 @@ function Navi(props) {
             ))}
           </List>
           <Divider />
-          <div className="nav_footer">
+          <div className={styles.nav_footer}>
             <img src={process.env.PUBLIC_URL + '/img/logo_sales.png'} alt="Sales Master" />
             <p>ⓒ 2023. 세일즈마스터코리아 Inc.</p>
             <p>All rights reserved.</p>

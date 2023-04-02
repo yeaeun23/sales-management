@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import '../App.css';
+import '../App.scss';
 import Navi from "../components/Navi";
 import BoardAdd from '../components/BoardAdd';
 import BoardDelete from '../components/BoardDelete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from 'react-bootstrap/Table';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import * as common from "../common";
-import { useSlotProps } from "@mui/base";
+import * as common from "../common/common";
 
 function BoardList() {
   const [board, setBoard] = useState("");

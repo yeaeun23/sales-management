@@ -5,7 +5,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from 'react-bootstrap/Button';
 import Typography from "@material-ui/core/Typography";
-import { apiPrefix } from "../common";
+import { apiPrefix } from "../common/common";
 
 function TGPDelete(props) {
 	const [open, setOpen] = useState(false);

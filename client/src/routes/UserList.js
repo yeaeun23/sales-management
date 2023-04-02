@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import '../App.css';
+import '../App.scss';
 import Navi from "../components/Navi";
 import UserAdd from '../components/UserAdd';
 import UserDelete from '../components/UserDelete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from 'react-bootstrap/Table';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import * as common from "../common";
+import * as common from "../common/common";
 
 function UserList() {
   const [user, setUser] = useState("");

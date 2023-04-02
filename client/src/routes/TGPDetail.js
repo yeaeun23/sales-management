@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Card from 'react-bootstrap/Card';
-import '../App.css';
+import '../App.scss';
 import Navi from "../components/Navi";
 import TGPStep from "../components/TGPStep";
 import Form from 'react-bootstrap/Form';
@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useParams, useLocation, Link, useNavigate } from "react-router-dom";
-import { apiPrefix } from "../common";
+import { apiPrefix } from "../common/common";
 
 function TGPDetail(props) {
   const { customer_id, tgp_id } = useParams();

@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import Form from 'react-bootstrap/Form';
 import TGP from '../components/TGP';
 import TGPAdd from '../components/TGPAdd';
-import '../App.css';
+import '../App.scss';
 import Navi from "../components/Navi";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from 'react-bootstrap/Table';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useParams, useLocation, Link } from 'react-router-dom';
-import * as common from "../common";
+import * as common from "../common/common";
 
 function TGPList(props) {
   const [year, setYear] = useState([]);

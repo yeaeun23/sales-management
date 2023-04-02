@@ -1,0 +1,201 @@
+@import './common/_mixins';
+
+.root {
+  min-width: $min-width;
+
+  .paper {
+    margin: auto;
+    padding: 84px 20px 20px 20px;
+    max-width: 1200px;
+
+    .paper_title {
+      margin: 20px 0;
+      font-weight: bold;
+      overflow: hidden;
+
+      a {
+        text-decoration: none !important;
+
+        &.title_link:hover {
+          text-decoration: underline !important;
+        }
+      }
+
+      .total_amount {
+        float: right;
+      }
+    }
+
+    .card {
+      margin-bottom: 20px;
+
+      table {
+        colgroup {
+          &.col_form1_1 col {
+
+            &:nth-child(1),
+            &:nth-child(3) {
+              width: 10%;
+            }
+
+            &:nth-child(2),
+            &:nth-child(4) {
+              width: 40%;
+            }
+          }
+
+          &.col_form2_1 col {
+            &:nth-child(1) {
+              min-width: 180px;
+              width: 23%;
+            }
+
+            &:nth-child(2) {
+              width: 72%;
+            }
+
+            &:nth-child(3) {
+              width: 5%;
+            }
+          }
+
+          &.col_form2_2 col {
+            &:nth-child(1) {
+              width: 16%;
+            }
+
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(7),
+            &:nth-child(9) {
+              width: 5%;
+            }
+
+            &:nth-child(6),
+            &:nth-child(8) {
+              width: 25%;
+            }
+
+            &:nth-child(10) {
+              width: 4%;
+            }
+          }
+
+          &.col_form2_3 col {
+            &:nth-child(2) {
+              min-width: 85px;
+            }
+
+            &:nth-child(1) {
+              width: 12%;
+            }
+
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4),
+            &:nth-child(5),
+            &:nth-child(6),
+            &:nth-child(7),
+            &:nth-child(8),
+            &:nth-child(9),
+            &:nth-child(10) {
+              width: 7%;
+            }
+
+            &:nth-child(11) {
+              width: 25%;
+            }
+          }
+
+          &.col_form2_4 col {
+            &:nth-child(1) {
+              min-width: 150px;
+              width: 15%;
+            }
+
+            &:nth-child(2),
+            &:nth-child(4) {
+              width: 36%;
+            }
+
+            &:nth-child(3),
+            &:nth-child(5) {
+              width: 5%;
+            }
+
+            &:nth-child(6) {
+              width: 3%;
+            }
+          }
+
+          &.col_form3_1 col {
+            &:nth-child(1) {
+              width: 2%;
+            }
+
+            &:nth-child(2),
+            &:nth-child(4) {
+              width: 47%;
+            }
+
+            &:nth-child(3) {
+              width: 3%;
+            }
+          }
+
+          &.col_form3_2 col {
+            &:nth-child(1) {
+              width: 52%;
+            }
+
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4) {
+              width: 15%;
+            }
+
+            &:nth-child(5) {
+              width: 3%;
+            }
+          }
+        }
+
+        td {
+          &.behavior {
+            position: relative;
+
+            &>textarea {
+              position: absolute;
+              top: 8px;
+              bottom: 8px;
+              left: 8px;
+              right: 8px;
+              resize: none;
+            }
+          }
+
+          .btnAddRow,
+          .btnDeleteRow {
+            font-weight: bold !important;
+          }
+
+          .btnDeleteRow {
+            color: red !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+.progress {
+  margin: 16px;
+  background-color: transparent !important;
+}
+
+.emptyRow {
+  color: #aaa !important;
+  padding: 30px !important;
+}

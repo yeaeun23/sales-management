@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Card from 'react-bootstrap/Card';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import '../App.css';
+import '../App.scss';
 import Navi from "../components/Navi";
 import TGPStep from "../components/TGPStep";
 import Form from 'react-bootstrap/Form';
@@ -14,7 +14,7 @@ import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
 import BtnAddRow from '../components/BtnAddRow';
 import BtnDeleteRow from '../components/BtnDeleteRow';
-import { apiPrefix } from "../common";
+import { apiPrefix } from "../common/common";
 
 function TGPDetail3(props) {
   const { customer_id, tgp_id, form_id } = useParams();

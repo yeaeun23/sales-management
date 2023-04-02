@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import Form from 'react-bootstrap/Form';
 import Customer from '../components/Customer';
 import CustomerAdd from '../components/CustomerAdd';
-import '../App.css';
+import '../App.scss';
 import Navi from "../components/Navi";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from 'react-bootstrap/Table';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useNavigate } from "react-router-dom";
-import * as common from "../common";
+import * as common from "../common/common";
 
 function CustomerList(props) {
   const userName = sessionStorage.getItem('user_name');

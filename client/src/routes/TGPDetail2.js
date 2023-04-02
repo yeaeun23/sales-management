@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Card from 'react-bootstrap/Card';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import '../App.css';
+import '../App.scss';
 import Navi from "../components/Navi";
 import TGPStep from "../components/TGPStep";
 import Form from 'react-bootstrap/Form';
@@ -18,7 +18,7 @@ import SelectScore from '../components/SelectScore';
 import SelectPower from "../components/SelectPower";
 import SelectSign from '../components/SelectSign';
 import SelectRole from '../components/SelectRole';
-import { apiPrefix } from "../common";
+import { apiPrefix } from "../common/common";
 
 function TGPDetail2(props) {
   const { customer_id, tgp_id, form_id } = useParams();

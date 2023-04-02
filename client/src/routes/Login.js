@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { post } from "axios";
 import Form from 'react-bootstrap/Form';
-import '../App.css';
 import Button from 'react-bootstrap/Button';
-import styles from "./Login.module.css";
+import styles from "./Login.module.scss";
 import { useNavigate } from "react-router-dom";
-import { apiPrefix } from "../common";
+import { apiPrefix } from "../common/common";
 
 function Login() {
   const [inputs, setInputs] = useState({});

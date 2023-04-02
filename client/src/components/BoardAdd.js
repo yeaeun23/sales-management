@@ -9,7 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Typography from '@mui/material/Typography';
 import Button from 'react-bootstrap/Button';
 import TextField from '@material-ui/core/TextField';
-import { apiPrefix } from '../common';
+import { apiPrefix } from '../common/common';
 
 function BoardAdd(props) {
   const [open, setOpen] = useState(false);
