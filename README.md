@@ -83,10 +83,10 @@
 
 ## DB 설계
 
-![db](https://user-images.githubusercontent.com/14077108/229775363-61fed6ac-fdbf-4b4f-a73a-e13ace85ed9d.png)
+![db_api_설계_page-0001](https://user-images.githubusercontent.com/14077108/229779195-e7b08905-e53b-4df5-a6f7-eafdb4524413.jpg)
 
 <br>
 
 ## API 설계
 
-![api](https://user-images.githubusercontent.com/14077108/229775418-f0da0139-277f-46fd-8e15-3620eb1c2882.png)
+![api_설계_page-0001](https://user-images.githubusercontent.com/14077108/229779214-49d2b925-dbcc-411a-aada-cd2d57c09515.jpg)
