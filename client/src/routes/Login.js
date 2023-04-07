@@ -12,7 +12,7 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getIP().then(res => setIP(res.ip));
+    getIP().then(res => setIP(res.ip === "" ? "모바일" : res.ip));
 
     if (sessionStorage.getItem('user_name')) {
       common.setLogout(sessionStorage.getItem('user_name'));
