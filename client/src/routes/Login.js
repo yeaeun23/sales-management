@@ -15,7 +15,7 @@ function Login() {
     getIP().then(res => setIP(res.ip));
 
     if (sessionStorage.getItem('user_name')) {
-      common.setLogout();
+      common.setLogout(sessionStorage.getItem('user_name'));
       sessionStorage.removeItem('user_name');
       sessionStorage.removeItem('user_status');
     }

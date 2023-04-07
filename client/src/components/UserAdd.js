@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Button from 'react-bootstrap/Button';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import { apiPrefix } from '../common/common';
+import * as common from "../common/common";
 
 function UserAdd(props) {
   const [open, setOpen] = useState(false);
@@ -39,13 +39,13 @@ function UserAdd(props) {
   };
 
   const getStatus = async () => {
-    const response = await fetch(apiPrefix + '/user-status');
+    const response = await fetch(common.apiPrefix + '/user-status');
     const body = await response.json();
     return body;
   }
 
   const getUser = async () => {
-    const response = await fetch(apiPrefix + '/user-detail/' + props.user_id);
+    const response = await fetch(common.apiPrefix + '/user-detail/' + props.user_id);
     const body = await response.json();
     return body;
   }
@@ -53,6 +53,12 @@ function UserAdd(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleLogout = () => {
+    common.setLogout(user.name);
+    alert("로그아웃 처리되었습니다.");
+    setOpen(false);
+  }
 
   const handleValueChange = (e) => {
     let { name, value } = e.target;
@@ -108,13 +114,13 @@ function UserAdd(props) {
   }
 
   const checkID = async () => {
-    const response = await fetch(apiPrefix + '/user-check/' + user.name);
+    const response = await fetch(common.apiPrefix + '/user-check/' + user.name);
     const body = await response.json();
     return body;
   }
 
   const addUser = () => {
-    let api = apiPrefix + '/user';
+    let api = common.apiPrefix + '/user';
     const data = { user };
     const config = {
       headers: { 'content-type': 'application/json' }
@@ -280,11 +286,23 @@ function UserAdd(props) {
           }
 
           {props.kind === "view" ?
+            <span>
+              <TextField
+                InputProps={{ readOnly: true, disableUnderline: true }}
+                fullWidth
+                label="수정일"
+                value={user.update_time || ''} />
+              <br /><br />
+            </span>
+            : ""
+          }
+
+          {props.kind === "view" ?
             <TextField
               InputProps={{ readOnly: true, disableUnderline: true }}
               fullWidth
-              label="수정일"
-              value={user.update_time || ''} />
+              label="로그인 IP"
+              value={user.login_ip || '-'} />
             : ""
           }
         </DialogContent>
@@ -295,6 +313,10 @@ function UserAdd(props) {
           }
           {props.kind === "edit" ?
             <Button variant="primary" size="sm" onClick={handleFormSubmit}>수정</Button>
+            : ""
+          }
+          {props.kind === "view" && sessionStorage.getItem("user_status") === "9" ?
+            <Button variant="secondary" size="sm" onClick={handleLogout}>로그아웃</Button>
             : ""
           }
           {props.kind === "view" ?

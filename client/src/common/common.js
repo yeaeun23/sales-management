@@ -12,9 +12,9 @@ export function comma(str) {
   return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
 }
 
-export function setLogout() {
+export function setLogout(user_name) {
   const api = apiPrefix + '/logout';
-  const data = { user_name: sessionStorage.getItem("user_name") };
+  const data = { user_name };
   const config = {
     headers: { 'content-type': 'application/json' }
   };

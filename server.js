@@ -187,7 +187,7 @@ app.get(apiPrefix + '/user-list/:user_name', (req, res) => {
 
 // 계정 상세
 app.get(apiPrefix + '/user-detail/:user_id', (req, res) => {
-  let sql = "SELECT `name`, passwd, (SELECT `status` FROM `USER_STATUS` WHERE `code` = user.`status`) AS `status`, `status` AS status_code, memo, DATE_FORMAT(update_time, '%Y-%m-%d %H:%i') AS update_time, DATE_FORMAT(make_time, '%Y-%m-%d %H:%i') AS make_time FROM USER user WHERE user_id = " + req.params.user_id;
+  let sql = "SELECT `name`, passwd, (SELECT `status` FROM `USER_STATUS` WHERE `code` = user.`status`) AS `status`, `status` AS status_code, memo, DATE_FORMAT(update_time, '%Y-%m-%d %H:%i') AS update_time, DATE_FORMAT(make_time, '%Y-%m-%d %H:%i') AS make_time, login_ip FROM USER user WHERE user_id = " + req.params.user_id;
 
   console.log("계정 상세: " + sql);
   connection.query(sql, (err, rows, fields) => {
