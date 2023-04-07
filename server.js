@@ -30,6 +30,7 @@ connection.connect(function (err) {
 app.post(apiPrefix + '/login', (req, res) => {
   const id = req.body.inputs.id;
   const pw = req.body.inputs.pw;
+  const ip = req.body.ip;
   const sql1 = "SELECT * FROM USER WHERE `name` = '" + id + "'";
   const sql2 = "SELECT * FROM USER WHERE `name` = '" + id + "' AND passwd = '" + pw + "'";
 
@@ -55,6 +56,16 @@ app.post(apiPrefix + '/login', (req, res) => {
             res.send({ 'code': 3, 'msg': '비밀번호가 일치하지 않습니다.' });
             console.log("로그인 실패(3): " + id);
           }
+          else if (id !== "admin") {
+            if (rows[0].login_ip && rows[0].login_ip !== ip) {
+              res.send({ 'code': 4, 'msg': '이전에 접속했던 PC에서 로그아웃 해주세요. (이전 IP: ' + rows[0].login_ip + ')' });
+              console.log("로그인 실패(4): " + id);
+            }
+            else {
+              res.send({ 'code': 9, 'status': rows[0].status });
+              console.log("로그인 성공(9): " + id);
+            }
+          }
           else {
             res.send({ 'code': 9, 'status': rows[0].status });
             console.log("로그인 성공(9): " + id);
@@ -62,6 +73,26 @@ app.post(apiPrefix + '/login', (req, res) => {
         });
       }
     }
+  });
+});
+
+// 로그인 여부
+app.put(apiPrefix + '/login', (req, res) => {
+  let sql = "UPDATE USER SET login_ip = '" + req.body.ip + "' WHERE `name` = '" + req.body.inputs.id + "'";
+
+  console.log("로그인 성공(9): " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
+  });
+});
+
+// 로그아웃
+app.put(apiPrefix + '/logout', (req, res) => {
+  let sql = "UPDATE USER SET login_ip = NULL WHERE `name` = '" + req.body.user_name + "'";
+
+  console.log("로그아웃: " + sql);
+  connection.query(sql, (err, rows, fields) => {
+    res.send(rows);
   });
 });
 
@@ -137,8 +168,16 @@ app.get(apiPrefix + '/user-check/:user_name', (req, res) => {
 });
 
 // 계정 조회
-app.get(apiPrefix + '/user', (req, res) => {
-  let sql = "SELECT user_id, `name`, (SELECT `status` FROM `USER_STATUS` WHERE `code` = user.`status`) AS `status`, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time FROM USER user WHERE delete_time IS NULL ORDER BY user_id DESC";
+app.get(apiPrefix + '/user-list/:user_name', (req, res) => {
+  let user_name = req.params.user_name;
+  let sql = "";
+
+  if (user_name === "admin") {
+    sql = "SELECT user_id, `name`, (SELECT `status` FROM `USER_STATUS` WHERE `code` = user.`status`) AS `status`, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time FROM USER user WHERE delete_time IS NULL ORDER BY user_id DESC";
+  }
+  else {
+    sql = "SELECT user_id, `name`, (SELECT `status` FROM `USER_STATUS` WHERE `code` = user.`status`) AS `status`, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time FROM USER user WHERE `name` = '" + user_name + "'";
+  }
 
   console.log("계정 조회: " + sql);
   connection.query(sql, (err, rows, fields) => {
@@ -147,7 +186,7 @@ app.get(apiPrefix + '/user', (req, res) => {
 });
 
 // 계정 상세
-app.get(apiPrefix + '/user/:user_id', (req, res) => {
+app.get(apiPrefix + '/user-detail/:user_id', (req, res) => {
   let sql = "SELECT `name`, passwd, (SELECT `status` FROM `USER_STATUS` WHERE `code` = user.`status`) AS `status`, `status` AS status_code, memo, DATE_FORMAT(update_time, '%Y-%m-%d %H:%i') AS update_time, DATE_FORMAT(make_time, '%Y-%m-%d %H:%i') AS make_time FROM USER user WHERE user_id = " + req.params.user_id;
 
   console.log("계정 상세: " + sql);
@@ -203,7 +242,6 @@ app.get(apiPrefix + '/year/customer/:user_name', (req, res) => {
 
 // 거래처 조회 1
 app.get(apiPrefix + '/customer/:user_name/makeyear/:year', (req, res) => {
-  console.log(req.params.year)
   let year = req.params.year.replace("년", "");
   let sql = "SELECT customer_id, DATE_FORMAT(make_time, '%Y-%m-%d') AS make_time, `name`, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1 AND YEAR(make_time) = " + year + ") AS amount_year, (SELECT SUM(CONVERT(REPLACE((SELECT amount FROM FORM WHERE tgp_id = tgp.tgp_id ORDER BY update_time DESC LIMIT 1), ',', ''), SIGNED)) FROM TGP tgp WHERE customer_id = customer.customer_id AND delete_time IS NULL AND `status` = 1) AS amount FROM CUSTOMER customer WHERE user_id = (SELECT user_id FROM USER WHERE `name` = '" + req.params.user_name + "') AND delete_time IS NULL ORDER BY customer_id DESC";
 

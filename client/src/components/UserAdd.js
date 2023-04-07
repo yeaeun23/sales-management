@@ -45,7 +45,7 @@ function UserAdd(props) {
   }
 
   const getUser = async () => {
-    const response = await fetch(apiPrefix + '/user/' + props.user_id);
+    const response = await fetch(apiPrefix + '/user-detail/' + props.user_id);
     const body = await response.json();
     return body;
   }
@@ -83,8 +83,14 @@ function UserAdd(props) {
   }
 
   const checkInputs = () => {
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/;
+
     if (!user.passwd) {
       alert("비밀번호를 입력하세요.");
+      document.querySelector("input[name='passwd']").focus();
+    }
+    else if (sessionStorage.getItem("user_status") !== "9" && !passwordRegex.test(user.passwd)) {
+      alert("8~20자리의 영문+숫자+특수문자(!@#$%^*+=-)를 포함하세요.");
       document.querySelector("input[name='passwd']").focus();
     }
     else if (!user.passwd_check) {
@@ -203,28 +209,36 @@ function UserAdd(props) {
           }
 
           {props.kind === "view" ?
-            <TextField
-              InputProps={{ readOnly: true, disableUnderline: true }}
-              fullWidth
-              label="활성 상태"
-              value={user.status || ''} />
+            <span>
+              <TextField
+                InputProps={{ readOnly: true, disableUnderline: true }}
+                fullWidth
+                label="활성 상태"
+                value={user.status || ''} />
+              <br /><br />
+            </span>
             :
-            <TextField
-              fullWidth
-              required
-              label="활성 상태"
-              select
-              name="status_code"
-              value={user.status_code || 0}
-              onChange={handleValueChange}>
-              {
-                status.map((c) => {
-                  return <MenuItem key={c.code} value={c.code}>{c.status}</MenuItem>
-                })
-              }
-            </TextField>
+            (sessionStorage.getItem("user_status") === "9" ?
+              <span>
+                <TextField
+                  fullWidth
+                  required
+                  label="활성 상태"
+                  select
+                  name="status_code"
+                  value={user.status_code || 0}
+                  onChange={handleValueChange}>
+                  {
+                    status.map((c) => {
+                      return <MenuItem key={c.code} value={c.code}>{c.status}</MenuItem>
+                    })
+                  }
+                </TextField>
+                <br /><br />
+              </span>
+              : ""
+            )
           }
-          <br /><br />
 
           {props.kind === "view" ?
             <span>
@@ -236,18 +250,21 @@ function UserAdd(props) {
               <br /><br />
             </span>
             :
-            <span>
-              <TextField
-                fullWidth
-                label="메모"
-                type="text"
-                name="memo"
-                value={user.memo || ''}
-                onChange={handleValueChange}
-                inputProps={{ maxLength: 50 }}
-                placeholder="50자 이내" />
-              <br /><br />
-            </span>
+            (sessionStorage.getItem("user_status") === "9" ?
+              <span>
+                <TextField
+                  fullWidth
+                  label="메모"
+                  type="text"
+                  name="memo"
+                  value={user.memo || ''}
+                  onChange={handleValueChange}
+                  inputProps={{ maxLength: 50 }}
+                  placeholder="50자 이내" />
+                <br /><br />
+              </span>
+              : ""
+            )
           }
 
           {props.kind === "view" ?

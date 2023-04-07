@@ -18,7 +18,9 @@ function UserList() {
   }, []);
 
   const getUser = async () => {
-    const response = await fetch(common.apiPrefix + '/user');
+    const api = common.apiPrefix + '/user-list/' + sessionStorage.getItem('user_name');
+    //const api = common.apiPrefix + '/user';
+    const response = await fetch(api);
     const body = await response.json();
     return body;
   }
@@ -55,7 +57,11 @@ function UserList() {
               <th>아이디</th>
               <th style={{ textAlign: 'center' }}>활성상태</th>
               <th style={{ textAlign: 'right' }} colSpan="2">
-                <UserAdd stateRefresh={stateRefresh} kind="add" />
+                {
+                  sessionStorage.getItem('user_status') === '9' ?
+                    <UserAdd stateRefresh={stateRefresh} kind="add" />
+                    : ""
+                }
               </th>
             </tr>
           </thead>
@@ -87,10 +93,14 @@ function UserList() {
                           kind="edit"
                           user_id={item.user_id} />
                         &nbsp;&nbsp;
-                        <UserDelete
-                          stateRefresh={stateRefresh}
-                          user_id={item.user_id}
-                          name={item.name} />
+                        {
+                          sessionStorage.getItem('user_status') === '9' ?
+                            <UserDelete
+                              stateRefresh={stateRefresh}
+                              user_id={item.user_id}
+                              name={item.name} />
+                            : ""
+                        }
                       </td>
                     </tr>
                   )

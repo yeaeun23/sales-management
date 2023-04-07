@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { post } from "axios";
+import { post, put } from "axios";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import styles from "./Login.module.scss";
 import { useNavigate } from "react-router-dom";
-import { apiPrefix } from "../common/common";
+import * as common from "../common/common";
 
 function Login() {
   const [inputs, setInputs] = useState({});
+  const [ip, setIP] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    sessionStorage.removeItem('user_name');
-    sessionStorage.removeItem('user_status');
+    getIP().then(res => setIP(res.ip));
+
+    if (sessionStorage.getItem('user_name')) {
+      common.setLogout();
+      sessionStorage.removeItem('user_name');
+      sessionStorage.removeItem('user_status');
+    }
   }, []);
+
+  const getIP = async () => {
+    const response = await fetch("https://api.ipify.org/?format=json");
+    const body = await response.json();
+    return body;
+  };
 
   const handleValueChange = (e) => {
     let { name, value } = e.target;
@@ -36,8 +48,8 @@ function Login() {
       document.querySelector("input[name='pw']").focus();
     }
     else {
-      const api = apiPrefix + '/login';
-      const data = { inputs };
+      const api = common.apiPrefix + '/login';
+      const data = { inputs, ip };
       const config = {
         headers: { 'content-type': 'application/json' }
       };
@@ -48,7 +60,7 @@ function Login() {
           sessionStorage.setItem('user_status', res.data.status);
 
           if (sessionStorage.getItem('user_name') && sessionStorage.getItem('user_status')) {
-            navigate('/account');
+            setLogin().then(() => navigate('/account'));
           }
           else {
             alert("로그인 에러!");
@@ -64,6 +76,15 @@ function Login() {
         }
       }).catch(err => console.log(err.response.data));
     }
+  }
+
+  const setLogin = () => {
+    const api = common.apiPrefix + '/login';
+    const data = { inputs, ip };
+    const config = {
+      headers: { 'content-type': 'application/json' }
+    };
+    return put(api, data, config);
   }
 
   return (

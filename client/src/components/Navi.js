@@ -24,10 +24,10 @@ import Drawer from '@mui/material/Drawer';
 function Navi(props) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menus = [
-    { text: "공지사항", link: "/board", icon: <NotificationsNoneOutlinedIcon /> },
-    { text: "거래처", link: "/account", icon: <FormatListBulletedIcon /> },
-    { text: "계정관리", link: "/user", icon: <SettingsIcon />, admin: true },
-    { text: "로그아웃", link: "/", icon: <LogoutIcon /> },
+    { text: "공지사항", link: "/board", icon: <NotificationsNoneOutlinedIcon />, admin: false },
+    { text: "거래처", link: "/account", icon: <FormatListBulletedIcon />, admin: false },
+    { text: "계정관리", link: "/user", icon: <SettingsIcon />, admin: false },
+    { text: "로그아웃", link: "/", icon: <LogoutIcon />, admin: false },
   ]
 
   const toggleMenu = (open) => (e) => {

@@ -26,7 +26,7 @@ function CustomerList(props) {
         .then(res => setYear(res))
         .catch(err => console.log(err));
     }
-    else {      
+    else {
       alert("로그인 정보가 없습니다.");
       navigate('/');
     }
