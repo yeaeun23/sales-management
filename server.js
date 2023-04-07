@@ -78,7 +78,7 @@ app.post(apiPrefix + '/login', (req, res) => {
 
 // 로그인 여부
 app.put(apiPrefix + '/login', (req, res) => {
-  let sql = "UPDATE USER SET login_ip = '" + req.body.ip + "' WHERE `name` = '" + req.body.inputs.id + "'";
+  let sql = "UPDATE USER SET login_ip = '" + (req.body.ip === "" ? "모바일" : req.body.ip) + "' WHERE `name` = '" + req.body.inputs.id + "'";
 
   console.log("로그인 성공(9): " + sql);
   connection.query(sql, (err, rows, fields) => {
