@@ -57,7 +57,7 @@ app.post(apiPrefix + '/login', (req, res) => {
             console.log("로그인 실패(3): " + id);
           }
           else if (id !== "admin") {
-            if (rows[0].login_ip && rows[0].login_ip !== ip) {
+            if (rows[0].login_ip !== null && rows[0].login_ip !== ip) {
               res.send({ 'code': 4, 'msg': '이전에 접속했던 PC에서 로그아웃 해주세요. (이전 IP: ' + rows[0].login_ip + ')' });
               console.log("로그인 실패(4): " + id);
             }
