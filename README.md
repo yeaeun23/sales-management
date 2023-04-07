@@ -81,6 +81,12 @@
 
 <br>
 
-## DB 구조
+## DB 설계
 
-![제목 없음](https://user-images.githubusercontent.com/14077108/227973013-a5ada6dc-8b57-414e-a07f-b9563040c3b4.png)
+![db_api_설계_page-0001](https://user-images.githubusercontent.com/14077108/229779195-e7b08905-e53b-4df5-a6f7-eafdb4524413.jpg)
+
+<br>
+
+## API 설계
+
+![api_설계_page-0001](https://user-images.githubusercontent.com/14077108/229779214-49d2b925-dbcc-411a-aada-cd2d57c09515.jpg)
